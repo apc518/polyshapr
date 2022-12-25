@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    </head>
+    <body>
+        <button id="playpausebtn">Play</button> <br/>
+        <button id="resetbtn">Reset</button> <br/>
+
+        <input type="checkbox" id="debugModeCheckbox"/><label for="debugModeCheckbox">Debug Mode</label> <br/>
+        <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
+
+        <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/><label for="globalSpeedSlider">Speed</label>
+        <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
+
+        <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/><label for="globalVolumeSlider">Volume</label>
+        <button id="globalVolumeResetBtn">reset</button> <br/>
+
+        <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/><label for="globalProgressSlider">Progress</label>
+        <button id="globalProgressResetBtn">reset</button> <br/>
+
+        <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/><label for="strokeWeightSlider">Stroke Weight</label>
+        <button id="strokeWeightSliderResetBtn">reset</button>
+
+        <input type="radio" name="prType" id="squaresOptionBtn"> Squares
+        <input type="radio" name="prType" id="trianglesOptionBtn"> Triangles
+        <input type="radio" name="prType" id="ngonsOptionBtn" checked> N-Gons
+
+        <script src="constants.js" defer></script>
+        <script src="utils/logging.js" defer></script>
+        <script src="utils/math.js" defer></script>
+        <script src="utils/drawing.js" defer></script>
+        <script src="htmlHandlers.js" defer></script>
+        <script src="color.js" defer></script>
+        <script src="sound/pitch.js" defer></script>
+        <script src="sound/sound.js" defer></script>
+        <script src="Patch.js" defer></script>
+        <script src="PolyRhythm.js" defer></script>
+        <script src="builders.js" defer></script>
+        <script src="presets.js" defer></script>
+        <script src="sketch.js" defer></script>
+        <script src="tests.js" defer></script>
+    </body>
+</html>

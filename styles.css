@@ -1,0 +1,19 @@
+body{
+    margin: 10;
+    line-height: 0px;
+    background-color: #1d1d21;
+    color: #ccc;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.rhythm{
+    max-width: 4rem;
+}
+
+.slider{
+    min-width: 400px;
+}
+
+#globalProgressSlider{
+    min-width: 1000px;
+}
