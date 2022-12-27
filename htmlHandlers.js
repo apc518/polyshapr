@@ -3,7 +3,6 @@
 // html elements
 const playPauseBtn = document.getElementById("playpausebtn");
 const resetBtn = document.getElementById("resetbtn");
-const debugModeCheckbox = document.getElementById("debugModeCheckbox");
 const soundOnCheckbox = document.getElementById("soundOnCheckbox");
 const globalSpeedSlider = document.getElementById("globalSpeedSlider");
 const globalSpeedIndicator = document.getElementById("globalSpeedIndicator");
@@ -32,13 +31,6 @@ resetBtn.onclick = e => {
     pause_();
     globalProgressSlider.value = 0;
     globalProgressSlider.oninput({ target: globalProgressSlider })
-    paint();
-}
-
-debugModeCheckbox.checked = false;
-debugModeCheckbox.oninput = e => {
-    e.target.blur();
-    debug = e.target.checked;
     paint();
 }
 

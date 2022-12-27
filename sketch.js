@@ -3,7 +3,6 @@
 // global variables
 let p5canvas = null;
 let soundOn = true;
-let debug = false;
 
 // physics
 let globalSpeed = 1;
@@ -177,7 +176,7 @@ function paint(){
     frameRate(FRAMERATE);
     master_pr.draw();
 
-    if(debug)
+    if(DEBUG)
         master_pr.drawBounds();
 }
 
@@ -197,6 +196,7 @@ function initializeCurrentPatch(){
 function setup(){
     noLoop();
     p5canvas = createCanvas(canvasWidth, canvasHeight);
+    p5canvas.parent(document.getElementById("p5canvas"));
     p5canvas.canvas.style.marginTop = "1rem";
 
     fullRefresh();

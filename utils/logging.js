@@ -1,17 +1,17 @@
 function debugLog(){
-    if (debug){
+    if (DEBUG){
         console.log(...arguments);
     }
 }
 
 function debugWarn(){
-    if (debug){
+    if (DEBUG){
         console.warn(...arguments);
     }
 }
 
 function debugError(){
-    if (debug){
+    if (DEBUG){
         console.error(...arguments);
     }
 }
