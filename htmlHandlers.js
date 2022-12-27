@@ -75,7 +75,7 @@ globalVolumeResetBtn.onclick = e => {
 globalProgressSlider.value = 0;
 
 globalProgressSlider.oninput = e => {
-    globalProgress = e.target.value / PROGRESS_SLIDER_RESOLUTION;
+    globalProgress = Math.floor(globalProgress) + e.target.value / PROGRESS_SLIDER_RESOLUTION;
     setMasterPolyRhythmProgress();
     paint();
 }
