@@ -66,7 +66,7 @@ const pitchModeOptions = [
     {
         name: PITCH_MODES.CUSTOM,
         displayName: "Custom",
-        func: () => console.warn("no function for custom pitch mode")
+        func: () => currentPatch.pitches
     },
     {
         name: PITCH_MODES.HARMONIC_SERIES,

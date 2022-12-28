@@ -32,16 +32,18 @@ function clearSoundList(){
 }
 
 
-function populateSoundList(patch){
-    if (patch.tuningMode === TUNING_MODES.RAW){
-        let noteSpeeds = pitchModeOptionsMap[patch.pitchMode].func(patch.rhythms.length);
+function populateSoundListFromPreset(){
+    if (currentPatch.pitchMode !== PITCH_MODES.CUSTOM){
+        currentPatch.pitches = pitchModeOptionsMap[currentPatch.pitchMode].func(currentPatch.rhythms.length);
+    }
 
-        for (let speed of noteSpeeds){
-            if (Number.isFinite(patch.pitchMultiplier)){
-                speed *= patch.pitchMultiplier;
+    if (currentPatch.tuningMode === TUNING_MODES.RAW){
+        for (let speed of currentPatch.pitches){
+            if (Number.isFinite(currentPatch.pitchMultiplier)){
+                speed *= currentPatch.pitchMultiplier;
             }
             else{
-                console.warn("pitch multiplier was not a number in patch:", patch);
+                console.warn("pitch multiplier was not a number in currentPatch:", currentPatch);
             }
 
             let howl = new Howl({ src: audioFileName });
@@ -49,19 +51,17 @@ function populateSoundList(patch){
             soundList.push(new Sound(howl, speed));
         }
     }
-    else if (patch.tuningMode === TUNING_MODES.EDO12){
-        let notes = pitchModeOptionsMap[patch.pitchMode].func(patch.rhythms.length);
-        
+    else if (currentPatch.tuningMode === TUNING_MODES.EDO12){
         let offset = 0;
 
-        if (Number.isFinite(patch.pitchOffset)){
-            offset = patch.pitchOffset;
+        if (Number.isFinite(currentPatch.pitchOffset)){
+            offset = currentPatch.pitchOffset;
         }
         else{
-            console.warn("pitch offset was not a number in patch:", patch);
+            console.warn("pitch offset was not a number in currentPatch:", currentPatch);
         }
 
-        for (let note of notes){
+        for (let note of currentPatch.pitches){
             let speed = Math.pow(2, (note + offset) / 12);
 
             let howl = new Howl({ src: audioFileName });
@@ -70,6 +70,6 @@ function populateSoundList(patch){
         }
     }
     else{
-        console.error("pitch mode unrecognized in patch:", patch);
+        console.error("pitch mode unrecognized in currentPatch:", currentPatch);
     }
 }

@@ -6,9 +6,9 @@ function setupAnimationModeEventHandlers(){
         elem.onclick = () => {
             currentPatch.animationMode = option.name;
             clearColorList();
-            populateColorList(currentPatch);
+            populateColorList();
             clearSoundList();
-            populateSoundList(currentPatch);
+            populateSoundListFromPreset();
             option.func();
     
             if (!isLooping()){

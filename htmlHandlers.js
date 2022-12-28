@@ -191,18 +191,19 @@ cycleTimeInput.oninput = () => {
 
 pitchListInput.oninput = () => {
     let nums = pitchListInput.value.split(",").map(r => parseFloat(r));
-    
+
     // if we dont have a valid list yet just return
     if (!Patch.pitchListIsValid(nums)){
         pitchListInput.style.backgroundColor = textFieldErrorColor;
         return;
     }
-
+    
     pitchListInput.style.backgroundColor = textFieldOkayColor;
-
+    
     currentPatch.pitches = nums;
-
+    
     // set selected pitch mode to custom
+    currentPatch.pitchMode = PITCH_MODES.CUSTOM;
     pitchModeDropdown.selectedIndex = getIndexOfPitchModeOption(PITCH_MODES.CUSTOM);
 
     fullRefresh();
@@ -210,10 +211,8 @@ pitchListInput.oninput = () => {
 
 
 function updatePitchesFromPresetInput(){
-    if (pitchModeDropdown.selectedIndex === getIndexOfPitchModeOption(PITCH_MODES.CUSTOM)) return;
-
     // pitch list
-    currentPatch.pitches = pitchModeOptions[pitchModeDropdown.selectedIndex]
+    currentPatch.pitches = pitchModeOptionsMap[getPitchOptionNameByIndex(pitchModeDropdown.selectedIndex)]
         .func(currentPatch.rhythms.length);
     
     pitchListInput.value = currentPatch.pitches.join();
@@ -232,6 +231,11 @@ tuningModeDropdown.oninput = () => {
     let tuningModeIsRaw = currentPatch.tuningMode === TUNING_MODES.RAW;
     pitchOffsetInput.disabled = tuningModeIsRaw;
     pitchMultiplierInput.disabled = !tuningModeIsRaw;
+    updatePitchesFromPresetInput();
+}
+
+pitchModeDropdown.oninput = () => {
+    currentPatch.pitchMode = getPitchOptionNameByIndex(pitchModeDropdown.selectedIndex);
     updatePitchesFromPresetInput();
 }
 
