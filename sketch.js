@@ -15,27 +15,6 @@ let currentPatch = new Patch(presets[0]);
 let transposition = 0;
 
 
-// set up event handlers for the pressing of each animation mode button
-for (let option of animationModeOptions){
-    // the html elem id for the corresponding radio button for a given animation mode
-    // should be the mode plus "OptionBtn"
-    let elem = document.getElementById(option.htmlId);
-    elem.onclick = () => {
-        currentPatch.animationMode = option.name;
-        clearColorList();
-        populateColorList(currentPatch);
-        clearSoundList();
-        populateSoundList(currentPatch);
-        option.func();
-
-        if (!isLooping()){
-            setMasterPolyRhythmProgress();
-            paint();
-        }
-    };
-}
-
-
 function onHit(soundIdx){
     debugLog("onhit called for idx", soundIdx);
 
@@ -162,7 +141,8 @@ function fullRefresh(){
 */
 function displayCurrentPatchSettings(){
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
-    initializeRhythmUIBasedOnCurrentPatch();
+    displayAnimationModeSettings();
+    displayRhythmSettings();
     cycleTimeInput.value = currentPatch.cycleTime;
 }
 

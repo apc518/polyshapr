@@ -19,21 +19,6 @@ const DEBUG = false;
 
 // enums
 
-const TUNING_MODES = Object.freeze({
-    EDO12: "edo12", // 12-edo
-    RAW: "raw" // useful for a harmonic series kind of thing
-});
-
-const PITCH_MODES = Object.freeze({
-    NONE: "none",
-    PENTATONIC: "pentatonic",
-    MAJOR: "major",
-    MINOR: "minor",
-    SUHMM_SCALE: "suhmm-scale",
-    SUHMM_CHORD: "suhmm-chord",
-    HARMONIC_SERIES: "harmonic"
-});
-
 const COLOR_MODES = Object.freeze({
     RGB: "rgb",
     HSL: "hsl"

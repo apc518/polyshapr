@@ -58,20 +58,3 @@ for (let option of animationModeOptions){
     animationModeOptionsMap[option.name] = option;
     option.htmlId = option.name + "OptionBtn";
 }
-
-// populate HTML
-for (let option of animationModeOptions){
-    let elem = document.createElement('input');
-    elem.type = 'radio';
-    elem.id = option.htmlId;
-    elem.innerText = option.displayName;
-    elem.name = "animationModeOptionBtn";
-    elem.className = "animationModeOptionBtn";
-    animationModeButtons.appendChild(elem);
-
-    // make label
-    let labelElem = document.createElement('label');
-    labelElem.htmlFor = option.htmlId;
-    labelElem.innerText = option.displayName;
-    animationModeButtons.appendChild(labelElem);
-}

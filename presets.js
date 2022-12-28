@@ -1,6 +1,6 @@
 const presets = [
     {
-        animationMode: ANIMATION_MODES.NGONS,
+        animationMode: ANIMATION_MODES.SQUARES,
         rhythmMode: RHYTHM_MODES.NATURALS,
         rhythmOffset: 3,
         rhythmCount: 8,
