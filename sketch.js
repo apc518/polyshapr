@@ -38,8 +38,6 @@ function onHit(soundIdx){
  */
 const soundList = [];
 
-globalVolumeSlider.oninput({ target: globalVolumeSlider })
-
 function logb(base, x) {
     return Math.log(x) / Math.log(base);
 }
@@ -149,17 +147,24 @@ function displayCurrentPatchSettings(){
 
 
 function setup(){
-    noLoop();
-    p5canvas = createCanvas(canvasWidth, canvasHeight);
-    p5canvas.parent(document.getElementById("p5canvas"));
-    p5canvas.canvas.style.marginTop = "1rem";
+    console.log("hello there");
 
-    displayCurrentPatchSettings();
-    fullRefresh();
+    Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enabled audio" })
+    .then(() => {
+        globalVolumeSlider.oninput({ target: globalVolumeSlider });
+        
+        noLoop();
+        p5canvas = createCanvas(canvasWidth, canvasHeight);
+        p5canvas.parent(document.getElementById("p5canvas"));
+        p5canvas.canvas.style.marginTop = "1rem";
     
-    // if running locally, run tests
-    if(["127.0.0.1", "localhost"].includes(window.location.hostname))
-        runTests();
+        displayCurrentPatchSettings();
+        fullRefresh();
+        
+        // if running locally, run tests
+        if(["127.0.0.1", "localhost"].includes(window.location.hostname))
+            runTests();
+    });
 }
 
 

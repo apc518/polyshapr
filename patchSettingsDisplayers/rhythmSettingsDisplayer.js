@@ -52,6 +52,7 @@ function initializeRhythmUIBasedOnCurrentPatch(){
     rhythmModeDropdown.oninput();
 }
 
+
 function displayRhythmSettings(){
     for (let option of rhythmModeOptions){
         let optionElem = document.createElement('option');
