@@ -13,10 +13,10 @@ const presets = [
         pitchOffset: -9, // used if pitch mode is edo12
         pitchMultiplier: 1.5, // used if pitch mode is raw
         skips: [],
-        colorMode: COLOR_MODES.RGB,
+        colorMode: COLOR_MODES.HSL,
         colorKeyFrames: [
-            new ColorKeyFrame({ idx: 0, values: [0, 100, 250] }),
-            new ColorKeyFrame({ idx: -1, values: [127, 255, 50] }),
+            new ColorKeyFrame({ idx: 0, values: [0, 100, 50] }),
+            new ColorKeyFrame({ idx: -1, values: [255, 50, 50] }),
         ],
         doColorRipple: false,
         strokeWeight: 3,

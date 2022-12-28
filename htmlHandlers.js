@@ -27,6 +27,9 @@ const tuningModeDropdown = document.getElementById("tuningModeDropdown");
 const pitchModeDropdown = document.getElementById("pitchModeDropdown");
 const pitchOffsetInput = document.getElementById("pitchOffsetInput");
 const pitchMultiplierInput = document.getElementById("pitchMultiplierInput");
+const colorModeDropdown = document.getElementById("colorModeDropdown");
+const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
+const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 
 
 // html elem event listeners
@@ -149,7 +152,7 @@ function updateRhythmsFromPresetInput(){
 }
 
 rhythmModeDropdown.oninput = () => {
-    let disabled = getRhythmOptionNameFromIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
+    let disabled = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
     rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
     updateRhythmsFromPresetInput();
 }
@@ -249,4 +252,72 @@ pitchMultiplierInput.oninput = () => {
     if (Patch.pitchMultiplierIsValid(pitchMultiplierInput.valueAsNumber)){
         updatePitchesFromPresetInput();
     }
+}
+
+
+function refreshColorInputValidationIndication(){
+    let allColorsAreValid = true; 
+
+    for (let keyFrameInput of [colorKeyFrameInput0, colorKeyFrameInput1]){
+        let colorValues = [
+            keyFrameInput.children[0].valueAsNumber,
+            keyFrameInput.children[1].valueAsNumber, 
+            keyFrameInput.children[2].valueAsNumber
+        ]
+    
+        let validValues = Patch.colorValuesValidation(colorValues, currentPatch.colorMode);
+
+        console.log(validValues);
+    
+        for (let i = 0; i < keyFrameInput.children.length; i++){
+            keyFrameInput.children[i].style.backgroundColor = validValues[i] ? textFieldOkayColor : textFieldErrorColor;
+
+            if(!validValues[i]){
+                allColorsAreValid = false;
+            }
+        }
+    }
+
+    return allColorsAreValid;
+}
+
+
+function updateColorsFromInput(){
+    currentPatch.colorMode = getColorOptionNameByIndex(colorModeDropdown.selectedIndex);
+    
+    if (!refreshColorInputValidationIndication()) return;
+
+    console.log("colors were valid");
+
+    let keyframe0values = [
+        colorKeyFrameInput0.children[0].valueAsNumber,
+        colorKeyFrameInput0.children[1].valueAsNumber,
+        colorKeyFrameInput0.children[2].valueAsNumber
+    ];
+
+    let keyframe1values = [
+        colorKeyFrameInput1.children[0].valueAsNumber,
+        colorKeyFrameInput1.children[1].valueAsNumber,
+        colorKeyFrameInput1.children[2].valueAsNumber
+    ];
+
+    currentPatch.colorKeyFrames = [
+        new ColorKeyFrame({ idx: 0, values: keyframe0values }),
+        new ColorKeyFrame({ idx: 1, values: keyframe1values })
+    ];
+
+    fullRefresh();
+}
+
+colorModeDropdown.oninput = () => {
+    updateColorsFromInput();
+}
+
+colorKeyFrameInput0.oninput = e => {
+    console.log(e);
+    updateColorsFromInput();
+}
+
+colorKeyFrameInput1.oninput = () => {
+    updateColorsFromInput();
 }

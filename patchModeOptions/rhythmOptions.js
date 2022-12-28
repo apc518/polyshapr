@@ -70,7 +70,7 @@ for (let option of rhythmModeOptions){
     rhythmModeOptionsMap[option.name] = option;
 }
 
-function getRhythmOptionNameFromIndex(idx){
+function getRhythmOptionNameByIndex(idx){
     return rhythmModeDropdown.children[idx].value;
 }
 

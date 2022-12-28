@@ -142,13 +142,12 @@ function displayCurrentPatchSettings(){
     displayAnimationModeSettings();
     displayRhythmSettings();
     displayPitchSettings();
+    displayColorSettings();
     cycleTimeInput.value = currentPatch.cycleTime;
 }
 
 
 function setup(){
-    console.log("hello there");
-
     Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
         globalVolumeSlider.oninput({ target: globalVolumeSlider });
@@ -160,11 +159,11 @@ function setup(){
     
         displayCurrentPatchSettings();
         fullRefresh();
-        
-        // if running locally, run tests
-        if(["127.0.0.1", "localhost"].includes(window.location.hostname))
-            runTests();
     });
+    
+    // if running locally, run tests
+    if(["127.0.0.1", "localhost"].includes(window.location.hostname))
+        runTests();
 }
 
 

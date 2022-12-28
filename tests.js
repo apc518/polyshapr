@@ -45,7 +45,7 @@ const myTests = [
         }
     },
     {
-        name: "PatchValidationTest1",
+        name: "RhythmListValidationTest1",
         desc: "Test that the Patch class validates rhythm lists correctly",
         func: () => {
             let lst = [0,1,2,3,4,5,6,7,8];
@@ -53,11 +53,43 @@ const myTests = [
         }
     },
     {
-        name: "PatchValidationTest2",
+        name: "RhythmListValidationTest2",
         desc: "Test that the Patch class validates rhythm lists correctly",
         func: () => {
             let lst = [-1,0,1,2,3,4,5,6,7,8];
             return !Patch.rhythmListIsValid(lst);
+        }
+    },
+    {
+        name: "ColorValidationTest1",
+        desc: "Test that the Patch class validates color values correctly",
+        func: () => {
+            validValues = Patch.colorValuesValidation([-9, 255, 0], COLOR_MODES.RGB);
+            return !validValues[0] && validValues[1] && validValues[2];
+        }
+    },
+    {
+        name: "ColorValidationTest2",
+        desc: "Test that the Patch class validates color values correctly",
+        func: () => {
+            validValues = Patch.colorValuesValidation([-9, 255, 100], COLOR_MODES.HSL);
+            return !validValues[0] && !validValues[1] && validValues[2];
+        }
+    },
+    {
+        name: "ColorValidationTest3",
+        desc: "Test that the Patch class validates color values correctly",
+        func: () => {
+            validValues = Patch.colorValuesValidation([0, 100, 101], COLOR_MODES.HSL);
+            return validValues[0] && validValues[1] && !validValues[2];
+        }
+    },
+    {
+        name: "ColorValidationTest4",
+        desc: "Test that the Patch class validates color values correctly",
+        func: () => {
+            validValues = Patch.colorValuesValidation([255, 256, -1], COLOR_MODES.RGB);
+            return validValues[0] && !validValues[1] && !validValues[2];
         }
     }
 ]

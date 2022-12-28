@@ -19,11 +19,6 @@ const DEBUG = false;
 
 // enums
 
-const COLOR_MODES = Object.freeze({
-    RGB: "rgb",
-    HSL: "hsl"
-});
-
 const SQUARE_STYLES = Object.freeze({
     SOLID: "solid",
     WIREFRAME: "wireframe"
