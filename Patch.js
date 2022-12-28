@@ -70,4 +70,32 @@ class Patch {
     static cycleTimeIsValid(cycleTime){
         return Number.isFinite(cycleTime) && cycleTime > 0;
     }
+
+    static pitchModeIsValid(mode){
+        for (let option of pitchModeOptions){
+            if (option.name === mode) return true;
+        }
+
+        return false;
+    }
+
+    static pitchOffsetIsValid(offset){
+        return Number.isFinite(offset);
+    }
+
+    static pitchMultiplierIsValid(mult){
+        return Number.isFinite(mult) && mult > 0;
+    }
+
+    static pitchListIsValid(pitches){
+        if (pitches.length < 1) return false;
+
+        for (let p of pitches){
+            if (!Number.isFinite(p)){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

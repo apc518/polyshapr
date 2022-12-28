@@ -143,6 +143,7 @@ function displayCurrentPatchSettings(){
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
     displayAnimationModeSettings();
     displayRhythmSettings();
+    displayPitchSettings();
     cycleTimeInput.value = currentPatch.cycleTime;
 }
 

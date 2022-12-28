@@ -69,9 +69,14 @@ const pitchModeOptions = [
         func: () => console.warn("no function for custom pitch mode")
     },
     {
+        name: PITCH_MODES.HARMONIC_SERIES,
+        displayName: "Harmonic Series",
+        func: n => Array.from({length: n}, (_,i) => i+1)
+    },
+    {
         name: PITCH_MODES.PENTATONIC,
         displayName: "Pentatonic",
-        func: () => {
+        func: n => {
             let lst = [];
             let v = 0;
             for (let i = 0; i < n; i++){
@@ -157,4 +162,38 @@ const pitchModeOptions = [
             return lst;
         }
     }
-]
+];
+
+const pitchModeOptionsMap = {};
+
+for (let option of pitchModeOptions){
+    pitchModeOptionsMap[option.name] = option;
+}
+
+function getPitchOptionNameByIndex(idx){
+    return pitchModeOptions[idx].name;
+}
+
+function getIndexOfPitchModeOption(optionName){
+    for (let i = 0; i < pitchModeDropdown.children.length; i++){
+        if (pitchModeDropdown.children[i].value === optionName){
+            return i;
+        }
+    }
+
+    throw new Error(`pitch mode option ${optionName} not found in pitch mode dropdown`);
+}
+
+function getTuningOptionNameByIndex(idx){
+    return tuningModeOptions[idx].name;
+}
+
+function getIndexOfTuningModeOption(optionName){
+    for (let i = 0; i < tuningModeDropdown.children.length; i++){
+        if (tuningModeDropdown.children[i].value === optionName){
+            return i;
+        }
+    }
+
+    throw new Error(`tuning mode option ${optionName} not found in tuning mode dropdown`);
+}

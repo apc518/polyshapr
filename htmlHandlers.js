@@ -22,6 +22,11 @@ const rhythmListCountInput = document.getElementById("rhythmListCountInput");
 const rhythmListOffsetInput = document.getElementById("rhythmListOffsetInput");
 const rhythmListIsReversedCheckbox = document.getElementById("rhythmListIsReversedCheckbox");
 const cycleTimeInput = document.getElementById("cycleTimeInput");
+const pitchListInput = document.getElementById("pitchListInput");
+const tuningModeDropdown = document.getElementById("tuningModeDropdown");
+const pitchModeDropdown = document.getElementById("pitchModeDropdown");
+const pitchOffsetInput = document.getElementById("pitchOffsetInput");
+const pitchMultiplierInput = document.getElementById("pitchMultiplierInput");
 
 
 // html elem event listeners
@@ -116,9 +121,8 @@ function applyRhythmsFromInput(){
     rhythmListCountInput.value = nums.length;
 
     // set selected rhythm mode to custom
-    let customIdx = -1;
-    rhythmModeOptions.forEach((option, idx) => option.name === RHYTHM_MODES.CUSTOM ? customIdx = idx : 0 );
-    rhythmModeDropdown.selectedIndex = customIdx;
+    rhythmModeDropdown.selectedIndex = getIndexOfRhythmModeOption(RHYTHM_MODES.CUSTOM);
+
     rhythmModeDropdown.oninput();
 
     fullRefresh();
@@ -181,5 +185,64 @@ cycleTimeInput.oninput = () => {
     }
     else{
         cycleTimeInput.style.backgroundColor = textFieldErrorColor;
+    }
+}
+
+
+pitchListInput.oninput = () => {
+    let nums = pitchListInput.value.split(",").map(r => parseFloat(r));
+    
+    // if we dont have a valid list yet just return
+    if (!Patch.pitchListIsValid(nums)){
+        pitchListInput.style.backgroundColor = textFieldErrorColor;
+        return;
+    }
+
+    pitchListInput.style.backgroundColor = textFieldOkayColor;
+
+    currentPatch.pitches = nums;
+
+    // set selected pitch mode to custom
+    pitchModeDropdown.selectedIndex = getIndexOfPitchModeOption(PITCH_MODES.CUSTOM);
+
+    fullRefresh();
+}
+
+
+function updatePitchesFromPresetInput(){
+    if (pitchModeDropdown.selectedIndex === getIndexOfPitchModeOption(PITCH_MODES.CUSTOM)) return;
+
+    // pitch list
+    currentPatch.pitches = pitchModeOptions[pitchModeDropdown.selectedIndex]
+        .func(currentPatch.rhythms.length);
+    
+    pitchListInput.value = currentPatch.pitches.join();
+
+    // count and offset
+    currentPatch.pitchOffset = pitchOffsetInput.valueAsNumber;
+    currentPatch.pitchMultiplier = pitchMultiplierInput.valueAsNumber;
+
+    fullRefresh();
+}
+
+
+tuningModeDropdown.oninput = () => {
+    currentPatch.tuningMode = getTuningOptionNameByIndex(tuningModeDropdown.selectedIndex);
+
+    let tuningModeIsRaw = currentPatch.tuningMode === TUNING_MODES.RAW;
+    pitchOffsetInput.disabled = tuningModeIsRaw;
+    pitchMultiplierInput.disabled = !tuningModeIsRaw;
+    updatePitchesFromPresetInput();
+}
+
+pitchOffsetInput.oninput = () => {
+    if (Patch.pitchOffsetIsValid(pitchOffsetInput.valueAsNumber)){
+        updatePitchesFromPresetInput();
+    }
+}
+
+pitchMultiplierInput.oninput = () => {
+    if (Patch.pitchMultiplierIsValid(pitchMultiplierInput.valueAsNumber)){
+        updatePitchesFromPresetInput();
     }
 }

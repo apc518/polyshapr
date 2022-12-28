@@ -81,6 +81,5 @@ function getIndexOfRhythmModeOption(optionName){
         }
     }
 
-    throw new Error(`option ${optionName} not found in dropdown`);
+    throw new Error(`rhythm option ${optionName} not found in rhythm mode dropdown`);
 }
-

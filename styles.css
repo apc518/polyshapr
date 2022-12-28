@@ -66,8 +66,11 @@ body{
     text-align: center;
 }
 
-.patchSettingTextInput{
+#rhythmListInput{
     margin-top: 1rem;
+}
+
+.patchSettingTextInput{
     width: 100%;
     box-sizing: border-box;
 }
@@ -77,7 +80,7 @@ body{
 }
 
 .listWithModesInput{
-    margin-bottom: 1rem;
+    margin-block: 1rem;
 }
 
 .patchSettingNumericalInput{

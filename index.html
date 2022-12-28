@@ -53,6 +53,23 @@
                         <label for="cycleTimeInput">Cycle Length (seconds)</label> <br/>
                         <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
                     </div>
+
+                    <div class="listWithModesInput" id="rhythmSettings">
+                        <div style="margin-bottom: 1rem">
+                            <label for="pitchListInput">Pitches</label> <br/>
+                        </div>
+                        <div id="presetPitchListControls">
+                            <input type="text" id="pitchListInput" class="patchSettingTextInput"/> 
+                            <br/>
+                            <select id="tuningModeDropdown"></select><label for="tuningModeDropdown" class="secondaryLabels">Tuning</label>
+                            <br/>
+                            <select id="pitchModeDropdown"></select><label for="pitchModeDropdown" class="secondaryLabels">Mode</label>
+                            <br/>
+                            <input type="number" id="pitchOffsetInput" /> <label for="pitchListOffsetInput" class="secondaryLabels">Offset</label>
+                            <br/>
+                            <input type="number" min="0" id="pitchMultiplierInput" /> <label for="pitchListIsReversedCheckbox" class="secondaryLabels">Multiplier</label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="centralDiv">
@@ -77,14 +94,13 @@
         <script src="utils/math.js" defer></script>
         <script src="utils/drawing.js" defer></script>
         <script src="htmlHandlers.js" defer></script>
-        <script src="patchModeOptions/animation.js" defer></script>
-        <script src="patchModeOptions/rhythm.js" defer></script>
-        <script src="patchModeOptions/pitch.js" defer></script>
-        <script src="patchSettingsDisplayers/animation.js" defer></script>
-        <script src="patchSettingsDisplayers/pitch.js" defer></script>
-        <script src="patchSettingsDisplayers/rhythm.js" defer></script>
+        <script src="patchModeOptions/animationOptions.js" defer></script>
+        <script src="patchModeOptions/rhythmOptions.js" defer></script>
+        <script src="patchModeOptions/pitchOptions.js" defer></script>
+        <script src="patchSettingsDisplayers/animationSettingsDisplayer.js" defer></script>
+        <script src="patchSettingsDisplayers/pitchSettingsDisplayer.js" defer></script>
+        <script src="patchSettingsDisplayers/rhythmSettingsDisplayer.js" defer></script>
         <script src="color.js" defer></script>
-        <script src="sound/pitch.js" defer></script>
         <script src="sound/sound.js" defer></script>
         <script src="Patch.js" defer></script>
         <script src="PolyRhythm.js" defer></script>

@@ -7,11 +7,11 @@ const presets = [
         rhythmIsReversed: false,
         rhythms: [],
         cycleTime: 10,
-        pitchMode: PITCH_MODES.SUHMM_CHORD,
+        pitchMode: PITCH_MODES.HARMONIC_SERIES,
         tuningMode: TUNING_MODES.EDO12,
         pitches: [],
-        pitchOffset: -7, // used if pitch mode is edo12
-        pitchMultiplier: 1, // used if pitch mode is raw
+        pitchOffset: -9, // used if pitch mode is edo12
+        pitchMultiplier: 1.5, // used if pitch mode is raw
         skips: [],
         colorMode: COLOR_MODES.RGB,
         colorKeyFrames: [
