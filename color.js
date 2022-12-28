@@ -24,7 +24,6 @@ class ColorKeyFrame {
 function copyColorKeyFrameList(colorKeyFrameList){
     let copy = [];
     for (let k of colorKeyFrameList){
-        console.log(k);
         copy.push(new ColorKeyFrame(k));
     }
     

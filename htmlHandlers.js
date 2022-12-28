@@ -267,8 +267,6 @@ function refreshColorInputValidationIndication(){
     
         let validValues = Patch.colorValuesValidation(colorValues, currentPatch.colorMode);
 
-        console.log(validValues);
-    
         for (let i = 0; i < keyFrameInput.children.length; i++){
             keyFrameInput.children[i].style.backgroundColor = validValues[i] ? textFieldOkayColor : textFieldErrorColor;
 
@@ -286,8 +284,6 @@ function updateColorsFromInput(){
     currentPatch.colorMode = getColorOptionNameByIndex(colorModeDropdown.selectedIndex);
     
     if (!refreshColorInputValidationIndication()) return;
-
-    console.log("colors were valid");
 
     let keyframe0values = [
         colorKeyFrameInput0.children[0].valueAsNumber,
@@ -313,8 +309,7 @@ colorModeDropdown.oninput = () => {
     updateColorsFromInput();
 }
 
-colorKeyFrameInput0.oninput = e => {
-    console.log(e);
+colorKeyFrameInput0.oninput = () => {
     updateColorsFromInput();
 }
 

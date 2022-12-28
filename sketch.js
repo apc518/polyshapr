@@ -223,8 +223,6 @@ function keyPressed(e){
         // some clever math hehe
         transposition = 39 - keyCode;
         
-        console.log("transposition:", transposition);
-
         // let newNoteSpeeds = Array.from(notes, n => Math.pow(2, (n + transposition)/12));
         if (currentPatch.pitchMode === TUNING_MODES.RAW){
             currentPatch.pitchMultiplier *= Math.pow(2, transposition / 12);
