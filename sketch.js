@@ -163,6 +163,7 @@ function fullRefresh(){
 function displayCurrentPatchSettings(){
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
     initializeRhythmUIBasedOnCurrentPatch();
+    cycleTimeInput.value = currentPatch.cycleTime;
 }
 
 

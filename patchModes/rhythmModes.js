@@ -94,34 +94,6 @@ function getIndexOfRhythmModeOption(optionName){
 }
 
 
-function rhythmModeIsValid(mode){
-    for (let option of rhythmModeOptions){
-        if (option.name === mode) return true;
-    }
-
-    return false;
-}
-
-function rhythmOffsetIsValid(offset){
-    return Number.isFinite(offset) && offset >= 0;
-}
-
-function rhythmCountIsValid(count){
-    return Number.isFinite(count) && count > 0;
-}
-
-function rhythmListIsValid(rhythms){
-    if (rhythms.length < 1) return false;
-
-    for (let r of rhythms){
-        if ((!Number.isFinite(r)) || r < 0){
-            return false;
-        }
-    }
-
-    return true;
-}
-
 /**
  * if the rhythms list has items in it that contradict the mode and other rhythm settings,
  * the mode will be set to custom but the other settings will remain in the patch for use
@@ -138,16 +110,16 @@ function resolveConflictsBetweenRhythmListAndModeInCurrentPatch(){
 
 
 function initializeRhythmUIBasedOnCurrentPatch(){
-    if (!rhythmModeIsValid(currentPatch.rhythmMode))
+    if (!Patch.rhythmModeIsValid(currentPatch.rhythmMode))
         throw new Error("rhythm mode is invalid:", currentPatch.rhythmMode);
     
-    if (!rhythmOffsetIsValid(currentPatch.rhythmOffset))
+    if (!Patch.rhythmOffsetIsValid(currentPatch.rhythmOffset))
         throw new Error("rhythm offset is invalid:", currentPatch.rhythmOffset);
 
-    if (!rhythmCountIsValid(currentPatch.rhythmCount))
+    if (!Patch.rhythmCountIsValid(currentPatch.rhythmCount))
         throw new Error("rhythm count is invalid:", currentPatch.rhythmCount);
 
-    if (!rhythmListIsValid(currentPatch.rhythms)){
+    if (!Patch.rhythmListIsValid(currentPatch.rhythms)){
         if(currentPatch.rhythmMode === RHYTHM_MODES.CUSTOM){
             throw new Error("given rhythm list was invalid and rhythm mode was custom, cannot create polyrhythm.");
         }

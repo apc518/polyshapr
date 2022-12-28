@@ -33,7 +33,7 @@
                         <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/>
                     </div>
 
-                    <div id="rhythmSettings">
+                    <div class="listWithModesInput" id="rhythmSettings">
                         <label for="rhythmListInput">Rhythms</label> <br/>
                         <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
                         <div id="presetRhythmListControls">
@@ -46,8 +46,12 @@
                             <input type="number" max="50" id="rhythmListOffsetInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
                             <br/>
                             <input type="checkbox" id="rhythmListIsReversedCheckbox" /> <label for="rhythmListIsReversedCheckbox" class="secondaryLabels">Reversed</label>
-
                         </div>
+                    </div>
+
+                    <div class="simpleNumericalSetting">
+                        <label for="cycleTimeInput">Cycle Length (seconds)</label> <br/>
+                        <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
                     </div>
                 </div>
             </div>

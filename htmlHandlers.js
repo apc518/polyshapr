@@ -1,5 +1,8 @@
 "use strict";
 
+const textFieldErrorColor = "#f88";
+const textFieldOkayColor = "#fff";
+
 // html elements
 const playPauseBtn = document.getElementById("playpausebtn");
 const resetBtn = document.getElementById("resetbtn");
@@ -18,6 +21,7 @@ const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
 const rhythmListCountInput = document.getElementById("rhythmListCountInput");
 const rhythmListOffsetInput = document.getElementById("rhythmListOffsetInput");
 const rhythmListIsReversedCheckbox = document.getElementById("rhythmListIsReversedCheckbox");
+const cycleTimeInput = document.getElementById("cycleTimeInput");
 
 
 // html elem event listeners
@@ -98,20 +102,15 @@ rhythmListInput.oninput = () => {
 }
 
 function applyRhythmsFromInput(){
-    let sNums = rhythmListInput.value.split(",");
-    let nums = [];
+    let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
     
-    for (let sNum of sNums){
-        let parsedNum = parseFloat(sNum);
-        if (Number.isFinite(parsedNum) && parsedNum >= 0){
-            nums.push(parsedNum);
-        }
-    }
-
     // if we dont have a valid list yet just return
-    if (nums.length < 1){
+    if (!Patch.rhythmListIsValid(nums)){
+        rhythmListInput.style.backgroundColor = textFieldErrorColor;
         return;
     }
+
+    rhythmListInput.style.backgroundColor = textFieldOkayColor;
 
     currentPatch.rhythms = nums;
     rhythmListCountInput.value = nums.length;
@@ -132,7 +131,7 @@ function updateRhythmsFromPresetInput(){
     // rhythm list
     currentPatch.rhythms = rhythmModeOptions[rhythmModeDropdown.selectedIndex]
         .func(rhythmListCountInput.valueAsNumber, rhythmListOffsetInput.valueAsNumber, rhythmListIsReversedCheckbox.checked);
-    console.log(currentPatch.rhythms);
+    
     rhythmListInput.value = currentPatch.rhythms.join();
 
     // count and offset
@@ -145,19 +144,42 @@ function updateRhythmsFromPresetInput(){
     fullRefresh();
 }
 
-rhythmModeDropdown.oninput = (e) => {
-    rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = getRhythmOptionNameFromIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
+rhythmModeDropdown.oninput = () => {
+    let disabled = getRhythmOptionNameFromIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
+    rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
     updateRhythmsFromPresetInput();
 }
 
-rhythmListCountInput.oninput = e => {
+rhythmListCountInput.oninput = () => {
+    if (Patch.rhythmCountIsValid(rhythmListCountInput.valueAsNumber)){
+        updateRhythmsFromPresetInput();
+        rhythmListCountInput.style.backgroundColor = textFieldOkayColor;
+    }
+    else{
+        rhythmListCountInput.style.backgroundColor = textFieldErrorColor;
+    }
+}
+
+rhythmListOffsetInput.oninput = () => {
+    if (Patch.rhythmOffsetIsValid(rhythmListCountInput.valueAsNumber)){
+        updateRhythmsFromPresetInput();
+        rhythmListCountInput.style.backgroundColor = textFieldOkayColor;
+    }
+    else{
+        rhythmListCountInput.style.backgroundColor = textFieldErrorColor;
+    }
+}
+
+rhythmListIsReversedCheckbox.oninput = () => {
     updateRhythmsFromPresetInput();
 }
 
-rhythmListOffsetInput.oninput = e => {
-    updateRhythmsFromPresetInput();
-}
-
-rhythmListIsReversedCheckbox.oninput = e => {
-    updateRhythmsFromPresetInput();
+cycleTimeInput.oninput = () => {
+    if (Patch.cycleTimeIsValid(cycleTimeInput.valueAsNumber)){
+        currentPatch.cycleTime = cycleTimeInput.valueAsNumber;
+        cycleTimeInput.style.backgroundColor = textFieldOkayColor;
+    }
+    else{
+        cycleTimeInput.style.backgroundColor = textFieldErrorColor;
+    }
 }

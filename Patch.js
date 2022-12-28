@@ -38,4 +38,36 @@ class Patch {
         this.size = size;
         this.backgroundColor = backgroundColor;
     }
+
+    static rhythmModeIsValid(mode){
+        for (let option of rhythmModeOptions){
+            if (option.name === mode) return true;
+        }
+    
+        return false;
+    }
+    
+    static rhythmOffsetIsValid(offset){
+        return Number.isFinite(offset) && offset >= 0;
+    }
+    
+    static rhythmCountIsValid(count){
+        return Number.isFinite(count) && count > 0;
+    }
+    
+    static rhythmListIsValid(rhythms){
+        if (rhythms.length < 1) return false;
+    
+        for (let r of rhythms){
+            if ((!Number.isFinite(r)) || r < 0){
+                return false;
+            }
+        }
+    
+        return true;
+    }
+
+    static cycleTimeIsValid(cycleTime){
+        return Number.isFinite(cycleTime) && cycleTime > 0;
+    }
 }

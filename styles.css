@@ -50,11 +50,6 @@ body{
     padding-inline: 0.5rem;
 }
 
-#rhythmListInput{
-    width: 100%;
-    box-sizing: border-box;
-}
-
 #rhythmListCountInput{
     width: 3rem;
 }
@@ -74,8 +69,18 @@ body{
 .patchSettingTextInput{
     margin-top: 1rem;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .secondaryLabels{
     font-size: 0.8rem;
+}
+
+.listWithModesInput{
+    margin-bottom: 1rem;
+}
+
+.patchSettingNumericalInput{
+    margin-top: 1rem;
+    width: 3rem;
 }
