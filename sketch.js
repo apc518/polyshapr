@@ -149,7 +149,7 @@ function displayCurrentPatchSettings(){
 function setup(){
     console.log("hello there");
 
-    Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enabled audio" })
+    Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
         globalVolumeSlider.oninput({ target: globalVolumeSlider });
         
