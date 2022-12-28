@@ -1,31 +1,31 @@
 const consoleErrorStyle = "color: red; font-weight: bold;"
 const consoleGoodStyle = "color: green; font-weight: bold;"
 
-let pr = null;
+let test_pr = null;
 
 const myTests = [
     {
         name: "PositionTest1",
         desc: "Test that position is calculated correctly",
         func: () => {
-            pr.setProgress(0.5);
-            return pr.pos.x === 50 && pr.pos.y === 0;
+            test_pr.setProgress(0.5);
+            return test_pr.pos.x === 50 && test_pr.pos.y === 0;
         }
     },
     {
         name: "PositionTest2",
         desc: "Test that position is calculated correctly",
         func: () => {
-            pr.setProgress(0.4);
-            return pr.pos.x === 80 && pr.pos.y === 40;
+            test_pr.setProgress(0.4);
+            return test_pr.pos.x === 80 && test_pr.pos.y === 40;
         }
     },
     {
         name: "PositionTest3",
         desc: "Test that position is calculated correctly",
         func: () => {
-            pr.setProgress(0.9);
-            return pr.pos.x === 70 && pr.pos.y === 40;
+            test_pr.setProgress(0.9);
+            return test_pr.pos.x === 70 && test_pr.pos.y === 40;
         }
     },
     {
@@ -43,11 +43,27 @@ const myTests = [
             pr2.setProgress(0);
             return pr2.pos.x === 10 && pr2.pos.y === 10;
         }
+    },
+    {
+        name: "PatchValidationTest1",
+        desc: "Test that the Patch class validates rhythm lists correctly",
+        func: () => {
+            let lst = [0,1,2,3,4,5,6,7,8];
+            return Patch.rhythmListIsValid(lst);
+        }
+    },
+    {
+        name: "PatchValidationTest2",
+        desc: "Test that the Patch class validates rhythm lists correctly",
+        func: () => {
+            let lst = [-1,0,1,2,3,4,5,6,7,8];
+            return !Patch.rhythmListIsValid(lst);
+        }
     }
 ]
 
 function runTests(){
-    pr = new RectanglePolyRhythm2d({
+    test_pr = new RectanglePolyRhythm2d({
         xRhythm: 3,
         yRhythm: 4,
         init_pos: createVector(0, 0),
