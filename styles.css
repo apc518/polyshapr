@@ -88,6 +88,15 @@ body{
     width: 3rem;
 }
 
+.colorKeyFrameContainer{
+    display: flex;
+    align-items: center;
+}
+
 .colorKeyFrameInput{
-    width: 3rem;
+    width: 2.5rem;
+}
+
+.colorKeyFrameLabel{
+    margin-left: 5px;
 }
