@@ -1,10 +1,14 @@
 const presets = [
     {
-        animationMode: ANIMATION_MODES.SQUARES,
-        rhythms: [3,4,5,6,7,8,9,10],
+        animationMode: ANIMATION_MODES.NGONS,
+        rhythmMode: RHYTHM_MODES.NATURALS,
+        rhythmOffset: 3,
+        rhythmCount: 8,
+        rhythmIsReversed: false,
+        rhythms: [],
         cycleTime: 10,
-        pitchPreset: PITCH_PRESETS.SUHMM_CHORD,
-        pitchMode: PITCH_MODES.EDO12,
+        pitchMode: PITCH_MODES.SUHMM_CHORD,
+        tuningMode: TUNING_MODES.EDO12,
         pitches: [],
         pitchOffset: -7, // used if pitch mode is edo12
         pitchMultiplier: 1, // used if pitch mode is raw
@@ -15,7 +19,7 @@ const presets = [
             new ColorKeyFrame({ idx: -1, values: [127, 255, 50] }),
         ],
         doColorRipple: false,
-        strokeWeight: 5,
+        strokeWeight: 3,
         canvasWidth: canvasWidth,
         canvasHeight: canvasHeight,
         ngonShrinkFactor: 0.9,

@@ -32,11 +32,11 @@ function clearSoundList(){
 }
 
 function populateSoundList(patch){
-    if (patch.pitchMode === PITCH_MODES.RAW){
+    if (patch.tuningMode === TUNING_MODES.RAW){
         let noteSpeeds;
 
-        if (Object.keys(rawPitchPresetFunctions).includes(patch.pitchPreset)){
-            noteSpeeds = rawPitchPresetFunctions[patch.pitchPreset](patch.rhythms.length);
+        if (Object.keys(rawPitchPresetFunctions).includes(patch.pitchMode)){
+            noteSpeeds = rawPitchPresetFunctions[patch.pitchMode](patch.rhythms.length);
         }
         else if (patch.pitches && patch.pitches.length === patch.rhythms.length){
             noteSpeeds = patch.pitches;
@@ -58,10 +58,10 @@ function populateSoundList(patch){
             soundList.push(new Sound(howl, speed));
         }
     }
-    else if (patch.pitchMode === PITCH_MODES.EDO12){
+    else if (patch.tuningMode === TUNING_MODES.EDO12){
         let notes;
-        if (Object.keys(edo12PitchPresetFunctions).includes(patch.pitchPreset)){
-            notes = edo12PitchPresetFunctions[patch.pitchPreset](patch.rhythms.length);
+        if (Object.keys(edo12PitchPresetFunctions).includes(patch.pitchMode)){
+            notes = edo12PitchPresetFunctions[patch.pitchMode](patch.rhythms.length);
         }
         else if (patch.pitches && patch.pitches.length === patch.rhythms.length){
             notes = patch.pitches;

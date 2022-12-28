@@ -2,14 +2,14 @@
 // and will return a list of the speeds of each pitch according to the mode
 const rawPitchPresetFunctions = {};
 
-rawPitchPresetFunctions[PITCH_PRESETS.HARMONIC_SERIES] = n => Array.from({length: n}, (_,i) => i+1);
+rawPitchPresetFunctions[PITCH_MODES.HARMONIC_SERIES] = n => Array.from({length: n}, (_,i) => i+1);
 
 
 // each function will accept a Number argumetns specifying the number of pitches
 // and will return a list of the chromatic scale degrees, aka semitone offsets from root
 const edo12PitchPresetFunctions = {};
 
-edo12PitchPresetFunctions[PITCH_PRESETS.PENTATONIC] = n => {
+edo12PitchPresetFunctions[PITCH_MODES.PENTATONIC] = n => {
     let lst = [];
     let v = 0;
     for (let i = 0; i < n; i++){
@@ -23,7 +23,7 @@ edo12PitchPresetFunctions[PITCH_PRESETS.PENTATONIC] = n => {
     return lst;
 }
 
-edo12PitchPresetFunctions[PITCH_PRESETS.SUHMM_SCALE] = n => {
+edo12PitchPresetFunctions[PITCH_MODES.SUHMM_SCALE] = n => {
     let lst = [];
     let v = 0;
     for (let i = 0; i < n; i++){
@@ -35,8 +35,8 @@ edo12PitchPresetFunctions[PITCH_PRESETS.SUHMM_SCALE] = n => {
     return lst;
 }
 
-edo12PitchPresetFunctions[PITCH_PRESETS.SUHMM_CHORD] = n => {
-    let scaleNotes = edo12PitchPresetFunctions[PITCH_PRESETS.SUHMM_SCALE](n*2);
+edo12PitchPresetFunctions[PITCH_MODES.SUHMM_CHORD] = n => {
+    let scaleNotes = edo12PitchPresetFunctions[PITCH_MODES.SUHMM_SCALE](n*2);
 
     let lst = [];
     for (let i = 0; i < scaleNotes.length; i++){
@@ -48,7 +48,7 @@ edo12PitchPresetFunctions[PITCH_PRESETS.SUHMM_CHORD] = n => {
     return lst;
 }
 
-edo12PitchPresetFunctions[PITCH_PRESETS.MAJOR] = n => {
+edo12PitchPresetFunctions[PITCH_MODES.MAJOR] = n => {
     let lst = [];
     let v = 0;
     for (let i = 0; lst.length <= n; i++){
@@ -71,7 +71,7 @@ edo12PitchPresetFunctions[PITCH_PRESETS.MAJOR] = n => {
     return lst.slice(0, n);
 }
 
-edo12PitchPresetFunctions[PITCH_PRESETS.MINOR] = n => {
+edo12PitchPresetFunctions[PITCH_MODES.MINOR] = n => {
     let lst = [];
     let v = 0;
     for (let i = 0; lst.length <= n; i++){

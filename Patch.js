@@ -4,22 +4,27 @@
  */
 class Patch {
     // this works as a copy constructor in addition to constructing from a simple js struct
-    constructor({ animationMode, rhythms, cycleTime, pitchPreset, pitchMode, pitches, pitchOffset, 
-                  pitchMultiplier, skips, colorMode, colorKeyFrames, doColorRipple, strokeWeight, 
-                  canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount, squareStyle, size, backgroundColor }){
-        // basic
-        this.animationMode = animationMode;
+    constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
+                  pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorMode, colorKeyFrames,
+                  doColorRipple, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
+                  squareStyle, size, backgroundColor }){
+        // rhythm
+        this.rhythmMode = rhythmMode;
+        this.rhythmOffset = rhythmOffset;
+        this.rhythmCount = rhythmCount;
+        this.rhythmIsReversed = rhythmIsReversed;
         this.rhythms = rhythms.slice();
         this.cycleTime = cycleTime;
         
         // sound
-        this.pitchPreset = pitchPreset;
         this.pitchMode = pitchMode;
+        this.tuningMode = tuningMode;
         this.pitches = pitches.slice();
         this.pitchOffset = pitchOffset; // used if pitch mode is EDO
         this.pitchMultiplier = pitchMultiplier; // used if pitch mode is RAW
         
         // visual
+        this.animationMode = animationMode;
         this.skips = skips.slice(); // no skips means assume 0 skip for all
         this.colorMode = colorMode;
         this.colorKeyFrames = Array.from(colorKeyFrames, k => new ColorKeyFrame(k));

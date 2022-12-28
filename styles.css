@@ -10,10 +10,72 @@ body{
     max-width: 4rem;
 }
 
+#soundOnCheckbox{
+    margin-bottom: 1rem;
+}
+
 .slider{
-    min-width: 400px;
+    width: fit-content;
+    min-width: 200px;
+}
+
+.settingsSlider{
+    margin-bottom: 1rem;
 }
 
 #globalProgressSlider{
-    min-width: 1000px;
+    min-width: 800px;
+}
+
+#appDrawer{
+    width: fit-content;
+    max-width: 300px;
+    margin-right: 1rem;
+}
+
+#nonPatchSettings{
+    background-color: #333;
+    padding-bottom: 1rem;
+    padding-inline: 0.5rem;
+}
+
+#appDrawerDivider{
+    min-height: 5px;
+    background-color: black;
+}
+
+#patchSettings{
+    padding-top: 1rem;
+    background-color: #2a2a2a;
+    padding-inline: 0.5rem;
+}
+
+#rhythmListInput{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#rhythmListCountInput{
+    width: 3rem;
+}
+
+#rhythmListOffsetInput{
+    width: 3rem;
+}
+
+#presetRhythmListControls{
+    max-width: 200px;
+}
+
+#globalProgressControlButtons{
+    text-align: center;
+}
+
+.patchSettingTextInput{
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.secondaryLabels{
+    font-size: 0.8rem;
 }

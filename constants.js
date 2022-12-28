@@ -14,22 +14,17 @@ const PROGRESS_SLIDER_RESOLUTION = 1000;
 const SPACE_KEYCODE = 32;
 const UP_ARROW_KEYCODE = 38;
 const DOWN_ARROW_KEYCODE = 40;
+const DEBUG = false;
 
 
 // enums
 
-const ANIMATION_MODES = Object.freeze({
-    SQUARES: "squares",
-    TRIANGLES: "triangles",
-    NGONS: "ngons"
-});
-
-const PITCH_MODES = Object.freeze({
+const TUNING_MODES = Object.freeze({
     EDO12: "edo12", // 12-edo
     RAW: "raw" // useful for a harmonic series kind of thing
 });
 
-const PITCH_PRESETS = Object.freeze({
+const PITCH_MODES = Object.freeze({
     NONE: "none",
     PENTATONIC: "pentatonic",
     MAJOR: "major",
