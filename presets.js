@@ -7,7 +7,7 @@ const presets = [
         rhythmIsReversed: false,
         rhythms: [],
         cycleTime: 10,
-        pitchMode: PITCH_MODES.HARMONIC_SERIES,
+        pitchMode: PITCH_MODES.SUHMM_CHORD,
         tuningMode: TUNING_MODES.EDO12,
         pitches: [],
         pitchOffset: -9, // used if pitch mode is edo12

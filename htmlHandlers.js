@@ -30,6 +30,7 @@ const pitchMultiplierInput = document.getElementById("pitchMultiplierInput");
 const colorModeDropdown = document.getElementById("colorModeDropdown");
 const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
+const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 
 
 // html elem event listeners
@@ -54,7 +55,7 @@ resetBtn.onclick = e => {
 soundOnCheckbox.checked = true;
 soundOnCheckbox.oninput = e => {
     e.target.blur();
-    soundOn = e.target.checked;
+    soundOn = soundOnCheckbox.checked;
 }
 
 const globalSpeedSliderMax = Math.max(1, parseInt(globalSpeedSlider.max))
@@ -315,4 +316,9 @@ colorKeyFrameInput0.oninput = () => {
 
 colorKeyFrameInput1.oninput = () => {
     updateColorsFromInput();
+}
+
+colorRippleCheckbox.oninput = () => {
+    currentPatch.doColorRipple = colorRippleCheckbox.checked;
+    colorRippleCheckbox.blur();
 }

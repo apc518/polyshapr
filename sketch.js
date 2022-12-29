@@ -141,9 +141,10 @@ function displayCurrentPatchSettings(){
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
     displayAnimationModeSettings();
     displayRhythmSettings();
+    cycleTimeInput.value = currentPatch.cycleTime;
     displayPitchSettings();
     displayColorSettings();
-    cycleTimeInput.value = currentPatch.cycleTime;
+    colorRippleCheckbox.checked = currentPatch.doColorRipple;
 }
 
 
