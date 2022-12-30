@@ -12,9 +12,8 @@ let globalProgress = 0;
 let master_pr;
 
 let currentPatch = new Patch(presets[0]);
-let audioSampleNames = ["assets/sounds/synth-pluck-C.wav", "assets/sounds/sine-blip-Eb.wav", "assets/sounds/synth-decay-Eb.wav"];
-let audioFileName = audioSampleNames[0];
-
+let audioFileName = audioSampleOptions[0].filepath;
+let audioFileExtension = audioSampleOptions[0].extension;
 
 function onHit(soundIdx){
     debugLog("onhit called for idx", soundIdx);
@@ -149,13 +148,25 @@ function displayCurrentPatchSettings(){
 }
 
 function displayAudioSampleSettings(){
-    for (let sampleName of audioSampleNames){
+    for (let option of audioSampleOptions){
         let elem = document.createElement('option');
-        elem.value = sampleName;
-        let samplePathParts = sampleName.split("/");
-        let sampleFileName = samplePathParts[samplePathParts.length - 1];
-        elem.innerText = sampleFileName.slice(0, sampleFileName.length - 4);
+        elem.value = option.filepath;
+        elem.innerText = option.displayName;
         audioSampleDropdown.appendChild(elem);
+
+        if (option.custom){
+            elem.onclick = () => {
+                audioSampleFileInput.click();
+            }
+        }
+        else{
+            elem.onclick = () => {
+                audioFileName = option.filepath;
+                let filenameSplitbyDot = audioFileName.split(".");
+                audioFileExtension = filenameSplitbyDot[filenameSplitbyDot.length - 1];
+                fullRefresh();
+            }
+        }
     }
 }
 

@@ -33,6 +33,12 @@ const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 
+const audioSampleFileInput = document.createElement('input');
+audioSampleFileInput.type = 'file';
+audioSampleFileInput.multiple = false;
+
+const stopAllSounds = () => soundList.forEach(s => s.stop());
+
 
 // html elem event listeners
 playPauseBtn.onclick = e => {
@@ -47,6 +53,8 @@ resetBtn.onclick = e => {
         master_pr.reset();
     }catch(e){}
 
+    stopAllSounds();
+
     pause_();
     globalProgressSlider.value = 0;
     globalProgressSlider.oninput({ target: globalProgressSlider })
@@ -57,6 +65,9 @@ soundOnCheckbox.checked = true;
 soundOnCheckbox.oninput = e => {
     e.target.blur();
     soundOn = soundOnCheckbox.checked;
+    if (!soundOn){
+        stopAllSounds();
+    }
 }
 
 const globalSpeedSliderMax = Math.max(1, parseInt(globalSpeedSlider.max))
@@ -91,9 +102,16 @@ globalProgressSlider.oninput = e => {
     paint();
 }
 
-audioSampleDropdown.oninput = () => {
-    audioFileName = audioSampleDropdown.children[audioSampleDropdown.selectedIndex].value;
-    fullRefresh();
+audioSampleFileInput.onchange = e => {
+    audioSampleFileInput.files[0].arrayBuffer().then(res => {
+        let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")
+        audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
+
+        let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
+        console.log(blob);
+        audioFileName = blob;
+        fullRefresh();
+    });
 }
 
 const strokeWeightSliderResolution = 50;

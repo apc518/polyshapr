@@ -19,7 +19,7 @@ function populateSoundListFromPreset(){
                 console.warn("pitch multiplier was not a number in currentPatch:", currentPatch);
             }
 
-            soundList.push(new Sound(audioFileName, speed));
+            soundList.push(new Sound(audioFileName, audioFileExtension, speed));
         }
     }
     else if (currentPatch.tuningMode === TUNING_MODES.EDO12){
@@ -35,7 +35,7 @@ function populateSoundListFromPreset(){
         for (let note of currentPatch.pitches){
             let speed = Math.pow(2, (note + offset) / 12);
 
-            soundList.push(new Sound(audioFileName, speed));
+            soundList.push(new Sound(audioFileName, audioFileExtension, speed));
         }
     }
     else{
