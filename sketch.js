@@ -179,7 +179,7 @@ function setup(){
     p5canvas.parent(document.getElementById("p5canvas"));
     p5canvas.canvas.style.marginTop = "1rem";
 
-    Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
+    Swal.fire({ title: "Welcome to PolyShapr!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
         displayCurrentPatchSettings();
         displayAudioSampleSettings();
