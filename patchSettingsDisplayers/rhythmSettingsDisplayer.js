@@ -28,7 +28,7 @@ function initializeRhythmUIBasedOnCurrentPatch(){
             throw new Error("given rhythm list was invalid and rhythm mode was custom, cannot create polyrhythm.");
         }
         else{
-            console.warn("given rhythm list was invalid; using other rhythm settings");
+            console.log("given rhythm list was invalid; using other rhythm settings");
             currentPatch.rhythms = rhythmModeOptionsMap[currentPatch.rhythmMode].func(currentPatch.rhythmCount, currentPatch.rhythmOffset, currentPatch.rhythmIsReversed)
         }
     }
