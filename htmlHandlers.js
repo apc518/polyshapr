@@ -109,7 +109,7 @@ audioSampleFileInput.onchange = e => {
 
         let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
         audioFileName = blob;
-        
+
         fullRefresh();
     });
 }
@@ -193,12 +193,12 @@ rhythmListCountInput.oninput = () => {
 }
 
 rhythmListOffsetInput.oninput = () => {
-    if (Patch.rhythmOffsetIsValid(rhythmListCountInput.valueAsNumber)){
+    if (Patch.rhythmOffsetIsValid(rhythmListOffsetInput.valueAsNumber)){
         updateRhythmsFromPresetInput();
-        rhythmListCountInput.style.backgroundColor = textFieldOkayColor;
+        rhythmListOffsetInput.style.backgroundColor = textFieldOkayColor;
     }
     else{
-        rhythmListCountInput.style.backgroundColor = textFieldErrorColor;
+        rhythmListOffsetInput.style.backgroundColor = textFieldErrorColor;
     }
 }
 

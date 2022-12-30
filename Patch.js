@@ -52,7 +52,7 @@ class Patch {
     }
     
     static rhythmCountIsValid(count){
-        return Number.isFinite(count) && count > 0;
+        return Number.isFinite(count) && count > 0 && Math.round(count) === count;
     }
     
     static rhythmListIsValid(rhythms){
