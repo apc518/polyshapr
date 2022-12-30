@@ -10,7 +10,9 @@
     <body>
         <div id="main" style="display: flex;">
             <div id="appDrawer">
-                <div id="nonPatchSettings">
+                <div id="playbackSettings" class="settingsSection">
+                    <h1 class="settingsHeader">Playback</h1>
+
                     <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
     
                     <div class="settingsSlider">
@@ -28,38 +30,43 @@
 
                 <div id="appDrawerDivider"></div>
 
-                <div id="patchSettings">
+                <div id="patchSettings" class="settingsSection">
+                    <h1 style="margin-bottom: 2rem;">Patch</h1>
+
+                    <div id="animationModeSettings">
+                        <label for="animationModeButtons" class="settingsCategoryLabel">Animation Mode</label>
+                        <div id="animationModeButtons" class="secondaryLabels"></div>
+                    </div>
+
                     <div class="settingsSlider">
-                        <label for="strokeWeightSlider">Stroke Weight</label>
+                        <label for="strokeWeightSlider" class="settingsCategoryLabel">Stroke Weight</label>
                         <button id="strokeWeightSliderResetBtn">reset</button> <br/>
                         <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/>
                     </div>
 
                     <div class="listWithModesInput" id="rhythmSettings">
-                        <label for="rhythmListInput">Rhythms</label> <br/>
+                        <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
                         <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
                         <div id="presetRhythmListControls">
                             <select id="rhythmModeDropdown">
                                 <!-- options injected via javascript -->
                             </select>
                             <br/>
-                            <input type="number" max="200" id="rhythmListCountInput" /> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
+                            <input type="number" max="200" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
                             <br/>
-                            <input type="number" max="50" id="rhythmListOffsetInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
+                            <input type="number" max="50" id="rhythmListOffsetInput" class="patchSettingNumericalInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
                             <br/>
                             <input type="checkbox" id="rhythmListIsReversedCheckbox" /> <label for="rhythmListIsReversedCheckbox" class="secondaryLabels">Reversed</label>
                         </div>
                     </div>
 
                     <div class="simpleNumericalSetting">
-                        <label for="cycleTimeInput">Cycle Length (seconds)</label> <br/>
+                        <label for="cycleTimeInput" class="settingsCategoryLabel">Cycle Length (seconds)</label> <br/>
                         <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
                     </div>
 
                     <div class="listWithModesInput" id="rhythmSettings">
-                        <div style="margin-bottom: 1rem">
-                            <label for="pitchListInput">Pitches</label> <br/>
-                        </div>
+                        <label for="pitchListInput" class="settingsCategoryLabel">Pitches</label> <br/>
                         <div id="presetPitchListControls">
                             <input type="text" id="pitchListInput" class="patchSettingTextInput"/> 
                             <br/>
@@ -67,9 +74,9 @@
                             <br/>
                             <select id="pitchModeDropdown"></select> <label for="pitchModeDropdown" class="secondaryLabels">Mode</label>
                             <br/>
-                            <input type="number" id="pitchOffsetInput" /> <label for="pitchListOffsetInput" class="secondaryLabels">Offset</label>
+                            <input type="number" id="pitchOffsetInput" class="patchSettingNumericalInput"/> <label for="pitchListOffsetInput" class="secondaryLabels">Offset</label>
                             <br/>
-                            <input type="number" min="0" id="pitchMultiplierInput" /> <label for="pitchListIsReversedCheckbox" class="secondaryLabels">Multiplier</label>
+                            <input type="number" min="0" id="pitchMultiplierInput" class="patchSettingNumericalInput"/> <label for="pitchListIsReversedCheckbox" class="secondaryLabels">Multiplier</label>
                         </div>
                     </div>
 
@@ -103,9 +110,6 @@
                 </div>
             </div>
             <div id="centralDiv">
-                <div id="topControlBar">
-                    <div id="animationModeButtons"></div>
-                </div>
                 <div id="p5canvas"></div>
                 <div id="bottomControlBar">
                     <div>
