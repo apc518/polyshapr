@@ -166,12 +166,10 @@ function setup(){
     p5canvas.parent(document.getElementById("p5canvas"));
     p5canvas.canvas.style.marginTop = "1rem";
 
-    displayCurrentPatchSettings();
-
-    displayAudioSampleSettings();
-
     Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
+        displayCurrentPatchSettings();
+        displayAudioSampleSettings();
         globalVolumeSlider.oninput({ target: globalVolumeSlider });
         fullRefresh();
     });
