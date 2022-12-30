@@ -102,6 +102,10 @@ globalProgressSlider.oninput = e => {
     paint();
 }
 
+audioSampleDropdown.oninput = () => {
+    audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
+}
+
 audioSampleFileInput.onchange = e => {
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
         let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")

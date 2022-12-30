@@ -157,12 +157,15 @@ function displayAudioSampleSettings(){
         audioSampleDropdown.appendChild(elem);
 
         if (option.custom){
-            elem.onclick = () => {
+            elem.onclick = e => {
+                if (e) return; // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
                 audioSampleFileInput.click();
             }
         }
         else{
-            elem.onclick = () => {
+            elem.onclick = e => {
+                // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
+                if (e) return;
                 audioFileName = option.filepath;
                 let filenameSplitbyDot = audioFileName.split(".");
                 audioFileExtension = filenameSplitbyDot[filenameSplitbyDot.length - 1];
