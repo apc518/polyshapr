@@ -41,6 +41,9 @@ const animationModeOptions = [
                 while (currentPatch.skips.length < currentPatch.rhythms.length){
                     currentPatch.skips.push(0);
                 }
+
+                Helper.showNgonLt2WarningIfNecessary();
+
                 master_pr = makeNGonRecursive();
             }
             else{

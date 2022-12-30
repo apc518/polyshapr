@@ -43,12 +43,6 @@
                         <div id="animationModeButtons" class="secondaryLabels"></div>
                     </div>
 
-                    <div class="settingsSlider">
-                        <label for="strokeWeightSlider" class="settingsCategoryLabel">Stroke Weight</label>
-                        <button id="strokeWeightSliderResetBtn">reset</button> <br/>
-                        <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/>
-                    </div>
-
                     <div class="listWithModesInput" id="rhythmSettings">
                         <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
                         <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
@@ -110,6 +104,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="settingsSlider">
+                        <label for="strokeWeightSlider" class="settingsCategoryLabel">Stroke Weight</label>
+                        <button id="strokeWeightSliderResetBtn">reset</button> <br/>
+                        <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/>
+                    </div>
                 </div>
             </div>
             <div id="centralDiv">
@@ -131,6 +131,7 @@
         <script src="utils/math.js" defer></script>
         <script src="utils/drawing.js" defer></script>
         <script src="htmlHandlers.js" defer></script>
+        <script src="Helper.js" defer></script>
         <script src="audioSampleOptions.js" defer></script>
         <script src="patchModeOptions/animationOptions.js" defer></script>
         <script src="patchModeOptions/rhythmOptions.js" defer></script>
