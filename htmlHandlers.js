@@ -108,8 +108,8 @@ audioSampleFileInput.onchange = e => {
         audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
 
         let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
-        console.log(blob);
         audioFileName = blob;
+        
         fullRefresh();
     });
 }
