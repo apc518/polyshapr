@@ -149,16 +149,16 @@ function displayCurrentPatchSettings(){
 
 
 function setup(){
+    noLoop();
+    p5canvas = createCanvas(canvasWidth, canvasHeight);
+    p5canvas.parent(document.getElementById("p5canvas"));
+    p5canvas.canvas.style.marginTop = "1rem";
+
+    displayCurrentPatchSettings();
+
     Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
         globalVolumeSlider.oninput({ target: globalVolumeSlider });
-        
-        noLoop();
-        p5canvas = createCanvas(canvasWidth, canvasHeight);
-        p5canvas.parent(document.getElementById("p5canvas"));
-        p5canvas.canvas.style.marginTop = "1rem";
-    
-        displayCurrentPatchSettings();
         fullRefresh();
     });
     
