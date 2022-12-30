@@ -14,6 +14,7 @@ const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
 const globalProgressSlider = document.getElementById("globalProgressSlider");
+const audioSampleDropdown = document.getElementById("audioSampleDropdown");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
 const rhythmListInput = document.getElementById("rhythmListInput");
@@ -88,6 +89,11 @@ globalProgressSlider.oninput = e => {
     globalProgress = Math.floor(globalProgress) + Math.min(e.target.value, PROGRESS_SLIDER_RESOLUTION - 1) / PROGRESS_SLIDER_RESOLUTION;
     setMasterPolyRhythmProgress();
     paint();
+}
+
+audioSampleDropdown.oninput = () => {
+    audioFileName = audioSampleDropdown.children[audioSampleDropdown.selectedIndex].value;
+    fullRefresh();
 }
 
 const strokeWeightSliderResolution = 50;

@@ -12,7 +12,8 @@ let globalProgress = 0;
 let master_pr;
 
 let currentPatch = new Patch(presets[0]);
-let transposition = 0;
+let audioSampleNames = ["assets/sounds/synth-pluck-C.wav", "assets/sounds/sine-blip-Eb.wav", "assets/sounds/synth-decay-Eb.wav"];
+let audioFileName = audioSampleNames[0];
 
 
 function onHit(soundIdx){
@@ -147,6 +148,17 @@ function displayCurrentPatchSettings(){
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
 }
 
+function displayAudioSampleSettings(){
+    for (let sampleName of audioSampleNames){
+        let elem = document.createElement('option');
+        elem.value = sampleName;
+        let samplePathParts = sampleName.split("/");
+        let sampleFileName = samplePathParts[samplePathParts.length - 1];
+        elem.innerText = sampleFileName.slice(0, sampleFileName.length - 4);
+        audioSampleDropdown.appendChild(elem);
+    }
+}
+
 
 function setup(){
     noLoop();
@@ -155,6 +167,8 @@ function setup(){
     p5canvas.canvas.style.marginTop = "1rem";
 
     displayCurrentPatchSettings();
+
+    displayAudioSampleSettings();
 
     Swal.fire({ title: "Welcome!", icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
@@ -222,7 +236,7 @@ function keyPressed(e){
     if(keyCode === UP_ARROW_KEYCODE || keyCode === DOWN_ARROW_KEYCODE){
         // it just so happens that up is 38 and down is 40 so we can do
         // some clever math hehe
-        transposition = 39 - keyCode;
+        let transposition = 39 - keyCode;
         
         // let newNoteSpeeds = Array.from(notes, n => Math.pow(2, (n + transposition)/12));
         if (currentPatch.pitchMode === TUNING_MODES.RAW){

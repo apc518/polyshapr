@@ -16,15 +16,20 @@
                     <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
     
                     <div class="settingsSlider">
-                        <label for="globalSpeedSlider">Speed</label>
+                        <label for="globalSpeedSlider" class="settingsCategoryLabel">Speed</label>
                         <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
                         <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/> <br/>
                     </div>
                     
                     <div class="settingsSlider">
-                        <label for="globalVolumeSlider">Volume</label>
+                        <label for="globalVolumeSlider" class="settingsCategoryLabel">Volume</label>
                         <button id="globalVolumeResetBtn">reset</button> <br/>
                         <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
+                    </div>
+
+                    <div id="audioSampleSettings" >
+                        <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
+                        <select id="audioSampleDropdown"></select>
                     </div>
                 </div>
 
@@ -48,9 +53,7 @@
                         <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
                         <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
                         <div id="presetRhythmListControls">
-                            <select id="rhythmModeDropdown">
-                                <!-- options injected via javascript -->
-                            </select>
+                            <select id="rhythmModeDropdown"></select>
                             <br/>
                             <input type="number" max="200" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
                             <br/>
@@ -136,8 +139,10 @@
         <script src="patchSettingsDisplayers/rhythmSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/pitchSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/colorSettingsDisplayer.js" defer></script>
-        <script src="color.js" defer></script>
-        <script src="sound/sound.js" defer></script>
+        <script src="listPopulators/colorListPopulator.js" defer></script>
+        <script src="listPopulators/soundListPopulator.js" defer></script>
+        <script src="ColorKeyFrame.js" defer></script>
+        <script src="Sound.js" defer></script>
         <script src="Patch.js" defer></script>
         <script src="PolyRhythm.js" defer></script>
         <script src="builders.js" defer></script>
