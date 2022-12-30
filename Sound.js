@@ -1,4 +1,6 @@
 class Sound {
+    static allHowls = [];
+
     // howl is a howler.js Howl object
     constructor(src, extension, speed){
         if (extension.startsWith(".")){
@@ -11,6 +13,9 @@ class Sound {
             rate: speed,
             format: [ extension ]
         });
+
+        Sound.allHowls.push(this.snd);
+
         this.speed = speed;
 
         // data

@@ -37,7 +37,7 @@ const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
 
-const stopAllSounds = () => soundList.forEach(s => s.stop());
+const stopAllSounds = () => Sound.allHowls.forEach(s => s.stop());
 
 
 // html elem event listeners

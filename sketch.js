@@ -1,8 +1,13 @@
 "use strict";
 
-// global variables
+//// global variables
+
 let p5canvas = null;
 let soundOn = true;
+let currentPatch = new Patch(presets[0]);
+let audioFileName = audioSampleOptions[0].filepath;
+let audioFileExtension = audioSampleOptions[0].extension;
+let allHowls = [];
 
 // physics
 let globalSpeed = 1;
@@ -11,9 +16,6 @@ let globalProgress = 0;
 // root PolyRhythm
 let master_pr;
 
-let currentPatch = new Patch(presets[0]);
-let audioFileName = audioSampleOptions[0].filepath;
-let audioFileExtension = audioSampleOptions[0].extension;
 
 function onHit(soundIdx){
     debugLog("onhit called for idx", soundIdx);
