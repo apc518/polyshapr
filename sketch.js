@@ -76,11 +76,6 @@ function pause_(){
 }
 
 
-function multiplyGlobalPitch(n){
-    soundList.forEach(s => s.setRate(s.initial_speed * n));
-}
-
-
 function drawGlobalBorder(){
     // draw a border
     push();

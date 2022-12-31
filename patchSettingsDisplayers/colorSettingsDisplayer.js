@@ -2,9 +2,9 @@ function initializeColorUIBasedOnCurrentPatch(){
     colorKeyFrameInput0.value = rgbArrayToHex(currentPatch.colorKeyFrames[0].rgbValues);
     colorKeyFrameInput1.value = rgbArrayToHex(currentPatch.colorKeyFrames[1].rgbValues);
 
-    colorModeDropdown.selectedIndex = getIndexOfColorOption(currentPatch.colorInterpolationMode);
+    colorInterpolationModeDropdown.selectedIndex = getIndexOfColorOption(currentPatch.colorInterpolationMode);
 
-    colorModeDropdown.oninput();
+    colorInterpolationModeDropdown.oninput();
 }
 
 
@@ -13,7 +13,7 @@ function displayColorSettings(){
         let elem = document.createElement('option');
         elem.value = option.name;
         elem.innerText = option.displayName;
-        colorModeDropdown.appendChild(elem);
+        colorInterpolationModeDropdown.appendChild(elem);
     }
 
     initializeColorUIBasedOnCurrentPatch();

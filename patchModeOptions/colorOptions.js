@@ -26,8 +26,8 @@ for (let option of colorInterpolationMode){
 
 
 function getIndexOfColorOption(optionName){
-    for (let i = 0; i < colorModeDropdown.children.length; i++){
-        if (colorModeDropdown.children[i].value === optionName){
+    for (let i = 0; i < colorInterpolationModeDropdown.children.length; i++){
+        if (colorInterpolationModeDropdown.children[i].value === optionName){
             return i;
         }
     }
@@ -36,5 +36,5 @@ function getIndexOfColorOption(optionName){
 }
 
 function getColorOptionNameByIndex(idx){
-    return colorModeDropdown.children[idx].value;
+    return colorInterpolationModeDropdown.children[idx].value;
 }

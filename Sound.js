@@ -1,6 +1,4 @@
 class Sound {
-    static allHowls = [];
-
     // howl is a howler.js Howl object
     constructor(src, extension, speed){
         if (extension.startsWith(".")){
@@ -14,13 +12,10 @@ class Sound {
             format: [ extension ]
         });
 
-        Sound.allHowls.push(this.snd);
-
         this.speed = speed;
 
         // data
         this.on = false;
-        this.initial_speed = speed;
     }
 
     play(){

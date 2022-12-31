@@ -14,6 +14,7 @@ const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
 const globalProgressSlider = document.getElementById("globalProgressSlider");
+const presetDropdown = document.getElementById("presetDropdown");
 const audioSampleDropdown = document.getElementById("audioSampleDropdown");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
@@ -28,7 +29,7 @@ const tuningModeDropdown = document.getElementById("tuningModeDropdown");
 const pitchModeDropdown = document.getElementById("pitchModeDropdown");
 const pitchOffsetInput = document.getElementById("pitchOffsetInput");
 const pitchMultiplierInput = document.getElementById("pitchMultiplierInput");
-const colorModeDropdown = document.getElementById("colorModeDropdown");
+const colorInterpolationModeDropdown = document.getElementById("colorInterpolationModeDropdown");
 const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
@@ -36,8 +37,6 @@ const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
-
-const stopAllSounds = () => Sound.allHowls.forEach(s => s.stop());
 
 
 // html elem event listeners
@@ -53,7 +52,7 @@ resetBtn.onclick = e => {
         master_pr.reset();
     }catch(e){}
 
-    stopAllSounds();
+    Howler.stop();
 
     pause_();
     globalProgressSlider.value = 0;
@@ -66,7 +65,7 @@ soundOnCheckbox.oninput = e => {
     e.target.blur();
     soundOn = soundOnCheckbox.checked;
     if (!soundOn){
-        stopAllSounds();
+        Howler.stop();
     }
 }
 
@@ -100,6 +99,10 @@ globalProgressSlider.oninput = e => {
     globalProgress = Math.floor(globalProgress) + Math.min(e.target.value, PROGRESS_SLIDER_RESOLUTION - 1) / PROGRESS_SLIDER_RESOLUTION;
     setMasterPolyRhythmProgress();
     paint();
+}
+
+presetDropdown.oninput = () => {
+
 }
 
 audioSampleDropdown.oninput = () => {
@@ -285,7 +288,7 @@ pitchMultiplierInput.oninput = () => {
 
 
 function updateColorsFromInput(){
-    currentPatch.colorInterpolationMode = getColorOptionNameByIndex(colorModeDropdown.selectedIndex);
+    currentPatch.colorInterpolationMode = getColorOptionNameByIndex(colorInterpolationModeDropdown.selectedIndex);
     
     currentPatch.colorKeyFrames = [
         new ColorKeyFrame({ idx: 0, rgbValues: hexToRgbArray(colorKeyFrameInput0.value) }),
@@ -295,7 +298,7 @@ function updateColorsFromInput(){
     fullRefresh();
 }
 
-colorModeDropdown.oninput = () => {
+colorInterpolationModeDropdown.oninput = () => {
     updateColorsFromInput();
 }
 
