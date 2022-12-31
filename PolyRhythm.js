@@ -532,9 +532,17 @@ class NGonRhythm2d extends Rhythm {
 
         beginShape();
         
-        stroke(colorList[this.colorIdx % colorList.length]); // rest of them
-        for(let i = 0; i < this.polygon.vertices.length + 2; i++){
-            let idx = (i+1) % this.polygon.vertices.length;
+        stroke(colorList[this.colorIdx % colorList.length]);
+        
+        // if the stroke weight is noticeably thick we want to
+        // draw the last side twice to make the first vertex have a sharp corner
+        // if the stroke weight is very thin, doing this would cause 
+        // the last side to be brighter than the rest, but when the stroke weight is thin
+        // the soft corners arent noticeable anyway
+        let numVerticesToDraw = this.polygon.vertices.length + (currentPatch.strokeWeight > 2 ? 2 : 1);
+        
+        for(let i = 0; i < numVerticesToDraw; i++){
+            let idx = i % this.polygon.vertices.length;
             vertex(this.polygon.vertices[idx].x, this.polygon.vertices[idx].y);
             
             // draw a dot on a specific vertex. This aids in seeing the rotation for large polygons

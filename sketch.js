@@ -1,9 +1,13 @@
 "use strict";
 
-// global variables
+//// global variables
+
 let p5canvas = null;
 let soundOn = true;
-let debug = false;
+let currentPatch = new Patch(presets[0]);
+let audioFileName = audioSampleOptions[0].filepath;
+let audioFileExtension = audioSampleOptions[0].extension;
+let allHowls = [];
 
 // physics
 let globalSpeed = 1;
@@ -11,66 +15,6 @@ let globalProgress = 0;
 
 // root PolyRhythm
 let master_pr;
-
-// visual variables
-let doColorRipple = false;
-
-let currentPatch = new Patch(presets[0]);
-let transposition = 0;
-
-let hitForgiveness = 1;
-
-const prOptions = {}
-
-prOptions[ANIMATION_MODES.SQUARES] = () => {
-    if (currentPatch) {
-        debugLog("squares with", currentPatch);
-        master_pr = squarePolyRhythmRecursive();
-    }
-    else{
-        // TODO: pop up an error message? set to some basic pr?
-    }
-}
-
-prOptions[ANIMATION_MODES.TRIANGLES] = () => {
-    if (currentPatch){
-        debugLog("triangles with ", currentPatch);
-        master_pr = trianglePolyrhythmRecursive();
-    }
-}
-
-prOptions[ANIMATION_MODES.NGONS] = () => {
-    if(currentPatch){
-        debugLog("ngons with ", currentPatch);
-        while (currentPatch.skips.length < currentPatch.rhythms.length){
-            currentPatch.skips.push(0);
-        }
-        master_pr = makeNGonRecursive();
-    }
-    else{
-
-    }
-}
-
-// set up event handlers for the pressing of each animation mode button
-for (let option of [ANIMATION_MODES.NGONS, ANIMATION_MODES.SQUARES, ANIMATION_MODES.TRIANGLES]){
-    // the html elem id for the corresponding radio button for a given animation mode
-    // should be the mode plus "OptionBtn"
-    let elem = document.getElementById(option + "OptionBtn");
-    elem.onclick = () => {
-        currentPatch.animationMode = option;
-        clearColorList();
-        populateColorList(currentPatch);
-        clearSoundList();
-        populateSoundList(currentPatch);
-        prOptions[option]();
-
-        if (!isLooping()){
-            setMasterPolyRhythmProgress();
-            paint();
-        }
-    };
-}
 
 
 function onHit(soundIdx){
@@ -95,8 +39,6 @@ function onHit(soundIdx){
  * After every frame, all the `on` properties must be set to false.
  */
 const soundList = [];
-
-globalVolumeSlider.oninput({ target: globalVolumeSlider })
 
 function logb(base, x) {
     return Math.log(x) / Math.log(base);
@@ -131,11 +73,6 @@ function play_(){
 function pause_(){
     noLoop();
     playPauseBtn.textContent = "Play";
-}
-
-
-function multiplyGlobalPitch(n){
-    soundList.forEach(s => s.setRate(s.initial_speed * n));
 }
 
 
@@ -177,29 +114,81 @@ function paint(){
     frameRate(FRAMERATE);
     master_pr.draw();
 
-    if(debug)
+    if(DEBUG)
         master_pr.drawBounds();
+}
+
+function initializeCurrentPatch(){
+    document.getElementById(animationModeOptionsMap[currentPatch.animationMode].htmlId).click();
 }
 
 /**
  * reflect the current patch on the screen, regardless of whether the animation is playing or paused
- */
+*/
 function fullRefresh(){
     initializeCurrentPatch();
     setMasterPolyRhythmProgress();
     paint();
 }
 
-function initializeCurrentPatch(){
-    document.getElementById(currentPatch.animationMode + "OptionBtn").click();
+/**
+ * show the settings of the current patch in the settings UI
+*/
+function displayCurrentPatchSettings(){
+    strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
+    displayAnimationModeSettings();
+    displayRhythmSettings();
+    cycleTimeInput.value = currentPatch.cycleTime;
+    displayPitchSettings();
+    displayColorSettings();
+    colorRippleCheckbox.checked = currentPatch.doColorRipple;
 }
+
+function displayAudioSampleSettings(){
+    for (let option of audioSampleOptions){
+        let elem = document.createElement('option');
+        elem.value = option.filepath;
+        elem.innerText = option.displayName;
+        audioSampleDropdown.appendChild(elem);
+
+        if (option.custom){
+            elem.onclick = e => {
+                if (e) return; // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
+                audioSampleFileInput.click();
+            }
+        }
+        else{
+            elem.onclick = e => {
+                // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
+                if (e) return;
+                audioFileName = option.filepath;
+                let filenameSplitbyDot = audioFileName.split(".");
+                audioFileExtension = filenameSplitbyDot[filenameSplitbyDot.length - 1];
+                fullRefresh();
+            }
+        }
+    }
+}
+
 
 function setup(){
     noLoop();
     p5canvas = createCanvas(canvasWidth, canvasHeight);
-    p5canvas.canvas.style.marginTop = "1rem";
+    p5canvas.parent(document.getElementById("p5canvas"));
 
-    fullRefresh();
+    playbackSettingsDetails.open = true;
+    patchSettingsDetails.open = true;
+
+    let welcomeMessage = Helper.isFirstVisit() ? "Welcome to PolyShapr!" : "Welcome back to PolyShapr!";
+    
+    Swal.fire({ title: welcomeMessage, icon: 'info', text: "Click OK to enable audio" })
+    .then(() => {
+        Helper.setNotFirstVisit();
+        displayCurrentPatchSettings();
+        displayAudioSampleSettings();
+        globalVolumeSlider.oninput({ target: globalVolumeSlider });
+        fullRefresh();
+    });
     
     // if running locally, run tests
     if(["127.0.0.1", "localhost"].includes(window.location.hostname))
@@ -237,7 +226,10 @@ function updateAll(){
     paint();
 }
 
-function keyPressed(){
+function keyPressed(e){
+    if (e.target.nodeName.toLowerCase() === "input"){
+        return;
+    }
     if (keyCode === SPACE_KEYCODE){
         playPause();
     }
@@ -258,11 +250,16 @@ function keyPressed(){
     if(keyCode === UP_ARROW_KEYCODE || keyCode === DOWN_ARROW_KEYCODE){
         // it just so happens that up is 38 and down is 40 so we can do
         // some clever math hehe
-        transposition += 39 - keyCode;
+        let transposition = 39 - keyCode;
         
         // let newNoteSpeeds = Array.from(notes, n => Math.pow(2, (n + transposition)/12));
-        multiplyGlobalPitch(Math.pow(2, transposition / 12));
+        if (currentPatch.pitchMode === TUNING_MODES.RAW){
+            currentPatch.pitchMultiplier *= Math.pow(2, transposition / 12);
+        }
+        else if (currentPatch.pitchMode === TUNING_MODES.EDO12){
+            currentPatch.pitchOffset += transposition;
+        }
 
-        console.log(soundList);
+        fullRefresh();
     }
 }

@@ -1,46 +1,152 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>PolyShapr</title>
         <link rel="stylesheet" href="styles.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
-        <button id="playpausebtn">Play</button> <br/>
-        <button id="resetbtn">Reset</button> <br/>
+        <div id="main" style="display: flex;">
+            <div id="appDrawer">
+                <div id="playbackSettings" class="settingsSection">
+                    <details id="playbackSettingsDetails">
+                        <summary class="settingsHeader">Playback</summary>
 
-        <input type="checkbox" id="debugModeCheckbox"/><label for="debugModeCheckbox">Debug Mode</label> <br/>
-        <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
+                        <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
+        
+                        <div class="settingsSlider">
+                            <label for="globalSpeedSlider" class="settingsCategoryLabel">Speed</label>
+                            <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
+                            <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/> <br/>
+                        </div>
+                        
+                        <div class="settingsSlider">
+                            <label for="globalVolumeSlider" class="settingsCategoryLabel">Volume</label>
+                            <button id="globalVolumeResetBtn">reset</button> <br/>
+                            <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
+                        </div>
+    
+                        <div id="audioSampleSettings" >
+                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
+                            <select id="audioSampleDropdown"></select>
+                        </div>
+                    </details>
+                </div>
 
-        <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/><label for="globalSpeedSlider">Speed</label>
-        <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
+                <div id="appDrawerDivider"></div>
 
-        <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/><label for="globalVolumeSlider">Volume</label>
-        <button id="globalVolumeResetBtn">reset</button> <br/>
-
-        <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/><label for="globalProgressSlider">Progress</label>
-        <button id="globalProgressResetBtn">reset</button> <br/>
-
-        <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/><label for="strokeWeightSlider">Stroke Weight</label>
-        <button id="strokeWeightSliderResetBtn">reset</button>
-
-        <input type="radio" name="prType" id="squaresOptionBtn"> Squares
-        <input type="radio" name="prType" id="trianglesOptionBtn"> Triangles
-        <input type="radio" name="prType" id="ngonsOptionBtn" checked> N-Gons
+                <div id="patchSettings" class="settingsSection">
+                    <details id="patchSettingsDetails">
+                        <summary class="settingsHeader">Patch</summary>
+    
+                        <div id="presetBrowser">
+                            <label for=""></label>
+                            <select id="presetDropdown"></select>
+                        </div>
+    
+                        <div id="animationModeSettings">
+                            <label for="animationModeButtons" class="settingsCategoryLabel">Animation Mode</label>
+                            <div id="animationModeButtons" class="secondaryLabels"></div>
+                        </div>
+    
+                        <div class="listWithModesInput" id="rhythmSettings">
+                            <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
+                            <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
+                            <div id="presetRhythmListControls">
+                                <select id="rhythmModeDropdown"></select>
+                                <br/>
+                                <input type="number" max="200" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
+                                <br/>
+                                <input type="number" max="50" id="rhythmListOffsetInput" class="patchSettingNumericalInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
+                                <br/>
+                                <input type="checkbox" id="rhythmListIsReversedCheckbox" /> <label for="rhythmListIsReversedCheckbox" class="secondaryLabels">Reversed</label>
+                            </div>
+                        </div>
+    
+                        <div class="simpleNumericalSetting">
+                            <label for="cycleTimeInput" class="settingsCategoryLabel">Cycle Length (seconds)</label> <br/>
+                            <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
+                        </div>
+    
+                        <div class="listWithModesInput" id="rhythmSettings">
+                            <label for="pitchListInput" class="settingsCategoryLabel">Pitches</label> <br/>
+                            <div id="presetPitchListControls">
+                                <input type="text" id="pitchListInput" class="patchSettingTextInput"/> 
+                                <br/>
+                                <select id="tuningModeDropdown"></select> <label for="tuningModeDropdown" class="secondaryLabels">Tuning</label>
+                                <br/>
+                                <select id="pitchModeDropdown"></select> <label for="pitchModeDropdown" class="secondaryLabels">Mode</label>
+                                <br/>
+                                <input type="number" id="pitchOffsetInput" class="patchSettingNumericalInput"/> <label for="pitchListOffsetInput" class="secondaryLabels">Offset</label>
+                                <br/>
+                                <input type="number" step="0.1" min="0" id="pitchMultiplierInput" class="patchSettingNumericalInput"/> <label for="pitchListIsReversedCheckbox" class="secondaryLabels">Multiplier</label>
+                            </div>
+                        </div>
+    
+                        <div id="colorSettings">
+                            <div style="margin-bottom: 1rem">
+                                <label for="pitchListInput">Color</label> <br/>
+                            </div>
+                            <div id="colorKeyFrameControls">
+                                <div id="colorGradientControl">
+                                    <input type="color" id="colorKeyFrameInput0" class="patchSettingNumericalInput"/> <span id="colorGradientUIArrow">--></span>
+                                    <input type="color" id="colorKeyFrameInput1" class="patchSettingNumericalInput"/>
+                                </div>
+                                <select id="colorInterpolationModeDropdown"></select> <label for="colorInterpolationModeDropdown" class="secondaryLabels">Interpolation Mode</label>
+                                <div>
+                                    <input type="checkbox" id="colorRippleCheckbox"/> <label for="checkbox" class="secondaryLabels">Ripple</label>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="settingsSlider">
+                            <label for="strokeWeightSlider" class="settingsCategoryLabel">Stroke Weight</label>
+                            <button id="strokeWeightSliderResetBtn">reset</button> <br/>
+                            <input type="range" value="0" min="0" max="1000" id="strokeWeightSlider" class="slider"/>
+                        </div>
+                    </details>
+                </div>
+            </div>
+            <div id="centralDiv">
+                <div id="p5canvas"></div>
+                <div id="bottomControlBar">
+                    <div>
+                        <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/>
+                    </div>
+                    <div id="globalProgressControlButtons">
+                        <button id="playpausebtn">Play</button>
+                        <button id="resetbtn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="constants.js" defer></script>
         <script src="utils/logging.js" defer></script>
         <script src="utils/math.js" defer></script>
         <script src="utils/drawing.js" defer></script>
         <script src="htmlHandlers.js" defer></script>
-        <script src="color.js" defer></script>
-        <script src="sound/pitch.js" defer></script>
-        <script src="sound/sound.js" defer></script>
+        <script src="Helper.js" defer></script>
+        <script src="audioSampleOptions.js" defer></script>
+        <script src="patchModeOptions/animationOptions.js" defer></script>
+        <script src="patchModeOptions/rhythmOptions.js" defer></script>
+        <script src="patchModeOptions/pitchOptions.js" defer></script>
+        <script src="patchModeOptions/colorOptions.js" defer></script>
+        <script src="patchSettingsDisplayers/animationSettingsDisplayer.js" defer></script>
+        <script src="patchSettingsDisplayers/rhythmSettingsDisplayer.js" defer></script>
+        <script src="patchSettingsDisplayers/pitchSettingsDisplayer.js" defer></script>
+        <script src="patchSettingsDisplayers/colorSettingsDisplayer.js" defer></script>
+        <script src="listPopulators/colorListPopulator.js" defer></script>
+        <script src="listPopulators/soundListPopulator.js" defer></script>
+        <script src="ColorKeyFrame.js" defer></script>
+        <script src="Sound.js" defer></script>
         <script src="Patch.js" defer></script>
         <script src="PolyRhythm.js" defer></script>
         <script src="builders.js" defer></script>
         <script src="presets.js" defer></script>
-        <script src="sketch.js" defer></script>
         <script src="tests.js" defer></script>
+        <script src="sketch.js" defer></script>
     </body>
 </html>

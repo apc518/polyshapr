@@ -10,10 +10,123 @@ body{
     max-width: 4rem;
 }
 
+#soundOnCheckbox{
+    margin-bottom: 1rem;
+}
+
 .slider{
-    min-width: 400px;
+    width: fit-content;
+    min-width: 200px;
+}
+
+.settingsSlider{
+    margin-bottom: 1rem;
 }
 
 #globalProgressSlider{
-    min-width: 1000px;
+    min-width: 800px;
+}
+
+#appDrawer{
+    width: fit-content;
+    max-width: 240px;
+    min-width: 240px;
+    margin-right: 1rem;
+}
+
+.settingsSection{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-inline: 0.5rem;
+}
+
+.settingsHeader{
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#playbackSettings{
+    background-color: #333;
+}
+
+#appDrawerDivider{
+    min-height: 5px;
+    background-color: black;
+}
+
+#patchSettings{
+    background-color: #2a2a2a;
+}
+
+#presetBrowser{
+    margin-bottom: 1.5rem;
+}
+
+#animationModeSettings{
+    margin-bottom: 1.5rem;
+}
+
+#rhythmListCountInput{
+    width: 3rem;
+}
+
+#rhythmListOffsetInput{
+    width: 3rem;
+}
+
+#presetRhythmListControls{
+    max-width: 200px;
+}
+
+#globalProgressControlButtons{
+    text-align: center;
+}
+
+.settingsCategoryLabel{
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.patchSettingTextInput{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.secondaryLabels{
+    font-size: 0.8rem;
+}
+
+.listWithModesInput{
+    margin-block: 1rem;
+}
+
+.patchSettingNumericalInput{
+    width: 3rem;
+}
+
+#colorGradientControl{
+    display: block;
+    place-items: center;
+}
+
+#colorGradientUIArrow{
+    place-self: center;
+}
+
+.colorKeyFrameContainer{
+    display: flex;
+    align-items: center;
+}
+
+.colorKeyFrameInput{
+    width: 2.5rem;
+}
+
+.colorKeyFrameLabel{
+    margin-left: 5px;
+}
+
+#strokeWeightSliderResetBtn{
+    margin-top: 0.5rem;
 }
