@@ -6,6 +6,8 @@ const textFieldOkayColor = "#fff";
 // html elements
 const playPauseBtn = document.getElementById("playpausebtn");
 const resetBtn = document.getElementById("resetbtn");
+const playbackSettingsDetails = document.getElementById("playbackSettingsDetails");
+const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const soundOnCheckbox = document.getElementById("soundOnCheckbox");
 const animationModeButtons = document.getElementById("animationModeButtons");
 const globalSpeedSlider = document.getElementById("globalSpeedSlider");

@@ -29,7 +29,8 @@ body{
 
 #appDrawer{
     width: fit-content;
-    max-width: 300px;
+    max-width: 240px;
+    min-width: 240px;
     margin-right: 1rem;
 }
 
@@ -40,7 +41,9 @@ body{
 }
 
 .settingsHeader{
-    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 #playbackSettings{

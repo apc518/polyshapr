@@ -175,7 +175,9 @@ function setup(){
     noLoop();
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent(document.getElementById("p5canvas"));
-    p5canvas.canvas.style.marginTop = "1rem";
+
+    playbackSettingsDetails.open = true;
+    patchSettingsDetails.open = true;
 
     let welcomeMessage = Helper.isFirstVisit() ? "Welcome to PolyShapr!" : "Welcome back to PolyShapr!";
     
