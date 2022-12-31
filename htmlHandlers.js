@@ -118,7 +118,7 @@ audioSampleFileInput.onchange = e => {
     });
 }
 
-const strokeWeightSliderResolution = 50;
+const strokeWeightSliderResolution = 25;
 
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
@@ -284,51 +284,12 @@ pitchMultiplierInput.oninput = () => {
 }
 
 
-function refreshColorInputValidationIndication(){
-    let allColorsAreValid = true; 
-
-    for (let keyFrameInput of [colorKeyFrameInput0, colorKeyFrameInput1]){
-        let colorValues = [
-            keyFrameInput.children[0].valueAsNumber,
-            keyFrameInput.children[1].valueAsNumber, 
-            keyFrameInput.children[2].valueAsNumber
-        ]
-    
-        let validValues = Patch.colorValuesValidation(colorValues, currentPatch.colorMode);
-
-        for (let i = 0; i < keyFrameInput.children.length; i++){
-            keyFrameInput.children[i].style.backgroundColor = validValues[i] ? textFieldOkayColor : textFieldErrorColor;
-
-            if(!validValues[i]){
-                allColorsAreValid = false;
-            }
-        }
-    }
-
-    return allColorsAreValid;
-}
-
-
 function updateColorsFromInput(){
-    currentPatch.colorMode = getColorOptionNameByIndex(colorModeDropdown.selectedIndex);
+    currentPatch.colorInterpolationMode = getColorOptionNameByIndex(colorModeDropdown.selectedIndex);
     
-    if (!refreshColorInputValidationIndication()) return;
-
-    let keyframe0values = [
-        colorKeyFrameInput0.children[0].valueAsNumber,
-        colorKeyFrameInput0.children[1].valueAsNumber,
-        colorKeyFrameInput0.children[2].valueAsNumber
-    ];
-
-    let keyframe1values = [
-        colorKeyFrameInput1.children[0].valueAsNumber,
-        colorKeyFrameInput1.children[1].valueAsNumber,
-        colorKeyFrameInput1.children[2].valueAsNumber
-    ];
-
     currentPatch.colorKeyFrames = [
-        new ColorKeyFrame({ idx: 0, values: keyframe0values }),
-        new ColorKeyFrame({ idx: 1, values: keyframe1values })
+        new ColorKeyFrame({ idx: 0, rgbValues: hexToRgbArray(colorKeyFrameInput0.value) }),
+        new ColorKeyFrame({ idx: 1, rgbValues: hexToRgbArray(colorKeyFrameInput1.value) })
     ];
 
     fullRefresh();

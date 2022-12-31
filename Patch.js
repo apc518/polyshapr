@@ -5,7 +5,7 @@
 class Patch {
     // this works as a copy constructor in addition to constructing from a simple js struct
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
-                  pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorMode, colorKeyFrames,
+                  pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames,
                   doColorRipple, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
                   squareStyle, sizeMultiplier, backgroundColor }){
         // rhythm
@@ -26,8 +26,8 @@ class Patch {
         // visual
         this.animationMode = animationMode;
         this.skips = skips.slice(); // no skips means assume 0 skip for all
-        this.colorMode = colorMode;
-        this.colorKeyFrames = Array.from(colorKeyFrames, k => new ColorKeyFrame(k));
+        this.colorInterpolationMode = colorInterpolationMode;
+        this.colorKeyFrames = copyColorKeyFrameList(colorKeyFrames);
         this.doColorRipple = doColorRipple;
         this.strokeWeight = strokeWeight;
         this.canvasWidth = canvasWidth;
@@ -101,27 +101,13 @@ class Patch {
 
     /**
      * Arguments:
-     *  `values` i.e. ColorKeyFrame().values
-     * 
-     *  `mode` i.e. COLOR_MODES.RGB or COLOR_MODES.HSL
+     *  `rgbValues` i.e. ColorKeyFrame().rgbValues
      * 
      * Returns:
-     * a corresponding list of values that indicates the validity of each item.
-     * i.e. if `values` was `[-9, 255, 0]` and the color mode was RGB
-     * the returned list would be `[false, true, true]`
+     * a corresponding list of booleans that indicates the validity of each item.
+     * i.e. if `rgbValues` was `[-9, 255, 0]` the returned list would be `[false, true, true]`
      */
-    static colorValuesValidation(values, mode){
-        if (mode === COLOR_MODES.RGB){
-            return values.map(v => Number.isFinite(v) && 0 <= v && v <= 255);
-        }
-        else if (mode === COLOR_MODES.HSL){
-            return [
-                Number.isFinite(values[0]) && 0 <= values[0] && values[0] <= 255,
-                Number.isFinite(values[1]) && 0 <= values[1] && values[1] <= 100,
-                Number.isFinite(values[2]) && 0 <= values[2] && values[2] <= 100,
-            ];
-        }
-
-        throw new Error("Unrecognized color mode:", currentPatch.colorMode);
+    static colorValuesValidation(rgbValues){
+        return rgbValues.map(v => Number.isFinite(v) && 0 <= v && v <= 255);
     }
 }

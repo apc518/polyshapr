@@ -62,33 +62,17 @@ const myTests = [
     },
     {
         name: "ColorValidationTest1",
-        desc: "Test that the Patch class validates color values correctly",
+        desc: "Test that the Patch class validates RGB values correctly",
         func: () => {
-            validValues = Patch.colorValuesValidation([-9, 255, 0], COLOR_MODES.RGB);
+            validValues = Patch.colorValuesValidation([-9, 255, 0]);
             return !validValues[0] && validValues[1] && validValues[2];
         }
     },
     {
-        name: "ColorValidationTest2",
-        desc: "Test that the Patch class validates color values correctly",
-        func: () => {
-            validValues = Patch.colorValuesValidation([-9, 255, 100], COLOR_MODES.HSL);
-            return !validValues[0] && !validValues[1] && validValues[2];
-        }
-    },
-    {
-        name: "ColorValidationTest3",
-        desc: "Test that the Patch class validates color values correctly",
-        func: () => {
-            validValues = Patch.colorValuesValidation([0, 100, 101], COLOR_MODES.HSL);
-            return validValues[0] && validValues[1] && !validValues[2];
-        }
-    },
-    {
         name: "ColorValidationTest4",
-        desc: "Test that the Patch class validates color values correctly",
+        desc: "Test that the Patch class validates RGB values correctly",
         func: () => {
-            validValues = Patch.colorValuesValidation([255, 256, -1], COLOR_MODES.RGB);
+            validValues = Patch.colorValuesValidation([255, 256, -1]);
             return validValues[0] && !validValues[1] && !validValues[2];
         }
     }

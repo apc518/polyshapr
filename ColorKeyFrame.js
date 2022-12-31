@@ -1,5 +1,5 @@
 class ColorKeyFrame {
-    constructor({ idx, values }){
+    constructor({ idx, rgbValues }){
         /**
          *  idx is the index of the shape that should have this exact color by default
          *  if idx is -1, that means "last", e.g. the last child of the deepest nested polyrhythm object will have that color by default
@@ -10,13 +10,13 @@ class ColorKeyFrame {
         this.idx = idx;
 
         /**
-         * a list of numbers that go into the color. These might be RGB or HSL values, or even RGBA
+         * a list of numbers that go into the color.
          */
-        if (!Array.isArray(values) || values.length < 3){
-            console.log(values);
-            throw new Error("values parameter was invalid; must be an array of length >= 3");
+        if (!Array.isArray(rgbValues) || rgbValues.length < 3){
+            console.log(rgbValues);
+            throw new Error("rgbValues parameter was invalid; must be an array of length >= 3");
         }
-        this.values = values.slice();
+        this.rgbValues = rgbValues.slice();
     }
 }
 
