@@ -86,8 +86,11 @@ function makeNGonRecursive(){
     if(sideNums.length === 0) throw new Error("sideNums must contain at least 1 item");
     if(skips.length < sideNums.length) throw new Error("skips list must be at least as long as rhythms list");
 
+    let firstRhythmUnitPolygon = new Polygon(sideNums[0], createVector(0,0), 1);
+    let firstAncestorInnerRadius = currentPatch.sizeMultiplier * (canvasWidth / (2 * firstRhythmUnitPolygon.outSize) - currentPatch.strokeWeight - 5);
+
     let pr = new NGonRhythm2d(
-        new Polygon(sideNums[0] , createVector(canvasWidth / 2, canvasHeight / 2), currentPatch.sizeMultiplier * (canvasWidth / 4 - currentPatch.strokeWeight), 0),
+        new Polygon(sideNums[0] , createVector(canvasWidth / 2, canvasHeight / 2), firstAncestorInnerRadius, 0),
         skips[0]
     );
 
