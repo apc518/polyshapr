@@ -103,6 +103,7 @@ globalProgressSlider.oninput = e => {
     paint();
 }
 
+presetDropdown.hidden = true;
 presetDropdown.oninput = () => {
 
 }
