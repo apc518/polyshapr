@@ -534,9 +534,9 @@ class NGonRhythm2d extends Rhythm {
         
         stroke(colorList[this.colorIdx % colorList.length]); // rest of them
 
-        let numSidesToDraw = this.polygon.vertices.length + (currentPatch.strokeWeight > 2 ? 2 : 1);
+        let numVerticesToDraw = this.polygon.vertices.length + (currentPatch.strokeWeight > 2 ? 2 : 1);
 
-        for(let i = 0; i < numSidesToDraw; i++){
+        for(let i = 0; i < numVerticesToDraw; i++){
             let idx = (i+1) % this.polygon.vertices.length;
             vertex(this.polygon.vertices[idx].x, this.polygon.vertices[idx].y);
             
