@@ -4,7 +4,7 @@
 const canvasWidth = 800;
 const canvasHeight = 800;
 const colorList = [];
-const DEFAULT_SIZE = 1;
+const DEFAULT_SIZE_MULTIPLIER = 1;
 
 // physics constants
 const FRAMERATE = 60;

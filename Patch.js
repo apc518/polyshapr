@@ -7,7 +7,7 @@ class Patch {
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
                   pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorMode, colorKeyFrames,
                   doColorRipple, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
-                  squareStyle, size, backgroundColor }){
+                  squareStyle, sizeMultiplier, backgroundColor }){
         // rhythm
         this.rhythmMode = rhythmMode;
         this.rhythmOffset = rhythmOffset;
@@ -35,7 +35,7 @@ class Patch {
         this.ngonShrinkFactor = ngonShrinkFactor;
         this.ngonInnerPolygonSideCount = ngonInnerPolygonSideCount;
         this.squareStyle = squareStyle;
-        this.size = size;
+        this.sizeMultiplier = sizeMultiplier;
         this.backgroundColor = backgroundColor;
     }
 

@@ -6,7 +6,7 @@ function squarePolyRhythmRecursive(){
         rhythmList.push(0);
     }
 
-    let parentSize = currentPatch.size * canvasWidth;
+    let parentSize = currentPatch.sizeMultiplier * canvasWidth;
     let padding = (parentSize + currentPatch.strokeWeight) / (1 + rhythmList.length / 2);
 
     return _squarePolyRhythmRecursive(parentSize, rhythmList, padding, 0);
@@ -46,7 +46,7 @@ function trianglePolyrhythmRecursive(){
 
     if (rhythmList.length < 1) throw new Error("rhythm list must have at least one element");
 
-    let parentSize = currentPatch.size * canvasWidth / 4;
+    let parentSize = currentPatch.sizeMultiplier * canvasWidth / 4;
     let padding = parentSize / (rhythmList.length + 1) - currentPatch.strokeWeight;
 
     return _trianglePolyrhythmRecursive(parentSize, rhythmList, padding, 0);
@@ -87,7 +87,7 @@ function makeNGonRecursive(){
     if(skips.length < sideNums.length) throw new Error("skips list must be at least as long as rhythms list");
 
     let pr = new NGonRhythm2d(
-        new Polygon(sideNums[0] , createVector(canvasWidth / 2, canvasHeight / 2), currentPatch.size * (canvasWidth / 4 - currentPatch.strokeWeight), 0),
+        new Polygon(sideNums[0] , createVector(canvasWidth / 2, canvasHeight / 2), currentPatch.sizeMultiplier * (canvasWidth / 4 - currentPatch.strokeWeight), 0),
         skips[0]
     );
 

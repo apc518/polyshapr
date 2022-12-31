@@ -25,7 +25,7 @@ const presets = [
         ngonShrinkFactor: 0.9,
         ngonInnerPolygonSideCount: 32,
         squareStyle: SQUARE_STYLES.WIREFRAME,
-        size: DEFAULT_SIZE,
+        sizeMultiplier: DEFAULT_SIZE_MULTIPLIER * 1.5,
         backgroundColor: "#000"
     }
 ]
