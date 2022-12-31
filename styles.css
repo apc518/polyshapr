@@ -110,3 +110,7 @@ body{
 .colorKeyFrameLabel{
     margin-left: 5px;
 }
+
+#strokeWeightSliderResetBtn{
+    margin-top: 0.5rem;
+}
