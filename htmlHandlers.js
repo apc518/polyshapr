@@ -16,10 +16,8 @@ const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
 const globalProgressSlider = document.getElementById("globalProgressSlider");
-const presetDropdown = document.getElementById("presetDropdown");
 const audioSampleDropdown = document.getElementById("audioSampleDropdown");
-const strokeWeightSlider = document.getElementById("strokeWeightSlider");
-const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
+const presetDropdown = document.getElementById("presetDropdown");
 const rhythmListInput = document.getElementById("rhythmListInput");
 const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
 const rhythmListCountInput = document.getElementById("rhythmListCountInput");
@@ -35,6 +33,8 @@ const colorInterpolationModeDropdown = document.getElementById("colorInterpolati
 const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
+const strokeWeightSlider = document.getElementById("strokeWeightSlider");
+const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
 
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
@@ -103,11 +103,6 @@ globalProgressSlider.oninput = e => {
     paint();
 }
 
-presetDropdown.hidden = true;
-presetDropdown.oninput = () => {
-
-}
-
 audioSampleDropdown.oninput = () => {
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
 }
@@ -119,24 +114,20 @@ audioSampleFileInput.onchange = e => {
 
         let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
         audioFileName = blob;
-
+        
         fullRefresh();
     });
 }
 
-const strokeWeightSliderResolution = 25;
-
-strokeWeightSlider.value = 0;
-strokeWeightSlider.oninput = e => {
-    currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
-    fullRefresh();
+function clickCustomAudioSampleOption(){
+    audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
+    audioSampleDropdown.oninput();
 }
 
-const strokeWeightDefault = 3;
-strokeWeightSliderResetBtn.onclick = () => {
-    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
-    currentPatch.strokeWeight = strokeWeightDefault;
-    fullRefresh();
+const strokeWeightSliderResolution = 25;
+
+presetDropdown.oninput = () => {
+
 }
 
 rhythmListInput.oninput = () => {
@@ -316,4 +307,17 @@ colorKeyFrameInput1.oninput = () => {
 colorRippleCheckbox.oninput = () => {
     currentPatch.doColorRipple = colorRippleCheckbox.checked;
     colorRippleCheckbox.blur();
+}
+
+strokeWeightSlider.value = 0;
+strokeWeightSlider.oninput = e => {
+    currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
+    fullRefresh();
+}
+
+const strokeWeightDefault = 3;
+strokeWeightSliderResetBtn.onclick = () => {
+    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
+    currentPatch.strokeWeight = strokeWeightDefault;
+    fullRefresh();
 }
