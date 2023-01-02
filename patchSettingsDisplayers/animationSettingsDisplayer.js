@@ -19,11 +19,7 @@ function setupAnimationModeEventHandlers(){
     }
 }
 
-function displayAnimationModeSettings(){
-    if (animationModeButtons.children.length !== 0){
-        return;
-    }
-
+function setupAnimationModeUI(){
     for (let option of animationModeOptions){
         let elem = document.createElement('input');
         elem.type = 'radio';
@@ -32,13 +28,13 @@ function displayAnimationModeSettings(){
         elem.name = "animationModeOptionBtn";
         elem.className = "animationModeOptionBtn";
         animationModeButtons.appendChild(elem);
-
+    
         // make label
         let labelElem = document.createElement('label');
         labelElem.htmlFor = option.htmlId;
         labelElem.innerText = option.displayName;
         animationModeButtons.appendChild(labelElem);
     }
-
+    
     setupAnimationModeEventHandlers();
 }

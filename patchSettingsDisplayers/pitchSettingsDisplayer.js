@@ -13,7 +13,7 @@ function resolveConflictsBetweenPitchListAndModeInCurrentPatch(){
 }
 
 
-function initializePitchUIBasedOnCurrentPatch(){
+function updatePitchUI(){
     if (!Patch.pitchModeIsValid(currentPatch.pitchMode))
         throw new Error("pitch mode is invalid:", currentPatch.pitchMode);
     
@@ -49,37 +49,23 @@ function initializePitchUIBasedOnCurrentPatch(){
 
     // multiplier
     pitchMultiplierInput.value = currentPatch.pitchMultiplier;
+
+    disableAppropriatePitchUIElements();
 }
 
 
-function setupPitchModeDropdown(){
+function setupPitchUI(){
     for (let option of pitchModeOptions){
         let elem = document.createElement("option");
         elem.value = option.name;
         elem.innerText = option.displayName;
         pitchModeDropdown.appendChild(elem);
     }
-}
-
-function setupTuningModeDropdown(){
+    
     for (let option of tuningModeOptions){
         let elem = document.createElement("option");
         elem.value = option.name;
         elem.innerText = option.displayName;
         tuningModeDropdown.appendChild(elem);
     }
-}
-
-
-function displayPitchSettings(){
-    if (tuningModeDropdown.children.length === 0){
-        setupTuningModeDropdown();
-    }
-
-    if (pitchModeDropdown.children.length === 0){
-        setupPitchModeDropdown();
-    }
-
-    initializePitchUIBasedOnCurrentPatch();
-    tuningModeDropdown.oninput();
 }

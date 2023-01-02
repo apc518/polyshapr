@@ -1,30 +1,21 @@
-function initializeColorUIBasedOnCurrentPatch(){
+function updateColorUI(){
     colorKeyFrameInput0.value = rgbArrayToHex(currentPatch.colorKeyFrames[0].rgbValues);
     colorKeyFrameInput1.value = rgbArrayToHex(currentPatch.colorKeyFrames[1].rgbValues);
 
     colorInterpolationModeDropdown.selectedIndex = getIndexOfColorOption(currentPatch.colorInterpolationMode);
 
-    colorInterpolationModeDropdown.oninput();
+    colorRippleCheckbox.checked = currentPatch.doColorRipple;
+    colorReflectionCheckbox.checked = currentPatch.doColorRipple;
 }
 
 
-function setupColorSettings(){
+function setupColorUI(){
     for (let option of colorInterpolationMode){
         let elem = document.createElement('option');
         elem.value = option.name;
         elem.innerText = option.displayName;
         colorInterpolationModeDropdown.appendChild(elem);
     }
-}
-    
-    
-
-function displayColorSettings(){
-    if (colorInterpolationModeDropdown.children.length === 0){
-        setupColorSettings();
-    }
-
-    initializeColorUIBasedOnCurrentPatch();
 }
 
 

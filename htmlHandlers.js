@@ -33,9 +33,9 @@ const colorInterpolationModeDropdown = document.getElementById("colorInterpolati
 const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
+const colorReflectionCheckbox = document.getElementById("colorReflectionCheckbox");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
-
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
@@ -49,17 +49,16 @@ playPauseBtn.onclick = e => {
 
 resetBtn.onclick = e => {
     e.target.blur();
-    globalProgress = 0;
-    try{
-        master_pr.reset();
-    }catch(e){}
-
+    
     Howler.stop();
-
+    
     pause_();
+    
+    globalProgress = 0;
     globalProgressSlider.value = 0;
     globalProgressSlider.oninput({ target: globalProgressSlider })
-    paint();
+    
+    fullRefresh();
 }
 
 soundOnCheckbox.checked = true;
@@ -85,14 +84,14 @@ globalSpeedResetBtn.onclick = e => {
 }
 
 globalVolumeSlider.value = parseInt(globalVolumeSlider.max) / 2;
-globalVolumeSlider.oninput = e => {
-    Howler.volume(convertSliderValueToAmplitude(e.target.value));
+globalVolumeSlider.oninput = () => {
+    Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
 }
 
 globalVolumeResetBtn.onclick = e => {
     e.target.blur();
     globalVolumeSlider.value = 50;
-    globalVolumeSlider.oninput({target: globalVolumeSlider})
+    globalVolumeSlider.oninput();
 }
 
 globalProgressSlider.value = 0;
@@ -127,15 +126,12 @@ function clickCustomAudioSampleOption(){
 const strokeWeightSliderResolution = 25;
 
 presetDropdown.oninput = () => {
-    presetDropdown[presetDropdown.selectedIndex].onclick();
+    presetDropdown.children[presetDropdown.selectedIndex].onclick();
 }
 
 rhythmListInput.oninput = () => {
     rhythmModeDropdown.selectedIndex = 0;
-    applyRhythmsFromInput();
-}
 
-function applyRhythmsFromInput(){
     let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
     
     // if we dont have a valid list yet just return
@@ -143,17 +139,17 @@ function applyRhythmsFromInput(){
         rhythmListInput.style.backgroundColor = textFieldErrorColor;
         return;
     }
-
+    
     rhythmListInput.style.backgroundColor = textFieldOkayColor;
-
+    
     currentPatch.rhythms = nums;
     rhythmListCountInput.value = nums.length;
-
+    
     // set selected rhythm mode to custom
     rhythmModeDropdown.selectedIndex = getIndexOfRhythmModeOption(RHYTHM_MODES.CUSTOM);
-
-    rhythmModeDropdown.oninput();
-
+    
+    // rhythmModeDropdown.oninput();
+    
     fullRefresh();
 }
 
@@ -254,12 +250,15 @@ function updatePitchesFromPresetInput(){
 }
 
 
-tuningModeDropdown.oninput = () => {
-    currentPatch.tuningMode = getTuningOptionNameByIndex(tuningModeDropdown.selectedIndex);
-
+function disableAppropriatePitchUIElements(){
     let tuningModeIsRaw = currentPatch.tuningMode === TUNING_MODES.RAW;
     pitchOffsetInput.disabled = tuningModeIsRaw;
     pitchMultiplierInput.disabled = !tuningModeIsRaw;
+}
+
+tuningModeDropdown.oninput = () => {
+    currentPatch.tuningMode = getTuningOptionNameByIndex(tuningModeDropdown.selectedIndex);
+    disableAppropriatePitchUIElements();
     updatePitchesFromPresetInput();
 }
 
@@ -307,6 +306,13 @@ colorKeyFrameInput1.oninput = () => {
 colorRippleCheckbox.oninput = () => {
     currentPatch.doColorRipple = colorRippleCheckbox.checked;
     colorRippleCheckbox.blur();
+}
+
+colorReflectionCheckbox.oninput = () => {
+    currentPatch.doColorReflection = colorReflectionCheckbox.checked;
+    colorReflectionCheckbox.blur();
+
+    fullRefresh();
 }
 
 strokeWeightSlider.value = 0;
