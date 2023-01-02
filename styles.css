@@ -1,9 +1,29 @@
+html{
+    height: 100%;
+}
+
 body{
-    margin: 10;
-    line-height: 0px;
+    margin: 0px;
     background-color: #1d1d21;
     color: #ccc;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+    min-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+a{
+    color: #0ff;
+}
+
+a:hover{
+    color:white;
+}
+
+#main{
+    margin: 10px;
 }
 
 .rhythm{
@@ -60,11 +80,11 @@ body{
 }
 
 #presetBrowser{
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 #animationModeSettings{
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 #rhythmListCountInput{
@@ -85,7 +105,6 @@ body{
 
 .settingsCategoryLabel{
     display: inline-block;
-    margin-bottom: 1rem;
 }
 
 .patchSettingTextInput{
@@ -129,4 +148,11 @@ body{
 
 #strokeWeightSliderResetBtn{
     margin-top: 0.5rem;
+}
+
+#footerContainer{
+    margin-top: auto;
+    margin-inline: 10px;
+    padding-bottom: 0.5rem;
+    overflow-y: hidden;
 }
