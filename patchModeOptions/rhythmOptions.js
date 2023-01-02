@@ -30,7 +30,7 @@ const rhythmModeOptions = [
         func: (count, offset=0, reverse=false) => {
             let max = 3;
             let arr = eratosthenes(max);
-            while (arr.length < count){
+            while (arr.length < count + offset){
                 max *= 2;
                 arr = eratosthenes(max);
             }
