@@ -104,16 +104,16 @@ const presets = [
         pitchMode: PITCH_MODES.CUSTOM,
         tuningMode: TUNING_MODES.EDO12,
         pitches: [0, 7, 16, 22, 25, 27, 30, 33, 35, 38, 41, 44, 49],
-        pitchOffset: -12, // used if pitch mode is edo12
+        pitchOffset: -10, // used if pitch mode is edo12
         pitchMultiplier: 1, // used if pitch mode is raw
         skips: [],
-        colorInterpolationMode: COLOR_INTERPOLATION_MODES.HSL,
+        colorInterpolationMode: COLOR_INTERPOLATION_MODES.RGB,
         colorKeyFrames: [
-            new ColorKeyFrame({ idx: 0, rgbValues: [0, 255, 0] }),
+            new ColorKeyFrame({ idx: 0, rgbValues: [0, 0, 255] }),
             new ColorKeyFrame({ idx: -1, rgbValues: [255, 0, 0] }),
         ],
-        doColorRipple: true,
-        doColorReflection: true,
+        doColorRipple: false,
+        doColorReflection: false,
         strokeWeight: 3,
         canvasWidth: canvasWidth,
         canvasHeight: canvasHeight,
