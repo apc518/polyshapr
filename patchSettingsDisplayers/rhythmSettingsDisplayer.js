@@ -52,12 +52,19 @@ function initializeRhythmUIBasedOnCurrentPatch(){
 }
 
 
-function displayRhythmSettings(){
+function setupRhythmSettings(){
     for (let option of rhythmModeOptions){
         let optionElem = document.createElement('option');
         optionElem.value = option.name;
         optionElem.innerText = option.displayName;
         rhythmModeDropdown.appendChild(optionElem);
+    }
+}
+
+
+function displayRhythmSettings(){
+    if (rhythmModeDropdown.children.length === 0){
+        setupRhythmSettings();
     }
 
     initializeRhythmUIBasedOnCurrentPatch();

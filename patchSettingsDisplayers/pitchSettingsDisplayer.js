@@ -51,19 +51,33 @@ function initializePitchUIBasedOnCurrentPatch(){
     pitchMultiplierInput.value = currentPatch.pitchMultiplier;
 }
 
-function displayPitchSettings(){
+
+function setupPitchModeDropdown(){
+    for (let option of pitchModeOptions){
+        let elem = document.createElement("option");
+        elem.value = option.name;
+        elem.innerText = option.displayName;
+        pitchModeDropdown.appendChild(elem);
+    }
+}
+
+function setupTuningModeDropdown(){
     for (let option of tuningModeOptions){
         let elem = document.createElement("option");
         elem.value = option.name;
         elem.innerText = option.displayName;
         tuningModeDropdown.appendChild(elem);
     }
+}
 
-    for (let option of pitchModeOptions){
-        let elem = document.createElement("option");
-        elem.value = option.name;
-        elem.innerText = option.displayName;
-        pitchModeDropdown.appendChild(elem);
+
+function displayPitchSettings(){
+    if (tuningModeDropdown.children.length === 0){
+        setupTuningModeDropdown();
+    }
+
+    if (pitchModeDropdown.children.length === 0){
+        setupPitchModeDropdown();
     }
 
     initializePitchUIBasedOnCurrentPatch();

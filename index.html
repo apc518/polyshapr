@@ -15,7 +15,7 @@
                         <summary class="settingsHeader">Playback</summary>
 
                         <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
-        
+                        
                         <div class="settingsSlider">
                             <label for="globalSpeedSlider" class="settingsCategoryLabel">Speed</label>
                             <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
@@ -31,6 +31,7 @@
                         <div id="audioSampleSettings" >
                             <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
                             <select id="audioSampleDropdown"></select>
+                            <button onclick="clickCustomAudioSampleOption()">Load your own</button>
                         </div>
                     </details>
                 </div>
@@ -43,7 +44,7 @@
     
                         <div id="presetBrowser">
                             <label for=""></label>
-                            <select id="presetDropdown"></select>
+                            <select id="presetDropdown"></select> <label for="presetDropdown" class="secondaryLabels">Preset</label>
                         </div>
     
                         <div id="animationModeSettings">
@@ -57,9 +58,9 @@
                             <div id="presetRhythmListControls">
                                 <select id="rhythmModeDropdown"></select>
                                 <br/>
-                                <input type="number" max="200" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
+                                <input type="number" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
                                 <br/>
-                                <input type="number" max="50" id="rhythmListOffsetInput" class="patchSettingNumericalInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
+                                <input type="number" id="rhythmListOffsetInput" class="patchSettingNumericalInput" /> <label for="rhythmListOffsetInput" class="secondaryLabels">Offset</label>
                                 <br/>
                                 <input type="checkbox" id="rhythmListIsReversedCheckbox" /> <label for="rhythmListIsReversedCheckbox" class="secondaryLabels">Reversed</label>
                             </div>
@@ -86,7 +87,7 @@
                         </div>
     
                         <div id="colorSettings">
-                            <div style="margin-bottom: 1rem">
+                            <div>
                                 <label for="pitchListInput">Color</label> <br/>
                             </div>
                             <div id="colorKeyFrameControls">
@@ -120,6 +121,15 @@
                         <button id="resetbtn">Reset</button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="footerContainer">
+            <div>
+                <a className="footerLink" target="_blank" rel="noreferrer" href="https://github.com/apc518/polyshapr" title="PolyShapr Github">GitHub</a>
+            </div>
+            <div>
+                Copyright &copy; 2022 <a className="footerLink" target="_blank" rel="noreferrer" href="https://chambercode.com/about/andy" title="ChamberCode Portfolio">Andy Chamberlain</a></div>
             </div>
         </div>
 
