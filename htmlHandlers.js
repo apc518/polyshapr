@@ -17,6 +17,7 @@ const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
 const globalProgressSlider = document.getElementById("globalProgressSlider");
 const audioSampleDropdown = document.getElementById("audioSampleDropdown");
+const audioSampleLoadButton = document.getElementById("audioSampleLoadButton");
 const presetDropdown = document.getElementById("presetDropdown");
 const rhythmListInput = document.getElementById("rhythmListInput");
 const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
@@ -106,6 +107,12 @@ audioSampleDropdown.oninput = () => {
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
 }
 
+audioSampleLoadButton.onclick = e => {
+    e.target.blur();
+    audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
+    audioSampleDropdown.oninput();
+}
+
 audioSampleFileInput.onchange = e => {
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
         let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")
@@ -116,11 +123,6 @@ audioSampleFileInput.onchange = e => {
         
         fullRefresh();
     });
-}
-
-function clickCustomAudioSampleOption(){
-    audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
-    audioSampleDropdown.oninput();
 }
 
 const strokeWeightSliderResolution = 25;
