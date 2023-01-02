@@ -13,7 +13,7 @@ function resolveConflictsBetweenRhythmListAndModeInCurrentPatch(){
 }
 
 
-function initializeRhythmUIBasedOnCurrentPatch(){
+function updateRhythmUI(){
     if (!Patch.rhythmModeIsValid(currentPatch.rhythmMode))
         throw new Error("rhythm mode is invalid:", currentPatch.rhythmMode);
     
@@ -46,13 +46,10 @@ function initializeRhythmUIBasedOnCurrentPatch(){
 
     // set reversed
     rhythmListIsReversedCheckbox.checked = !!currentPatch.rhythmIsReversed;
-    
-    // refresh with html handler
-    rhythmModeDropdown.oninput();
 }
 
 
-function setupRhythmSettings(){
+function setupRhythmUI(){
     for (let option of rhythmModeOptions){
         let optionElem = document.createElement('option');
         optionElem.value = option.name;
@@ -64,8 +61,8 @@ function setupRhythmSettings(){
 
 function displayRhythmSettings(){
     if (rhythmModeDropdown.children.length === 0){
-        setupRhythmSettings();
+        setupRhythmUI();
     }
 
-    initializeRhythmUIBasedOnCurrentPatch();
+    updateRhythmUI();
 }

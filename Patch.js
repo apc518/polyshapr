@@ -6,7 +6,7 @@ class Patch {
     // this works as a copy constructor in addition to constructing from a simple js struct
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
                   pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames,
-                  doColorRipple, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
+                  doColorRipple, doColorReflection, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
                   squareStyle, sizeMultiplier, backgroundColor }){
         // rhythm
         this.rhythmMode = rhythmMode;
@@ -29,6 +29,7 @@ class Patch {
         this.colorInterpolationMode = colorInterpolationMode;
         this.colorKeyFrames = copyColorKeyFrameList(colorKeyFrames);
         this.doColorRipple = doColorRipple;
+        this.doColorReflection = doColorReflection;
         this.strokeWeight = strokeWeight;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;

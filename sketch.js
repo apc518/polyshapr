@@ -16,12 +16,14 @@ let globalProgress = 0;
 // root PolyRhythm
 let master_pr;
 
+let hits = 0;
 
 function onHit(soundIdx){
     debugLog("onhit called for idx", soundIdx);
+    hits += 1;
 
     // color ripple
-    if (currentPatch.doColorRipple){
+    if (currentPatch.doColorRipple && isLooping()){
         colorList.push(colorList.shift());
     }
 
@@ -131,17 +133,26 @@ function fullRefresh(){
     paint();
 }
 
+
+function setupPatchUI() {
+    setupAnimationModeUI();
+    setupPresetDropdown();
+    setupRhythmUI();
+    setupPitchUI();
+    setupColorUI();
+}
+
+
 /**
  * show the settings of the current patch in the settings UI
 */
-function displayCurrentPatchSettings(){
-    strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
-    displayAnimationModeSettings();
-    displayRhythmSettings();
+function updatePatchUI(){
+    updateRhythmUI();
     cycleTimeInput.value = currentPatch.cycleTime;
-    displayPitchSettings();
-    displayColorSettings();
+    updatePitchUI();
+    updateColorUI();
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
+    strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
 }
 
 function displayAudioSampleSettings(){
@@ -188,7 +199,7 @@ function setupPresetDropdown(){
 
             currentPatch = preset;
 
-            displayCurrentPatchSettings();
+            updatePatchUI();
             fullRefresh();
         };
     }
@@ -209,9 +220,9 @@ function setup(){
     .then(() => {
         Helper.setNotFirstVisit();
         displayAudioSampleSettings();
-        displayCurrentPatchSettings();
-        setupPresetDropdown();
-        globalVolumeSlider.oninput({ target: globalVolumeSlider });
+        setupPatchUI();
+        updatePatchUI();
+        globalVolumeSlider.oninput();
         fullRefresh();
     });
     
