@@ -28,7 +28,6 @@ function updatePitchUI(){
             throw new Error("given pitch list was invalid and pitch mode was custom, cannot create polyrhythm.");
         }
         else{
-            console.warn("given pitch list was invalid; using other pitch settings");
             currentPatch.pitches = pitchModeOptionsMap[currentPatch.pitchMode].func(currentPatch.rhythmCount, currentPatch.rhythmOffset, currentPatch.rhythmIsReversed)
         }
     }
