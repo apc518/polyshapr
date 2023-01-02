@@ -171,6 +171,30 @@ function displayAudioSampleSettings(){
 }
 
 
+function setupPresetDropdown(){
+    for (let preset of presets){
+        if (!preset.patchName){
+            console.error("patch had no patchName:", patch);
+        }
+
+        let elem = document.createElement('option');
+        elem.value = preset.patchName;
+        elem.innerText = preset.patchName;
+
+        presetDropdown.appendChild(elem);
+
+        elem.onclick = e => {
+            if (e) return; // should only be called from oninput handler for presetDropdown, with no arguments
+
+            currentPatch = preset;
+
+            displayCurrentPatchSettings();
+            fullRefresh();
+        };
+    }
+}
+
+
 function setup(){
     noLoop();
     p5canvas = createCanvas(canvasWidth, canvasHeight);
@@ -184,8 +208,9 @@ function setup(){
     Swal.fire({ title: welcomeMessage, icon: 'info', text: "Click OK to enable audio" })
     .then(() => {
         Helper.setNotFirstVisit();
-        displayCurrentPatchSettings();
         displayAudioSampleSettings();
+        displayCurrentPatchSettings();
+        setupPresetDropdown();
         globalVolumeSlider.oninput({ target: globalVolumeSlider });
         fullRefresh();
     });

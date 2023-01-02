@@ -20,6 +20,10 @@ function setupAnimationModeEventHandlers(){
 }
 
 function displayAnimationModeSettings(){
+    if (animationModeButtons.children.length !== 0){
+        return;
+    }
+
     for (let option of animationModeOptions){
         let elem = document.createElement('input');
         elem.type = 'radio';

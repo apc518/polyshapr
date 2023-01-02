@@ -8,12 +8,20 @@ function initializeColorUIBasedOnCurrentPatch(){
 }
 
 
-function displayColorSettings(){
+function setupColorSettings(){
     for (let option of colorInterpolationMode){
         let elem = document.createElement('option');
         elem.value = option.name;
         elem.innerText = option.displayName;
         colorInterpolationModeDropdown.appendChild(elem);
+    }
+}
+    
+    
+
+function displayColorSettings(){
+    if (colorInterpolationModeDropdown.children.length === 0){
+        setupColorSettings();
     }
 
     initializeColorUIBasedOnCurrentPatch();

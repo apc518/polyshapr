@@ -127,7 +127,7 @@ function clickCustomAudioSampleOption(){
 const strokeWeightSliderResolution = 25;
 
 presetDropdown.oninput = () => {
-
+    presetDropdown[presetDropdown.selectedIndex].onclick();
 }
 
 rhythmListInput.oninput = () => {
