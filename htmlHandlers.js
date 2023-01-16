@@ -52,7 +52,11 @@ resetBtn.onclick = e => {
     e.target.blur();
     
     Howler.stop();
-    
+    Howler.ctx.close();
+    Howler.init();
+
+    Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
+
     pause_();
     
     globalProgress = 0;
