@@ -44,15 +44,19 @@ audioSampleFileInput.multiple = false;
 
 // html elem event listeners
 playPauseBtn.onclick = e => {
-    e.target.blur();
+    e?.target.blur();
     playPause();
 }
 
 resetBtn.onclick = e => {
-    e.target.blur();
+    e?.target.blur();
     
     Howler.stop();
-    
+    Howler.ctx.close();
+    Howler.init();
+
+    Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
+
     pause_();
     
     globalProgress = 0;
@@ -64,7 +68,7 @@ resetBtn.onclick = e => {
 
 soundOnCheckbox.checked = true;
 soundOnCheckbox.oninput = e => {
-    e.target.blur();
+    e?.target.blur();
     soundOn = soundOnCheckbox.checked;
     if (!soundOn){
         Howler.stop();
@@ -78,19 +82,23 @@ globalSpeedSlider.oninput = e => {
     globalSpeedIndicator.innerText = globalSpeed.toFixed(2);
 }
 
+globalSpeedSlider.onmouseup = e => e?.target.blur();
+
 globalSpeedResetBtn.onclick = e => {
-    e.target.blur();
+    e?.target.blur();
     globalSpeedSlider.value = globalSpeedSliderMax / 2;
     globalSpeedSlider.oninput({target: globalSpeedSlider});
 }
 
 globalVolumeSlider.value = parseInt(globalVolumeSlider.max) / 2;
-globalVolumeSlider.oninput = () => {
+globalVolumeSlider.oninput = e => {
     Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
 }
 
+globalVolumeSlider.onmouseup = e => e?.target.blur();
+
 globalVolumeResetBtn.onclick = e => {
-    e.target.blur();
+    e?.target.blur();
     globalVolumeSlider.value = 50;
     globalVolumeSlider.oninput();
 }
@@ -103,17 +111,21 @@ globalProgressSlider.oninput = e => {
     paint();
 }
 
-audioSampleDropdown.oninput = () => {
+globalProgressSlider.onmouseup = e => e?.target.blur();
+
+audioSampleDropdown.oninput = e => {
+    e?.target.blur();
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
 }
 
 audioSampleLoadButton.onclick = e => {
-    e.target.blur();
+    e?.target.blur();
     audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
     audioSampleDropdown.oninput();
 }
 
 audioSampleFileInput.onchange = e => {
+    e?.target.blur();
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
         let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")
         audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
@@ -127,11 +139,12 @@ audioSampleFileInput.onchange = e => {
 
 const strokeWeightSliderResolution = 25;
 
-presetDropdown.oninput = () => {
+presetDropdown.oninput = e => {
+    e?.target.blur();
     presetDropdown.children[presetDropdown.selectedIndex].onclick();
 }
 
-rhythmListInput.oninput = () => {
+rhythmListInput.oninput = e => {
     rhythmModeDropdown.selectedIndex = 0;
 
     let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
@@ -175,13 +188,14 @@ function updateRhythmsFromPresetInput(){
     fullRefresh();
 }
 
-rhythmModeDropdown.oninput = () => {
+rhythmModeDropdown.oninput = e => {
+    e?.target.blur();
     let disabled = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
     rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
     updateRhythmsFromPresetInput();
 }
 
-rhythmListCountInput.oninput = () => {
+rhythmListCountInput.oninput = e => {
     if (Patch.rhythmCountIsValid(rhythmListCountInput.valueAsNumber)){
         updateRhythmsFromPresetInput();
         rhythmListCountInput.style.backgroundColor = textFieldOkayColor;
@@ -191,7 +205,7 @@ rhythmListCountInput.oninput = () => {
     }
 }
 
-rhythmListOffsetInput.oninput = () => {
+rhythmListOffsetInput.oninput = e => {
     if (Patch.rhythmOffsetIsValid(rhythmListOffsetInput.valueAsNumber)){
         updateRhythmsFromPresetInput();
         rhythmListOffsetInput.style.backgroundColor = textFieldOkayColor;
@@ -201,11 +215,12 @@ rhythmListOffsetInput.oninput = () => {
     }
 }
 
-rhythmListIsReversedCheckbox.oninput = () => {
+rhythmListIsReversedCheckbox.oninput = e => {
+    e?.target.blur();
     updateRhythmsFromPresetInput();
 }
 
-cycleTimeInput.oninput = () => {
+cycleTimeInput.oninput = e => {
     if (Patch.cycleTimeIsValid(cycleTimeInput.valueAsNumber)){
         currentPatch.cycleTime = cycleTimeInput.valueAsNumber;
         cycleTimeInput.style.backgroundColor = textFieldOkayColor;
@@ -216,7 +231,7 @@ cycleTimeInput.oninput = () => {
 }
 
 
-pitchListInput.oninput = () => {
+pitchListInput.oninput = e => {
     let nums = pitchListInput.value.split(",").map(r => parseFloat(r));
 
     // if we dont have a valid list yet just return
@@ -258,24 +273,26 @@ function disableAppropriatePitchUIElements(){
     pitchMultiplierInput.disabled = !tuningModeIsRaw;
 }
 
-tuningModeDropdown.oninput = () => {
+tuningModeDropdown.oninput = e => {
+    e?.target.blur();
     currentPatch.tuningMode = getTuningOptionNameByIndex(tuningModeDropdown.selectedIndex);
     disableAppropriatePitchUIElements();
     updatePitchesFromPresetInput();
 }
 
-pitchModeDropdown.oninput = () => {
+pitchModeDropdown.oninput = e => {
+    e?.target.blur();
     currentPatch.pitchMode = getPitchOptionNameByIndex(pitchModeDropdown.selectedIndex);
     updatePitchesFromPresetInput();
 }
 
-pitchOffsetInput.oninput = () => {
+pitchOffsetInput.oninput = e => {
     if (Patch.pitchOffsetIsValid(pitchOffsetInput.valueAsNumber)){
         updatePitchesFromPresetInput();
     }
 }
 
-pitchMultiplierInput.oninput = () => {
+pitchMultiplierInput.oninput = e => {
     if (Patch.pitchMultiplierIsValid(pitchMultiplierInput.valueAsNumber)){
         updatePitchesFromPresetInput();
     }
@@ -293,24 +310,29 @@ function updateColorsFromInput(){
     fullRefresh();
 }
 
-colorInterpolationModeDropdown.oninput = () => {
+colorInterpolationModeDropdown.oninput = e => {
+    e?.target.blur();
     updateColorsFromInput();
 }
 
-colorKeyFrameInput0.oninput = () => {
+colorKeyFrameInput0.oninput = e => {
+    e?.target.blur();
     updateColorsFromInput();
 }
 
-colorKeyFrameInput1.oninput = () => {
+colorKeyFrameInput1.oninput = e => {
+    e?.target.blur();
     updateColorsFromInput();
 }
 
-colorRippleCheckbox.oninput = () => {
+colorRippleCheckbox.oninput = e => {
+    e?.target.blur();
     currentPatch.doColorRipple = colorRippleCheckbox.checked;
     colorRippleCheckbox.blur();
 }
 
-colorReflectionCheckbox.oninput = () => {
+colorReflectionCheckbox.oninput = e => {
+    e?.target.blur();
     currentPatch.doColorReflection = colorReflectionCheckbox.checked;
     colorReflectionCheckbox.blur();
 
@@ -323,8 +345,11 @@ strokeWeightSlider.oninput = e => {
     fullRefresh();
 }
 
+strokeWeightSlider.onmouseup = e => e?.target.blur();
+
 const strokeWeightDefault = 3;
-strokeWeightSliderResetBtn.onclick = () => {
+strokeWeightSliderResetBtn.onclick = e => {
+    e?.target.blur();
     strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
     currentPatch.strokeWeight = strokeWeightDefault;
     fullRefresh();
