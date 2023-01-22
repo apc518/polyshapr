@@ -113,6 +113,11 @@ globalProgressSlider.oninput = e => {
 
 globalProgressSlider.onmouseup = e => e?.target.blur();
 
+presetDropdown.oninput = e => {
+    e?.target.blur();
+    presetDropdown.children[presetDropdown.selectedIndex].onclick();
+}
+
 audioSampleDropdown.oninput = e => {
     e?.target.blur();
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
@@ -120,28 +125,26 @@ audioSampleDropdown.oninput = e => {
 
 audioSampleLoadButton.onclick = e => {
     e?.target.blur();
-    audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
-    audioSampleDropdown.oninput();
+    audioSampleFileInput.click();
 }
 
 audioSampleFileInput.onchange = e => {
     e?.target.blur();
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
-        let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")
-        audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
+        let base64 = typedArrayToBase64(new Uint8Array(res));
+        audioSampleOptions.push({
+            filepath: audioSampleFileInput.files[0].name,
+            displayName: audioSampleFileInput.files[0].name,
+            custom: true,
+            base64: base64
+        });
 
-        let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
-        audioFileName = blob;
+        displayAudioSampleSettings();
+
+        audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
+        audioSampleDropdown.oninput();
         
-        fullRefresh();
     });
-}
-
-const strokeWeightSliderResolution = 25;
-
-presetDropdown.oninput = e => {
-    e?.target.blur();
-    presetDropdown.children[presetDropdown.selectedIndex].onclick();
 }
 
 rhythmListInput.oninput = e => {
@@ -339,6 +342,8 @@ colorReflectionCheckbox.oninput = e => {
     fullRefresh();
 }
 
+const strokeWeightSliderResolution = 25;
+
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
     currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
@@ -348,6 +353,7 @@ strokeWeightSlider.oninput = e => {
 strokeWeightSlider.onmouseup = e => e?.target.blur();
 
 const strokeWeightDefault = 3;
+
 strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
     strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;

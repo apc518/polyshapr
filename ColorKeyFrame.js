@@ -13,8 +13,7 @@ class ColorKeyFrame {
          * a list of numbers that go into the color.
          */
         if (!Array.isArray(rgbValues) || rgbValues.length < 3){
-            console.log(rgbValues);
-            throw new Error("rgbValues parameter was invalid; must be an array of length >= 3");
+            throw new Error(`rgbValues [${rgbValues}] parameter was invalid; must be an array of length >= 3`);
         }
         this.rgbValues = rgbValues.slice();
     }

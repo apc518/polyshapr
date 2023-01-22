@@ -5,8 +5,6 @@
 let p5canvas = null;
 let soundOn = true;
 let currentPatch = new Patch(presets[0]);
-let audioFileName = audioSampleOptions[0].filepath;
-let audioFileExtension = audioSampleOptions[0].extension;
 let allHowls = [];
 
 // physics
@@ -14,7 +12,7 @@ let globalSpeed = 1;
 let globalProgress = 0;
 
 // root PolyRhythm
-let master_pr;
+let rootPr;
 
 let hits = 0;
 
@@ -64,7 +62,7 @@ function playPause(){
 
 function play_(){
     try{
-        master_pr.playIfOnBounds();
+        rootPr.playIfOnBounds();
     }catch(e){}
     
     loop();
@@ -103,7 +101,7 @@ function incrementGlobalProgress(){
 
 
 function setMasterPolyRhythmProgress(){
-    master_pr.setProgress(globalProgress, getProgressIncrement());
+    rootPr.setProgress(globalProgress, getProgressIncrement());
 }
 
 
@@ -114,14 +112,18 @@ function paint(){
     background(currentPatch ? currentPatch.backgroundColor : 0);
     drawGlobalBorder();
     frameRate(FRAMERATE);
-    master_pr.draw();
+    rootPr.draw();
 
     if(DEBUG)
-        master_pr.drawBounds();
+        rootPr.drawBounds();
 }
 
 function initializeCurrentPatch(){
-    document.getElementById(animationModeOptionsMap[currentPatch.animationMode].htmlId).click();
+    clearColorList();
+    populateColorList();
+    clearSoundList();
+    populateSoundListFromPreset();
+    createRootPr();
 }
 
 /**
@@ -147,38 +149,14 @@ function setupPatchUI() {
  * show the settings of the current patch in the settings UI
 */
 function updatePatchUI(){
+    updateAudioSampleUI();
+    updateAnimationModeUI();
     updateRhythmUI();
     cycleTimeInput.value = currentPatch.cycleTime;
     updatePitchUI();
     updateColorUI();
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
-}
-
-function displayAudioSampleSettings(){
-    for (let option of audioSampleOptions){
-        let elem = document.createElement('option');
-        elem.value = option.filepath;
-        elem.innerText = option.displayName;
-        audioSampleDropdown.appendChild(elem);
-
-        if (option.custom){
-            elem.onclick = e => {
-                if (e) return; // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
-                audioSampleFileInput.click();
-            }
-        }
-        else{
-            elem.onclick = e => {
-                // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
-                if (e) return;
-                audioFileName = option.filepath;
-                let filenameSplitbyDot = audioFileName.split(".");
-                audioFileExtension = filenameSplitbyDot[filenameSplitbyDot.length - 1];
-                fullRefresh();
-            }
-        }
-    }
 }
 
 
@@ -256,7 +234,7 @@ function updateAll(){
     let prevGlobProg = globalProgress
     incrementGlobalProgress();
     if (globalProgress % 1 < prevGlobProg % 1){
-        console.log("Loop!");
+        debugLog("Loop!");
     }
     setMasterPolyRhythmProgress();
     paint();

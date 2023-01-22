@@ -27,12 +27,6 @@
                             <button id="globalVolumeResetBtn">reset</button> <br/>
                             <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
                         </div>
-    
-                        <div id="audioSampleSettings" >
-                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
-                            <select id="audioSampleDropdown"></select>
-                            <button id="audioSampleLoadButton">Load your own</button>
-                        </div>
                     </details>
                 </div>
 
@@ -44,7 +38,13 @@
     
                         <div id="presetBrowser">
                             <label for=""></label>
-                            <select id="presetDropdown"></select> <label for="presetDropdown" class="secondaryLabels">Preset</label>
+                            <select id="presetDropdown"></select> <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/>
+                        </div>
+
+                        <div id="audioSampleSettings" >
+                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
+                            <select id="audioSampleDropdown"></select>
+                            <button id="audioSampleLoadButton">Load your own</button>
                         </div>
     
                         <div id="animationModeSettings">
@@ -147,6 +147,7 @@
         <script src="patchModeOptions/rhythmOptions.js" defer></script>
         <script src="patchModeOptions/pitchOptions.js" defer></script>
         <script src="patchModeOptions/colorOptions.js" defer></script>
+        <script src="patchSettingsDisplayers/audioSampleSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/animationSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/rhythmSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/pitchSettingsDisplayer.js" defer></script>
