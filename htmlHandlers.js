@@ -19,6 +19,7 @@ const globalProgressSlider = document.getElementById("globalProgressSlider");
 const audioSampleDropdown = document.getElementById("audioSampleDropdown");
 const audioSampleLoadButton = document.getElementById("audioSampleLoadButton");
 const presetDropdown = document.getElementById("presetDropdown");
+const patchSaveButton = document.getElementById("patchSaveButton");
 const rhythmListInput = document.getElementById("rhythmListInput");
 const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
 const rhythmListCountInput = document.getElementById("rhythmListCountInput");
@@ -116,6 +117,40 @@ globalProgressSlider.onmouseup = e => e?.target.blur();
 presetDropdown.oninput = e => {
     e?.target.blur();
     presetDropdown.children[presetDropdown.selectedIndex].onclick();
+}
+
+patchSaveButton.onclick = e => {
+    e?.target.blur();
+
+    let patchJson = JSON.stringify(currentPatch);
+    let blob = URL.createObjectURL(new Blob([patchJson], { type: "application/json" }));
+    let downloadElem = document.createElement('a');
+
+    downloadElem.href = blob;
+    
+    Swal.fire({
+        title: "Name:",
+        input: "text",
+        showCancelButton: true
+    }).then(res => {
+        if(res.isConfirmed){
+            let name = res.value;
+            if(name === ""){
+                name = "New.polyshapr"
+            }
+            else if (!name.endsWith(".polyshapr")){
+                name = name + ".polyshapr";
+            }
+            downloadElem.download = name;
+            downloadElem.click();
+            Swal.fire({
+                icon: "success",
+                text: "Success",
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
+    });
 }
 
 audioSampleDropdown.oninput = e => {
