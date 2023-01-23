@@ -5,10 +5,25 @@ function clearSoundList(){
 }
 
 
-function populateSoundListFromPreset(){
+function populateSoundList(){
     if (currentPatch.pitchMode !== PITCH_MODES.CUSTOM){
         currentPatch.pitches = pitchModeOptionsMap[currentPatch.pitchMode].func(currentPatch.rhythms.length);
     }
+
+    clearSoundList();
+
+    let audioFileName;
+
+    if (currentPatch.audioSampleIsCustom){
+        let audioFileBytes = base64ToTypedArray(currentPatch.audioSampleBase64).buffer;
+        audioFileName = URL.createObjectURL(new Blob([audioFileBytes]));
+    }
+    else{
+        audioFileName = currentPatch.audioSampleFilename;
+    }
+
+    let filenameSplitByDot = currentPatch.audioSampleFilename.split(".");
+    let audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
 
     if (currentPatch.tuningMode === TUNING_MODES.RAW){
         for (let speed of currentPatch.pitches){

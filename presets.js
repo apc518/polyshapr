@@ -28,7 +28,11 @@ const presets = [
         ngonInnerPolygonSideCount: 32,
         squareStyle: SQUARE_STYLES.WIREFRAME,
         sizeMultiplier: DEFAULT_SIZE_MULTIPLIER,
-        backgroundColor: "#000"
+        backgroundColor: "#000",
+        audioSampleIsCustom: false,
+        audioSampleFilename: "assets/sounds/synth-pluck-C.wav",
+        audioSampleDisplayName: "Sine Blip (Eb)",
+        audioSampleBase64: null
     },
     {
         patchName: "The Viral One",
@@ -59,7 +63,11 @@ const presets = [
         ngonInnerPolygonSideCount: 32,
         squareStyle: SQUARE_STYLES.WIREFRAME,
         sizeMultiplier: DEFAULT_SIZE_MULTIPLIER,
-        backgroundColor: "#000"
+        backgroundColor: "#000",
+        audioSampleIsCustom: false,
+        audioSampleFilename: "assets/sounds/synth-pluck-C.wav",
+        audioSampleDisplayName: "Sine Blip (Eb)",
+        audioSampleBase64: null
     },
     {
         patchName: "Triaesthetic",
@@ -90,7 +98,11 @@ const presets = [
         ngonInnerPolygonSideCount: 32,
         squareStyle: SQUARE_STYLES.WIREFRAME,
         sizeMultiplier: DEFAULT_SIZE_MULTIPLIER,
-        backgroundColor: "#000"
+        backgroundColor: "#000",
+        audioSampleIsCustom: false,
+        audioSampleFilename: "assets/sounds/synth-pluck-C.wav",
+        audioSampleDisplayName: "Sine Blip (Eb)",
+        audioSampleBase64: null
     },
     {
         patchName: "Jacob Collier D7",
@@ -104,7 +116,7 @@ const presets = [
         pitchMode: PITCH_MODES.CUSTOM,
         tuningMode: TUNING_MODES.EDO12,
         pitches: [0, 7, 16, 22, 25, 27, 30, 33, 35, 38, 41, 44, 49],
-        pitchOffset: -22, // used if pitch mode is edo12
+        pitchOffset: -13, // used if pitch mode is edo12
         pitchMultiplier: 1, // used if pitch mode is raw
         skips: [],
         colorInterpolationMode: COLOR_INTERPOLATION_MODES.RGB,
@@ -121,6 +133,10 @@ const presets = [
         ngonInnerPolygonSideCount: 32,
         squareStyle: SQUARE_STYLES.WIREFRAME,
         sizeMultiplier: DEFAULT_SIZE_MULTIPLIER,
-        backgroundColor: "#000"
+        backgroundColor: "#000",
+        audioSampleIsCustom: false,
+        audioSampleFilename: "assets/sounds/sine-blip-Eb.wav",
+        audioSampleDisplayName: "Sine Blip (Eb)",
+        audioSampleBase64: null
     }
 ]

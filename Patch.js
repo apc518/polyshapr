@@ -7,7 +7,7 @@ class Patch {
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
                   pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames,
                   doColorRipple, doColorReflection, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
-                  squareStyle, sizeMultiplier, backgroundColor }){
+                  squareStyle, sizeMultiplier, backgroundColor, audioSampleIsCustom, audioSampleFilename, audioSampleDisplayName, audioSampleBase64 }){
         // rhythm
         this.rhythmMode = rhythmMode;
         this.rhythmOffset = rhythmOffset;
@@ -38,6 +38,12 @@ class Patch {
         this.squareStyle = squareStyle;
         this.sizeMultiplier = sizeMultiplier;
         this.backgroundColor = backgroundColor;
+
+        // audio sample
+        this.audioSampleIsCustom = audioSampleIsCustom;
+        this.audioSampleFilename = audioSampleFilename.slice();
+        this.audioSampleDisplayName = audioSampleDisplayName;
+        this.audioSampleBase64 = audioSampleBase64?.slice();
     }
 
     static rhythmModeIsValid(mode){
@@ -111,4 +117,24 @@ class Patch {
     static colorValuesValidation(rgbValues){
         return rgbValues.map(v => Number.isFinite(v) && 0 <= v && v <= 255);
     }
+}
+
+function base64ToTypedArray(base64String) {
+    let binaryString = window.atob(base64String);
+    let len = binaryString.length;
+    let buffer = new ArrayBuffer(len);
+    let bytes = new Uint8Array(buffer);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function typedArrayToBase64(typedArray) {
+    let binaryString = "";
+    let len = typedArray.byteLength;
+    for (let i = 0; i < len; i++) {
+        binaryString += String.fromCharCode(typedArray[i]);
+    }
+    return window.btoa(binaryString);
 }

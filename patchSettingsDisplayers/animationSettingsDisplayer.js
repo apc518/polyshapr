@@ -1,33 +1,27 @@
-function setupAnimationModeEventHandlers(){
-    for (let option of animationModeOptions){
-        // the html elem id for the corresponding radio button for a given animation mode
-        // should be the mode plus "OptionBtn"
-        let elem = document.getElementById(option.htmlId);
-        elem.onclick = () => {
-            currentPatch.animationMode = option.name;
-            clearColorList();
-            populateColorList();
-            clearSoundList();
-            populateSoundListFromPreset();
-            option.func();
-    
-            if (!isLooping()){
-                setMasterPolyRhythmProgress();
-                paint();
-            }
-        };
+function updateAnimationModeUI(){
+    for (let elem of animationModeButtons.children){
+        elem.checked = currentPatch.animationMode === elem.mode;
     }
 }
+
 
 function setupAnimationModeUI(){
     for (let option of animationModeOptions){
         let elem = document.createElement('input');
         elem.type = 'radio';
         elem.id = option.htmlId;
+        elem.mode = option.mode;
         elem.innerText = option.displayName;
         elem.name = "animationModeOptionBtn";
         elem.className = "animationModeOptionBtn";
         animationModeButtons.appendChild(elem);
+
+        elem.onclick = () => {
+            currentPatch.animationMode = option.mode;
+            fullRefresh(false);
+        }
+
+        elem.checked = currentPatch.animationMode === option.mode;
     
         // make label
         let labelElem = document.createElement('label');
@@ -35,6 +29,4 @@ function setupAnimationModeUI(){
         labelElem.innerText = option.displayName;
         animationModeButtons.appendChild(labelElem);
     }
-    
-    setupAnimationModeEventHandlers();
 }

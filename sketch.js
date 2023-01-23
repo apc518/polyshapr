@@ -5,8 +5,6 @@
 let p5canvas = null;
 let soundOn = true;
 let currentPatch = new Patch(presets[0]);
-let audioFileName = audioSampleOptions[0].filepath;
-let audioFileExtension = audioSampleOptions[0].extension;
 let allHowls = [];
 
 // physics
@@ -14,7 +12,7 @@ let globalSpeed = 1;
 let globalProgress = 0;
 
 // root PolyRhythm
-let master_pr;
+let rootPr;
 
 let hits = 0;
 
@@ -64,7 +62,7 @@ function playPause(){
 
 function play_(){
     try{
-        master_pr.playIfOnBounds();
+        rootPr.playIfOnBounds();
     }catch(e){}
     
     loop();
@@ -103,7 +101,7 @@ function incrementGlobalProgress(){
 
 
 function setMasterPolyRhythmProgress(){
-    master_pr.setProgress(globalProgress, getProgressIncrement());
+    rootPr.setProgress(globalProgress, getProgressIncrement());
 }
 
 
@@ -114,29 +112,31 @@ function paint(){
     background(currentPatch ? currentPatch.backgroundColor : 0);
     drawGlobalBorder();
     frameRate(FRAMERATE);
-    master_pr.draw();
+    rootPr.draw();
 
     if(DEBUG)
-        master_pr.drawBounds();
+        rootPr.drawBounds();
 }
 
-function initializeCurrentPatch(){
-    document.getElementById(animationModeOptionsMap[currentPatch.animationMode].htmlId).click();
+function initializeCurrentPatch(initSounds=false){
+    populateColorList();
+    if (initSounds) populateSoundList();
+    createRootPr();
 }
 
 /**
  * reflect the current patch on the screen, regardless of whether the animation is playing or paused
 */
-function fullRefresh(){
-    initializeCurrentPatch();
+function fullRefresh(refreshSounds=false){
+    initializeCurrentPatch(refreshSounds);
     setMasterPolyRhythmProgress();
     paint();
 }
 
 
 function setupPatchUI() {
-    setupAnimationModeUI();
     setupPresetDropdown();
+    setupAnimationModeUI();
     setupRhythmUI();
     setupPitchUI();
     setupColorUI();
@@ -147,6 +147,8 @@ function setupPatchUI() {
  * show the settings of the current patch in the settings UI
 */
 function updatePatchUI(){
+    updateAudioSampleUI();
+    updateAnimationModeUI();
     updateRhythmUI();
     cycleTimeInput.value = currentPatch.cycleTime;
     updatePitchUI();
@@ -155,37 +157,13 @@ function updatePatchUI(){
     strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
 }
 
-function displayAudioSampleSettings(){
-    for (let option of audioSampleOptions){
-        let elem = document.createElement('option');
-        elem.value = option.filepath;
-        elem.innerText = option.displayName;
-        audioSampleDropdown.appendChild(elem);
-
-        if (option.custom){
-            elem.onclick = e => {
-                if (e) return; // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
-                audioSampleFileInput.click();
-            }
-        }
-        else{
-            elem.onclick = e => {
-                // this is intended to be called only by the handler for audioSampleDropdown.oninput, without any arguments
-                if (e) return;
-                audioFileName = option.filepath;
-                let filenameSplitbyDot = audioFileName.split(".");
-                audioFileExtension = filenameSplitbyDot[filenameSplitbyDot.length - 1];
-                fullRefresh();
-            }
-        }
-    }
-}
-
 
 function setupPresetDropdown(){
+    presetDropdown.replaceChildren([]);
+
     for (let preset of presets){
         if (!preset.patchName){
-            console.error("patch had no patchName:", patch);
+            console.error("patch had no patchName:", preset);
         }
 
         let elem = document.createElement('option');
@@ -200,7 +178,7 @@ function setupPresetDropdown(){
             currentPatch = preset;
 
             updatePatchUI();
-            fullRefresh();
+            fullRefresh(true);
         };
     }
 }
@@ -223,7 +201,7 @@ function setup(){
         setupPatchUI();
         updatePatchUI();
         globalVolumeSlider.oninput();
-        fullRefresh();
+        fullRefresh(true);
     });
     
     // if running locally, run tests
@@ -256,7 +234,7 @@ function updateAll(){
     let prevGlobProg = globalProgress
     incrementGlobalProgress();
     if (globalProgress % 1 < prevGlobProg % 1){
-        console.log("Loop!");
+        debugLog("Loop!");
     }
     setMasterPolyRhythmProgress();
     paint();
@@ -280,22 +258,5 @@ function keyPressed(e){
         globalSpeed *= -1;
         setMasterPolyRhythmProgress();
         paint();
-    }
-
-    // up and down arrow transpose by a semitone
-    if(keyCode === UP_ARROW_KEYCODE || keyCode === DOWN_ARROW_KEYCODE){
-        // it just so happens that up is 38 and down is 40 so we can do
-        // some clever math hehe
-        let transposition = 39 - keyCode;
-        
-        // let newNoteSpeeds = Array.from(notes, n => Math.pow(2, (n + transposition)/12));
-        if (currentPatch.pitchMode === TUNING_MODES.RAW){
-            currentPatch.pitchMultiplier *= Math.pow(2, transposition / 12);
-        }
-        else if (currentPatch.pitchMode === TUNING_MODES.EDO12){
-            currentPatch.pitchOffset += transposition;
-        }
-
-        fullRefresh();
     }
 }

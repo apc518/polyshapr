@@ -76,7 +76,7 @@ function _trianglePolyrhythmRecursive(parentSize, rhythmList, padding, depth=0, 
 }
 
 
-function makeNGonRecursive(){
+function nGonPolyrhythmRecursive(){
     let sideNums = currentPatch.rhythms.filter(n => n >= 1);
 
     // add a 0 to the front of the skips list because the first shape doesnt actually move
@@ -101,13 +101,13 @@ function makeNGonRecursive(){
     sideNumsAugmented = sideNums.slice();
     sideNumsAugmented.push(currentPatch.ngonInnerPolygonSideCount);
 
-    _makeNGonRecursive(sideNumsAugmented, skips, pr, 1);
+    _nGonPolyrhythmRecursive(sideNumsAugmented, skips, pr, 1);
 
     return pr;
 }
 
 
-function _makeNGonRecursive(sideNums, skips, parent, depth){
+function _nGonPolyrhythmRecursive(sideNums, skips, parent, depth){
     if (depth >= sideNums.length) return;
     
     parent.soundIdx = depth - 1;
@@ -116,5 +116,5 @@ function _makeNGonRecursive(sideNums, skips, parent, depth){
     
     child.setColorIdx(depth);
     
-    _makeNGonRecursive(sideNums, skips, parent.children[0], depth + 1);
+    _nGonPolyrhythmRecursive(sideNums, skips, parent.children[0], depth + 1);
 }

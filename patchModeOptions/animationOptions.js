@@ -7,12 +7,12 @@ const ANIMATION_MODES = Object.freeze({
 
 const animationModeOptions = [
     {
-        name: ANIMATION_MODES.SQUARES,
+        mode: ANIMATION_MODES.SQUARES,
         displayName: "Squares",
         func: () => {
             if (currentPatch) {
                 debugLog("squares with", currentPatch);
-                master_pr = squarePolyRhythmRecursive();
+                rootPr = squarePolyRhythmRecursive();
             }
             else{
                 console.warn("currentPatch was not defined when squares func was called");
@@ -20,12 +20,12 @@ const animationModeOptions = [
         }
     },
     {
-        name: ANIMATION_MODES.TRIANGLES,
+        mode: ANIMATION_MODES.TRIANGLES,
         displayName: "Triangles",
         func: () => {
             if (currentPatch){
                 debugLog("triangles with ", currentPatch);
-                master_pr = trianglePolyrhythmRecursive();
+                rootPr = trianglePolyrhythmRecursive();
             }
             else{
                 console.warn("currentPatch was not defined when triangles func was called");
@@ -33,7 +33,7 @@ const animationModeOptions = [
         }
     },
     {
-        name: ANIMATION_MODES.NGONS,
+        mode: ANIMATION_MODES.NGONS,
         displayName: "N-Gons",
         func: () => {
             if(currentPatch){
@@ -44,20 +44,30 @@ const animationModeOptions = [
 
                 Helper.showNgonLt2WarningIfNecessary();
 
-                master_pr = makeNGonRecursive();
+                rootPr = nGonPolyrhythmRecursive();
             }
             else{
                 console.warn("currentPatch was not defined when ngons func was called");
             }
         }
     }
-]
+];
 
 
 const animationModeOptionsMap = {}
 
 // populate animationModeOptionsMap
 for (let option of animationModeOptions){
-    animationModeOptionsMap[option.name] = option;
-    option.htmlId = option.name + "OptionBtn";
+    animationModeOptionsMap[option.mode] = option;
+    option.htmlId = option.mode + "OptionBtn";
+}
+
+
+function createRootPr(){
+    if(currentPatch){
+        animationModeOptionsMap[currentPatch.animationMode].func();
+    }
+    else{
+        console.warn("currentPatch was not defined when createRootPr was called");
+    }
 }

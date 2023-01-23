@@ -35,8 +35,8 @@ a:hover{
 }
 
 .slider{
-    width: fit-content;
-    min-width: 200px;
+    width: 100%;
+    min-width: 240px;
 }
 
 #globalProgressSlider{
@@ -45,8 +45,8 @@ a:hover{
 
 #appDrawer{
     width: fit-content;
-    max-width: 240px;
-    min-width: 240px;
+    min-width: 280px;
+    max-width: 340px;
     margin-right: 1rem;
 }
 
@@ -62,6 +62,10 @@ a:hover{
     margin-bottom: 1rem;
 }
 
+.settingsCategory {
+    margin-bottom: 0.75rem;
+}
+
 #playbackSettings{
     background-color: #333;
 }
@@ -75,28 +79,12 @@ a:hover{
     background-color: #2a2a2a;
 }
 
-#presetBrowser{
-    margin-bottom: 1rem;
-}
-
-#animationModeSettings{
-    margin-bottom: 1rem;
-}
-
-#rhythmListCountInput{
-    width: 3rem;
-}
-
-#rhythmListOffsetInput{
-    width: 3rem;
-}
-
-#presetRhythmListControls{
-    max-width: 200px;
-}
-
 #globalProgressControlButtons{
     text-align: center;
+}
+
+.mayDisplayFilename{
+    max-width: 100%;
 }
 
 .settingsCategoryLabel{
@@ -112,12 +100,8 @@ a:hover{
     font-size: 0.8rem;
 }
 
-.listWithModesInput{
-    margin-block: 1rem;
-}
-
 .patchSettingNumericalInput{
-    width: 3rem;
+    width: 4rem;
 }
 
 #colorGradientControl{

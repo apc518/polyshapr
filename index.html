@@ -27,12 +27,6 @@
                             <button id="globalVolumeResetBtn">reset</button> <br/>
                             <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
                         </div>
-    
-                        <div id="audioSampleSettings" >
-                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
-                            <select id="audioSampleDropdown"></select>
-                            <button id="audioSampleLoadButton">Load your own</button>
-                        </div>
                     </details>
                 </div>
 
@@ -42,20 +36,27 @@
                     <details id="patchSettingsDetails">
                         <summary class="settingsHeader">Patch</summary>
     
-                        <div id="presetBrowser">
+                        <div id="presetBrowser" class="settingsCategory">
                             <label for=""></label>
-                            <select id="presetDropdown"></select> <label for="presetDropdown" class="secondaryLabels">Preset</label>
+                            <select id="presetDropdown" class="mayDisplayFilename"></select> <!-- <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/> -->
+                            <button id="patchSaveButton">Save</button> <button id="patchLoadButton">Load</button>
+                        </div>
+
+                        <div id="audioSampleSettings" class="settingsCategory">
+                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
+                            <select id="audioSampleDropdown"  class="mayDisplayFilename"></select>
+                            <button id="audioSampleLoadButton">Load your own</button>
                         </div>
     
-                        <div id="animationModeSettings">
+                        <div id="animationModeSettings" class="settingsCategory">
                             <label for="animationModeButtons" class="settingsCategoryLabel">Animation Mode</label>
                             <div id="animationModeButtons" class="secondaryLabels"></div>
                         </div>
     
-                        <div class="listWithModesInput" id="rhythmSettings">
+                        <div class="settingsCategory" id="rhythmSettings">
                             <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
                             <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
-                            <div id="presetRhythmListControls">
+                            <div>
                                 <select id="rhythmModeDropdown"></select>
                                 <br/>
                                 <input type="number" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
@@ -66,12 +67,12 @@
                             </div>
                         </div>
     
-                        <div class="simpleNumericalSetting">
+                        <div class="settingsCategory">
                             <label for="cycleTimeInput" class="settingsCategoryLabel">Cycle Length (seconds)</label> <br/>
                             <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
                         </div>
     
-                        <div class="listWithModesInput" id="rhythmSettings">
+                        <div class="settingsCategory" id="rhythmSettings">
                             <label for="pitchListInput" class="settingsCategoryLabel">Pitches</label> <br/>
                             <div id="presetPitchListControls">
                                 <input type="text" id="pitchListInput" class="patchSettingTextInput"/> 
@@ -86,7 +87,7 @@
                             </div>
                         </div>
     
-                        <div id="colorSettings">
+                        <div class="settingsCategory" id="colorSettings">
                             <div>
                                 <label for="pitchListInput">Color</label> <br/>
                             </div>
@@ -147,6 +148,7 @@
         <script src="patchModeOptions/rhythmOptions.js" defer></script>
         <script src="patchModeOptions/pitchOptions.js" defer></script>
         <script src="patchModeOptions/colorOptions.js" defer></script>
+        <script src="patchSettingsDisplayers/audioSampleSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/animationSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/rhythmSettingsDisplayer.js" defer></script>
         <script src="patchSettingsDisplayers/pitchSettingsDisplayer.js" defer></script>

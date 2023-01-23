@@ -1,22 +1,17 @@
 const audioSampleOptions = [
     {
         filepath: "assets/sounds/synth-pluck-C.wav",
-        extension: ".wav",
-        displayName: "Synth Pluck (C)"
+        displayName: "Synth Pluck (C)",
+        base64: null
     },
     {
         filepath: "assets/sounds/sine-blip-Eb.wav",
-        extension: ".wav",
-        displayName: "Sine Blip (Eb)"
+        displayName: "Sine Blip (Eb)",
+        base64: null
     },
     {
         filepath: "assets/sounds/synth-decay-Eb.wav",
-        extension: ".wav",
-        displayName: "Synth Decay (Eb)"
-    },
-    {
-        filepath: "",
-        displayName: "Custom",
-        custom: true
+        displayName: "Synth Decay (Eb)",
+        base64: null
     }
 ];

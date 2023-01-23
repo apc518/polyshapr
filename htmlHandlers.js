@@ -3,22 +3,30 @@
 const textFieldErrorColor = "#f88";
 const textFieldOkayColor = "#fff";
 
-// html elements
+// existing html elements
+
+// play/pause/reset controls
+const globalProgressSlider = document.getElementById("globalProgressSlider");
 const playPauseBtn = document.getElementById("playpausebtn");
 const resetBtn = document.getElementById("resetbtn");
+
+// playback ui elements
 const playbackSettingsDetails = document.getElementById("playbackSettingsDetails");
-const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const soundOnCheckbox = document.getElementById("soundOnCheckbox");
-const animationModeButtons = document.getElementById("animationModeButtons");
 const globalSpeedSlider = document.getElementById("globalSpeedSlider");
 const globalSpeedIndicator = document.getElementById("globalSpeedIndicator");
 const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
-const globalProgressSlider = document.getElementById("globalProgressSlider");
+
+// patch ui elements
+const patchSettingsDetails = document.getElementById("patchSettingsDetails");
+const presetDropdown = document.getElementById("presetDropdown");
+const patchSaveButton = document.getElementById("patchSaveButton");
+const patchLoadButton = document.getElementById("patchLoadButton");
 const audioSampleDropdown = document.getElementById("audioSampleDropdown");
 const audioSampleLoadButton = document.getElementById("audioSampleLoadButton");
-const presetDropdown = document.getElementById("presetDropdown");
+const animationModeButtons = document.getElementById("animationModeButtons");
 const rhythmListInput = document.getElementById("rhythmListInput");
 const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
 const rhythmListCountInput = document.getElementById("rhythmListCountInput");
@@ -37,9 +45,17 @@ const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 const colorReflectionCheckbox = document.getElementById("colorReflectionCheckbox");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
+
+// invisible input elements
+
+const patchFileInput = document.createElement('input');
+patchFileInput.type = 'file';
+patchFileInput.multiple = false;
+
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
+audioSampleFileInput.accept = ".wav,.mp4,.mp3,.ogg,.aiff,.flac,.m4a,.aac,.wmv,.wma,.alac"
 
 
 // html elem event listeners
@@ -63,7 +79,7 @@ resetBtn.onclick = e => {
     globalProgressSlider.value = 0;
     globalProgressSlider.oninput({ target: globalProgressSlider })
     
-    fullRefresh();
+    fullRefresh(true);
 }
 
 soundOnCheckbox.checked = true;
@@ -113,6 +129,84 @@ globalProgressSlider.oninput = e => {
 
 globalProgressSlider.onmouseup = e => e?.target.blur();
 
+presetDropdown.oninput = e => {
+    e?.target.blur();
+    presetDropdown.children[presetDropdown.selectedIndex].onclick();
+}
+
+patchSaveButton.onclick = e => {
+    e?.target.blur();
+
+    let patchJson = JSON.stringify(currentPatch);
+    let blob = URL.createObjectURL(new Blob([patchJson], { type: "application/json" }));
+    let downloadElem = document.createElement('a');
+
+    downloadElem.href = blob;
+    
+    Swal.fire({
+        title: "Name:",
+        input: "text",
+        showCancelButton: true
+    }).then(res => {
+        if(res.isConfirmed){
+            let name = res.value;
+            if(name === ""){
+                name = "New.polyshapr"
+            }
+            else if (!name.endsWith(".polyshapr")){
+                name = name + ".polyshapr";
+            }
+            downloadElem.download = name;
+            downloadElem.click();
+            Swal.fire({
+                icon: "success",
+                text: "Success",
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
+    });
+}
+
+patchLoadButton.onclick = e => {
+    e?.target.blur();
+    patchFileInput.click()
+}
+
+patchFileInput.onchange = e => {
+    e?.target.blur();
+    patchFileInput.files[0].text().then(res => {
+        let obj;
+        
+        try{
+            obj = JSON.parse(res);
+            let name = patchFileInput.files[0].name;
+            if (name.endsWith(".polyshapr")){
+                name = name.slice(0, name.length - 10);
+            }
+            
+            obj.patchName = name;
+            
+            presets.push(obj);
+            
+            setupPresetDropdown();
+
+            presetDropdown.selectedIndex = presetDropdown.children.length - 1;
+            presetDropdown.children[presetDropdown.children.length - 1].onclick();
+        }
+        catch(e){
+            console.log(e);
+            Swal.fire({
+                icon: "error",
+                title: "Invalid Polyshapr File",
+                text: `"${patchFileInput.files[0].name}" could not be parsed. Are you sure its a polyshapr file?"`
+            });
+        }
+
+        
+    })
+}
+
 audioSampleDropdown.oninput = e => {
     e?.target.blur();
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
@@ -120,28 +214,25 @@ audioSampleDropdown.oninput = e => {
 
 audioSampleLoadButton.onclick = e => {
     e?.target.blur();
-    audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
-    audioSampleDropdown.oninput();
+    audioSampleFileInput.click();
 }
 
 audioSampleFileInput.onchange = e => {
     e?.target.blur();
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
-        let filenameSplitByDot = audioSampleFileInput.files[0].name.split(".")
-        audioFileExtension = filenameSplitByDot[filenameSplitByDot.length - 1];
+        audioSampleOptions.push({
+            filepath: audioSampleFileInput.files[0].name,
+            displayName: audioSampleFileInput.files[0].name,
+            custom: true,
+            base64: typedArrayToBase64(new Uint8Array(res))
+        });
 
-        let blob = URL.createObjectURL(new Blob([res]), { type: audioSampleFileInput.files[0].type });
-        audioFileName = blob;
+        displayAudioSampleSettings();
+
+        audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
+        audioSampleDropdown.oninput();
         
-        fullRefresh();
     });
-}
-
-const strokeWeightSliderResolution = 25;
-
-presetDropdown.oninput = e => {
-    e?.target.blur();
-    presetDropdown.children[presetDropdown.selectedIndex].onclick();
 }
 
 rhythmListInput.oninput = e => {
@@ -165,7 +256,7 @@ rhythmListInput.oninput = e => {
     
     // rhythmModeDropdown.oninput();
     
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -185,7 +276,7 @@ function updateRhythmsFromPresetInput(){
     // reversed
     currentPatch.rhythmIsReversed = rhythmListIsReversedCheckbox.checked;
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 rhythmModeDropdown.oninput = e => {
@@ -248,7 +339,7 @@ pitchListInput.oninput = e => {
     currentPatch.pitchMode = PITCH_MODES.CUSTOM;
     pitchModeDropdown.selectedIndex = getIndexOfPitchModeOption(PITCH_MODES.CUSTOM);
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -263,7 +354,7 @@ function updatePitchesFromPresetInput(){
     currentPatch.pitchOffset = pitchOffsetInput.valueAsNumber;
     currentPatch.pitchMultiplier = pitchMultiplierInput.valueAsNumber;
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -307,7 +398,7 @@ function updateColorsFromInput(){
         new ColorKeyFrame({ idx: 1, rgbValues: hexToRgbArray(colorKeyFrameInput1.value) })
     ];
 
-    fullRefresh();
+    fullRefresh(false);
 }
 
 colorInterpolationModeDropdown.oninput = e => {
@@ -336,21 +427,24 @@ colorReflectionCheckbox.oninput = e => {
     currentPatch.doColorReflection = colorReflectionCheckbox.checked;
     colorReflectionCheckbox.blur();
 
-    fullRefresh();
+    fullRefresh(false);
 }
+
+const strokeWeightSliderResolution = 25;
 
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
     currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
-    fullRefresh();
+    fullRefresh(false);
 }
 
 strokeWeightSlider.onmouseup = e => e?.target.blur();
 
 const strokeWeightDefault = 3;
+
 strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
     strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
     currentPatch.strokeWeight = strokeWeightDefault;
-    fullRefresh();
+    fullRefresh(false);
 }
