@@ -45,8 +45,8 @@ a:hover{
 
 #appDrawer{
     width: fit-content;
-    max-width: 240px;
-    min-width: 240px;
+    max-width: 300px;
+    min-width: 300px;
     margin-right: 1rem;
 }
 
@@ -62,6 +62,10 @@ a:hover{
     margin-bottom: 1rem;
 }
 
+.settingsCategory {
+    margin-bottom: 0.75rem;
+}
+
 #playbackSettings{
     background-color: #333;
 }
@@ -73,14 +77,6 @@ a:hover{
 
 #patchSettings{
     background-color: #2a2a2a;
-}
-
-#presetBrowser{
-    margin-bottom: 1rem;
-}
-
-#animationModeSettings{
-    margin-bottom: 1rem;
 }
 
 #rhythmListCountInput{
@@ -110,10 +106,6 @@ a:hover{
 
 .secondaryLabels{
     font-size: 0.8rem;
-}
-
-.listWithModesInput{
-    margin-block: 1rem;
 }
 
 .patchSettingNumericalInput{
