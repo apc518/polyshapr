@@ -175,7 +175,7 @@ function setupPresetDropdown(){
         elem.onclick = e => {
             if (e) return; // should only be called from oninput handler for presetDropdown, with no arguments
 
-            currentPatch = preset;
+            currentPatch = new Patch(preset);
 
             updatePatchUI();
             fullRefresh(true);
