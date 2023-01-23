@@ -18,7 +18,7 @@ function setupAnimationModeUI(){
 
         elem.onclick = () => {
             currentPatch.animationMode = option.mode;
-            fullRefresh();
+            fullRefresh(false);
         }
 
         elem.checked = currentPatch.animationMode === option.mode;

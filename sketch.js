@@ -118,27 +118,25 @@ function paint(){
         rootPr.drawBounds();
 }
 
-function initializeCurrentPatch(){
-    clearColorList();
+function initializeCurrentPatch(initSounds=false){
     populateColorList();
-    clearSoundList();
-    populateSoundListFromPreset();
+    if (initSounds) populateSoundList();
     createRootPr();
 }
 
 /**
  * reflect the current patch on the screen, regardless of whether the animation is playing or paused
 */
-function fullRefresh(){
-    initializeCurrentPatch();
+function fullRefresh(refreshSounds=false){
+    initializeCurrentPatch(refreshSounds);
     setMasterPolyRhythmProgress();
     paint();
 }
 
 
 function setupPatchUI() {
-    setupAnimationModeUI();
     setupPresetDropdown();
+    setupAnimationModeUI();
     setupRhythmUI();
     setupPitchUI();
     setupColorUI();
@@ -180,7 +178,7 @@ function setupPresetDropdown(){
             currentPatch = preset;
 
             updatePatchUI();
-            fullRefresh();
+            fullRefresh(true);
         };
     }
 }
@@ -203,7 +201,7 @@ function setup(){
         setupPatchUI();
         updatePatchUI();
         globalVolumeSlider.oninput();
-        fullRefresh();
+        fullRefresh(true);
     });
     
     // if running locally, run tests
@@ -276,6 +274,6 @@ function keyPressed(e){
             currentPatch.pitchOffset += transposition;
         }
 
-        fullRefresh();
+        fullRefresh(true);
     }
 }

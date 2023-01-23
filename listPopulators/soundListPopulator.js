@@ -5,15 +5,12 @@ function clearSoundList(){
 }
 
 
-function populateSoundListFromPreset(){
+function populateSoundList(){
     if (currentPatch.pitchMode !== PITCH_MODES.CUSTOM){
         currentPatch.pitches = pitchModeOptionsMap[currentPatch.pitchMode].func(currentPatch.rhythms.length);
     }
 
-    // convert base64 from current patch into an arraybuffer
-    // make blob
-    // get extension from filename
-    // pass to each creation of new Sound()
+    clearSoundList();
 
     let audioFileName;
 

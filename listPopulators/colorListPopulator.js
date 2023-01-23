@@ -37,7 +37,7 @@ function colorLerpList(numColors, keyframe0, keyframe1){
 
 
 function populateColorList(){
-    // TODO: make this work with >2 keyframes
+    clearColorList();
 
     let numColors = currentPatch.rhythms.length;
 

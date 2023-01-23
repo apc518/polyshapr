@@ -79,7 +79,7 @@ resetBtn.onclick = e => {
     globalProgressSlider.value = 0;
     globalProgressSlider.oninput({ target: globalProgressSlider })
     
-    fullRefresh();
+    fullRefresh(true);
 }
 
 soundOnCheckbox.checked = true;
@@ -256,7 +256,7 @@ rhythmListInput.oninput = e => {
     
     // rhythmModeDropdown.oninput();
     
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -276,7 +276,7 @@ function updateRhythmsFromPresetInput(){
     // reversed
     currentPatch.rhythmIsReversed = rhythmListIsReversedCheckbox.checked;
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 rhythmModeDropdown.oninput = e => {
@@ -339,7 +339,7 @@ pitchListInput.oninput = e => {
     currentPatch.pitchMode = PITCH_MODES.CUSTOM;
     pitchModeDropdown.selectedIndex = getIndexOfPitchModeOption(PITCH_MODES.CUSTOM);
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -354,7 +354,7 @@ function updatePitchesFromPresetInput(){
     currentPatch.pitchOffset = pitchOffsetInput.valueAsNumber;
     currentPatch.pitchMultiplier = pitchMultiplierInput.valueAsNumber;
 
-    fullRefresh();
+    fullRefresh(true);
 }
 
 
@@ -398,7 +398,7 @@ function updateColorsFromInput(){
         new ColorKeyFrame({ idx: 1, rgbValues: hexToRgbArray(colorKeyFrameInput1.value) })
     ];
 
-    fullRefresh();
+    fullRefresh(false);
 }
 
 colorInterpolationModeDropdown.oninput = e => {
@@ -427,7 +427,7 @@ colorReflectionCheckbox.oninput = e => {
     currentPatch.doColorReflection = colorReflectionCheckbox.checked;
     colorReflectionCheckbox.blur();
 
-    fullRefresh();
+    fullRefresh(false);
 }
 
 const strokeWeightSliderResolution = 25;
@@ -435,7 +435,7 @@ const strokeWeightSliderResolution = 25;
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
     currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
-    fullRefresh();
+    fullRefresh(false);
 }
 
 strokeWeightSlider.onmouseup = e => e?.target.blur();
@@ -446,5 +446,5 @@ strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
     strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
     currentPatch.strokeWeight = strokeWeightDefault;
-    fullRefresh();
+    fullRefresh(false);
 }

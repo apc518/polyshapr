@@ -47,7 +47,7 @@ function displayAudioSampleSettings(){
             currentPatch.audioSampleDisplayName = option.displayName;
             currentPatch.audioSampleBase64 = option.base64;
 
-            fullRefresh();
+            fullRefresh(true);
         }
     }
 }
