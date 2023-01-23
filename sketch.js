@@ -259,21 +259,4 @@ function keyPressed(e){
         setMasterPolyRhythmProgress();
         paint();
     }
-
-    // up and down arrow transpose by a semitone
-    if(keyCode === UP_ARROW_KEYCODE || keyCode === DOWN_ARROW_KEYCODE){
-        // it just so happens that up is 38 and down is 40 so we can do
-        // some clever math hehe
-        let transposition = 39 - keyCode;
-        
-        // let newNoteSpeeds = Array.from(notes, n => Math.pow(2, (n + transposition)/12));
-        if (currentPatch.pitchMode === TUNING_MODES.RAW){
-            currentPatch.pitchMultiplier *= Math.pow(2, transposition / 12);
-        }
-        else if (currentPatch.pitchMode === TUNING_MODES.EDO12){
-            currentPatch.pitchOffset += transposition;
-        }
-
-        fullRefresh(true);
-    }
 }
