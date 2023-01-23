@@ -1,8 +1,32 @@
+function currentPatchAudioSampleIsInUi(){
+    for(let i = 0; i < audioSampleDropdown.children.length; i++){
+        if (audioSampleDropdown.children[i].value === currentPatch.audioSampleFilename){
+            return audioSampleOptions[i]?.base64 == currentPatch.audioSampleBase64;
+        }
+    }
+
+    return false;
+}
+
 function updateAudioSampleUI(){
     for (let i = 0; i < audioSampleDropdown.children.length; i++){
         if (audioSampleDropdown.children[i].value === currentPatch.audioSampleFilename){
             audioSampleDropdown.selectedIndex = i;
+            break;
         }
+    }
+
+    if (!currentPatchAudioSampleIsInUi()){
+        audioSampleOptions.push({
+            custom: true,
+            filepath: currentPatch.audioSampleFilename,
+            displayName: currentPatch.audioSampleFilename,
+            base64: currentPatch.audioSampleBase64
+        });
+
+        displayAudioSampleSettings();
+
+        audioSampleDropdown.selectedIndex = audioSampleDropdown.children.length - 1;
     }
 }
 

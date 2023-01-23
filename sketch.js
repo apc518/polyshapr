@@ -161,9 +161,11 @@ function updatePatchUI(){
 
 
 function setupPresetDropdown(){
+    presetDropdown.replaceChildren([]);
+
     for (let preset of presets){
         if (!preset.patchName){
-            console.error("patch had no patchName:", patch);
+            console.error("patch had no patchName:", preset);
         }
 
         let elem = document.createElement('option');

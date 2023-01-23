@@ -3,23 +3,30 @@
 const textFieldErrorColor = "#f88";
 const textFieldOkayColor = "#fff";
 
-// html elements
+// existing html elements
+
+// play/pause/reset controls
+const globalProgressSlider = document.getElementById("globalProgressSlider");
 const playPauseBtn = document.getElementById("playpausebtn");
 const resetBtn = document.getElementById("resetbtn");
+
+// playback ui elements
 const playbackSettingsDetails = document.getElementById("playbackSettingsDetails");
-const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const soundOnCheckbox = document.getElementById("soundOnCheckbox");
-const animationModeButtons = document.getElementById("animationModeButtons");
 const globalSpeedSlider = document.getElementById("globalSpeedSlider");
 const globalSpeedIndicator = document.getElementById("globalSpeedIndicator");
 const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
-const globalProgressSlider = document.getElementById("globalProgressSlider");
-const audioSampleDropdown = document.getElementById("audioSampleDropdown");
-const audioSampleLoadButton = document.getElementById("audioSampleLoadButton");
+
+// patch ui elements
+const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const presetDropdown = document.getElementById("presetDropdown");
 const patchSaveButton = document.getElementById("patchSaveButton");
+const patchLoadButton = document.getElementById("patchLoadButton");
+const audioSampleDropdown = document.getElementById("audioSampleDropdown");
+const audioSampleLoadButton = document.getElementById("audioSampleLoadButton");
+const animationModeButtons = document.getElementById("animationModeButtons");
 const rhythmListInput = document.getElementById("rhythmListInput");
 const rhythmModeDropdown = document.getElementById("rhythmModeDropdown");
 const rhythmListCountInput = document.getElementById("rhythmListCountInput");
@@ -38,6 +45,13 @@ const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 const colorReflectionCheckbox = document.getElementById("colorReflectionCheckbox");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
+
+// invisible input elements
+
+const patchFileInput = document.createElement('input');
+patchFileInput.type = 'file';
+patchFileInput.multiple = false;
+
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
@@ -153,6 +167,45 @@ patchSaveButton.onclick = e => {
     });
 }
 
+patchLoadButton.onclick = e => {
+    e?.target.blur();
+    patchFileInput.click()
+}
+
+patchFileInput.onchange = e => {
+    e?.target.blur();
+    patchFileInput.files[0].text().then(res => {
+        let obj;
+        
+        try{
+            obj = JSON.parse(res);
+            let name = patchFileInput.files[0].name;
+            if (name.endsWith(".polyshapr")){
+                name = name.slice(0, name.length - 10);
+            }
+            
+            obj.patchName = name;
+            
+            presets.push(obj);
+            
+            setupPresetDropdown();
+
+            presetDropdown.selectedIndex = presetDropdown.children.length - 1;
+            presetDropdown.children[presetDropdown.children.length - 1].onclick();
+        }
+        catch(e){
+            console.log(e);
+            Swal.fire({
+                icon: "error",
+                title: "Invalid Polyshapr File",
+                text: `"${patchFileInput.files[0].name}" could not be parsed. Are you sure its a polyshapr file?"`
+            });
+        }
+
+        
+    })
+}
+
 audioSampleDropdown.oninput = e => {
     e?.target.blur();
     audioSampleDropdown.children[audioSampleDropdown.selectedIndex].onclick();
@@ -166,12 +219,11 @@ audioSampleLoadButton.onclick = e => {
 audioSampleFileInput.onchange = e => {
     e?.target.blur();
     audioSampleFileInput.files[0].arrayBuffer().then(res => {
-        let base64 = typedArrayToBase64(new Uint8Array(res));
         audioSampleOptions.push({
             filepath: audioSampleFileInput.files[0].name,
             displayName: audioSampleFileInput.files[0].name,
             custom: true,
-            base64: base64
+            base64: typedArrayToBase64(new Uint8Array(res))
         });
 
         displayAudioSampleSettings();
