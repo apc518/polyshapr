@@ -35,8 +35,8 @@ a:hover{
 }
 
 .slider{
-    width: fit-content;
-    min-width: 200px;
+    width: 100%;
+    min-width: 240px;
 }
 
 #globalProgressSlider{
@@ -45,8 +45,8 @@ a:hover{
 
 #appDrawer{
     width: fit-content;
-    max-width: 300px;
-    min-width: 300px;
+    max-width: 280px;
+    min-width: 280px;
     margin-right: 1rem;
 }
 
