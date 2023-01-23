@@ -45,8 +45,8 @@ a:hover{
 
 #appDrawer{
     width: fit-content;
-    max-width: 280px;
     min-width: 280px;
+    max-width: 340px;
     margin-right: 1rem;
 }
 
@@ -79,20 +79,12 @@ a:hover{
     background-color: #2a2a2a;
 }
 
-#rhythmListCountInput{
-    width: 3rem;
-}
-
-#rhythmListOffsetInput{
-    width: 3rem;
-}
-
-#presetRhythmListControls{
-    max-width: 200px;
-}
-
 #globalProgressControlButtons{
     text-align: center;
+}
+
+.mayDisplayFilename{
+    max-width: 100%;
 }
 
 .settingsCategoryLabel{
@@ -109,7 +101,7 @@ a:hover{
 }
 
 .patchSettingNumericalInput{
-    width: 3rem;
+    width: 4rem;
 }
 
 #colorGradientControl{

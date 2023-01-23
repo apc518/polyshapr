@@ -38,13 +38,13 @@
     
                         <div id="presetBrowser" class="settingsCategory">
                             <label for=""></label>
-                            <select id="presetDropdown"></select> <!-- <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/> -->
+                            <select id="presetDropdown" class="mayDisplayFilename"></select> <!-- <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/> -->
                             <button id="patchSaveButton">Save</button> <button id="patchLoadButton">Load</button>
                         </div>
 
                         <div id="audioSampleSettings" class="settingsCategory">
                             <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
-                            <select id="audioSampleDropdown"></select>
+                            <select id="audioSampleDropdown"  class="mayDisplayFilename"></select>
                             <button id="audioSampleLoadButton">Load your own</button>
                         </div>
     
@@ -56,7 +56,7 @@
                         <div class="settingsCategory" id="rhythmSettings">
                             <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
                             <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
-                            <div id="presetRhythmListControls">
+                            <div>
                                 <select id="rhythmModeDropdown"></select>
                                 <br/>
                                 <input type="number" id="rhythmListCountInput" class="patchSettingNumericalInput"/> <label for="rhythmListCountInput" class="secondaryLabels"># of Rhythms</label>
