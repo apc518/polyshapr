@@ -55,6 +55,7 @@ patchFileInput.multiple = false;
 const audioSampleFileInput = document.createElement('input');
 audioSampleFileInput.type = 'file';
 audioSampleFileInput.multiple = false;
+audioSampleFileInput.accept = ".wav,.mp4,.mp3,.ogg,.aiff,.flac,.m4a,.aac,.wmv,.wma,.alac"
 
 
 // html elem event listeners
