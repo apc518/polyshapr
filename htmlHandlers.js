@@ -448,3 +448,9 @@ strokeWeightSliderResetBtn.onclick = e => {
     currentPatch.strokeWeight = strokeWeightDefault;
     fullRefresh(false);
 }
+
+window.addEventListener('keydown', function(e) {
+    if(e.key == " " && e.target == document.body) {
+        e.preventDefault();
+    }
+});
