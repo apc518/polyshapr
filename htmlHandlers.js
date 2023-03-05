@@ -41,6 +41,7 @@ const pitchMultiplierInput = document.getElementById("pitchMultiplierInput");
 const colorInterpolationModeDropdown = document.getElementById("colorInterpolationModeDropdown");
 const colorKeyFrameInput0 = document.getElementById("colorKeyFrameInput0");
 const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
+const colorScaleInput = document.getElementById("colorScaleInput");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 const colorReflectionCheckbox = document.getElementById("colorReflectionCheckbox");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
@@ -414,6 +415,17 @@ colorKeyFrameInput0.oninput = e => {
 colorKeyFrameInput1.oninput = e => {
     e?.target.blur();
     updateColorsFromInput();
+}
+
+colorScaleInput.oninput = e => {
+    if (Patch.colorScaleIsValid(colorScaleInput.valueAsNumber)){
+        colorScaleInput.style.backgroundColor = textFieldOkayColor;
+        currentPatch.colorScale = colorScaleInput.valueAsNumber;
+        fullRefresh(false);
+    }
+    else{
+        colorScaleInput.style.backgroundColor = textFieldErrorColor;
+    }
 }
 
 colorRippleCheckbox.oninput = e => {

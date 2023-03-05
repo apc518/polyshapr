@@ -50,6 +50,12 @@ function populateColorList(){
         numColors += 1;
     }
 
+    if (currentPatch.colorScale === 0){
+        throw new Error(`color scale was zero`);
+    }
+
+    numColors = ceil(numColors * abs(currentPatch.colorScale));
+
     if (currentPatch.doColorReflection){
         let firstColors     = colorLerpList(numColors + 1, currentPatch.colorKeyFrames[0], currentPatch.colorKeyFrames[1]);
         let reflectedColors = colorLerpList(numColors + 1, currentPatch.colorKeyFrames[1], currentPatch.colorKeyFrames[0]);
@@ -63,5 +69,10 @@ function populateColorList(){
     else{
         let colors = colorLerpList(numColors, currentPatch.colorKeyFrames[0], currentPatch.colorKeyFrames[1]);
         colors.forEach(c => colorList.push(c));
+    }
+
+    // reverse the list is the color scale is negative
+    if (currentPatch.colorScale < 0){
+        colorList.reverse();
     }
 }
