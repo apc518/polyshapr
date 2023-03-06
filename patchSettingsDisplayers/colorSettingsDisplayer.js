@@ -4,6 +4,8 @@ function updateColorUI(){
 
     colorInterpolationModeDropdown.selectedIndex = getIndexOfColorOption(currentPatch.colorInterpolationMode);
 
+    colorScaleInput.value = currentPatch.colorScale;
+
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
     colorReflectionCheckbox.checked = currentPatch.doColorRipple;
 }

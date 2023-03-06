@@ -5,7 +5,7 @@
 class Patch {
     // this works as a copy constructor in addition to constructing from a simple js struct
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
-                  pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames,
+                  pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames, colorScale,
                   doColorRipple, doColorReflection, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
                   squareStyle, sizeMultiplier, backgroundColor, audioSampleIsCustom, audioSampleFilename, audioSampleDisplayName, audioSampleBase64 }){
         // rhythm
@@ -28,6 +28,7 @@ class Patch {
         this.skips = skips.slice(); // no skips means assume 0 skip for all
         this.colorInterpolationMode = colorInterpolationMode;
         this.colorKeyFrames = copyColorKeyFrameList(colorKeyFrames);
+        this.colorScale = colorScale;
         this.doColorRipple = doColorRipple;
         this.doColorReflection = doColorReflection;
         this.strokeWeight = strokeWeight;
@@ -116,6 +117,10 @@ class Patch {
      */
     static colorValuesValidation(rgbValues){
         return rgbValues.map(v => Number.isFinite(v) && 0 <= v && v <= 255);
+    }
+
+    static colorScaleIsValid(colorScale){
+        return Number.isFinite(colorScale) && colorScale !== 0;
     }
 }
 
