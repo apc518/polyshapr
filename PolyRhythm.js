@@ -386,7 +386,7 @@ class EqTriangleRhythm2d extends Rhythm {
             translate(parent.pos.x - parent.boundPos.x, parent.pos.y - parent.boundPos.y + parent.size + parent.size * (parent.boundSize / parent.size - 2));
         }
         else{
-            this.drawBounds();
+            // this.drawBounds();
         }
 
         noFill();

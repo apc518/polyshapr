@@ -105,14 +105,35 @@ function setMasterPolyRhythmProgress(){
 }
 
 
+let rotationSpeedRatio = 1200;
+let rotateCount = 4;
+let drawBackground = false;
+
 /**
  * paint the screen without updating physics
  */
 function paint(){
-    background(currentPatch ? currentPatch.backgroundColor : 0);
-    drawGlobalBorder();
-    frameRate(FRAMERATE);
-    rootPr.draw();
+    if (drawBackground)
+        background(currentPatch ? currentPatch.backgroundColor : 0);
+
+
+    for (let i = 0; i < rotateCount; i++){
+        push();
+    
+        // let globalRotationProgress = (globalProgress % 1) * rotationSpeedRatio;
+        let globalRotationProgress = i / rotateCount;
+        let v = createVector(0, 1);
+        v = v.mult((canvasWidth / 2) / (sin(PI/4))).rotate((2 * PI * globalRotationProgress) + PI * 3 / 4);
+        v = v.add(createVector(canvasWidth / 2, canvasHeight / 2));
+        translate(v);
+        rotate(globalRotationProgress * 2 * PI);
+    
+        // drawGlobalBorder();
+        frameRate(FRAMERATE);
+        rootPr.draw();
+    
+        pop();
+    }
 
     if(DEBUG)
         rootPr.drawBounds();
@@ -226,6 +247,9 @@ function draw() {
     updateAll();
 }
 
+let globalRotation = 0;
+
+
 /**
  * basically an alias for p5js `draw`, i.e. the function that the gameloop calls
  */
@@ -237,6 +261,7 @@ function updateAll(){
         debugLog("Loop!");
     }
     setMasterPolyRhythmProgress();
+    
     paint();
 }
 
