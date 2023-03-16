@@ -237,9 +237,8 @@ audioSampleFileInput.onchange = e => {
 }
 
 rhythmListInput.oninput = e => {
-    rhythmModeDropdown.selectedIndex = 0;
-    rhythmListCountInput.disabled = true;
-    rhythmListOffsetInput.disabled = true;
+    rhythmModeDropdown.selectedIndex = getIndexOfRhythmModeOption(RHYTHM_MODES.CUSTOM);
+    rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = true;
 
     let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
     
