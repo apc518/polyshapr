@@ -238,6 +238,8 @@ audioSampleFileInput.onchange = e => {
 
 rhythmListInput.oninput = e => {
     rhythmModeDropdown.selectedIndex = 0;
+    rhythmListCountInput.disabled = true;
+    rhythmListOffsetInput.disabled = true;
 
     let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
     
