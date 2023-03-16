@@ -236,18 +236,36 @@ audioSampleFileInput.onchange = e => {
     });
 }
 
+function setBackgroundColorForRhythmInputs() {
+    if (!rhythmListInput.disabled){
+        let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
+        rhythmListInput.style.backgroundColor = Patch.rhythmListIsValid(nums) ? textFieldOkayColor : textFieldErrorColor;
+    }
+
+    if (!rhythmListCountInput.disabled){
+        rhythmListCountInput.style.backgroundColor = Patch.rhythmCountIsValid(rhythmListCountInput.valueAsNumber) ? textFieldOkayColor : textFieldErrorColor;
+    }
+
+    if (!rhythmListOffsetInput.disabled){
+        rhythmListOffsetInput.style.backgroundColor = Patch.rhythmOffsetIsValid(rhythmListOffsetInput.valueAsNumber) ? textFieldOkayColor : textFieldErrorColor;
+    }
+}
+
 rhythmListInput.oninput = e => {
-    rhythmModeDropdown.selectedIndex = 0;
+    rhythmModeDropdown.selectedIndex = getIndexOfRhythmModeOption(RHYTHM_MODES.CUSTOM);
+    rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = true;
 
     let nums = rhythmListInput.value.split(",").map(r => parseFloat(r));
     
+    setBackgroundColorForRhythmInputs();
+    
     // if we dont have a valid list yet just return
-    if (!Patch.rhythmListIsValid(nums)){
-        rhythmListInput.style.backgroundColor = textFieldErrorColor;
+    if (!Patch.rhythmListIsValid(nums)) return;
+    
+    // just return if its the same as the current rhythms
+    if (JSON.stringify(currentPatch.rhythms) === JSON.stringify(nums)){
         return;
     }
-    
-    rhythmListInput.style.backgroundColor = textFieldOkayColor;
     
     currentPatch.rhythms = nums;
     rhythmListCountInput.value = nums.length;
@@ -285,31 +303,29 @@ rhythmModeDropdown.oninput = e => {
     let disabled = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
     rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
     updateRhythmsFromPresetInput();
+    setBackgroundColorForRhythmInputs();
 }
 
 rhythmListCountInput.oninput = e => {
     if (Patch.rhythmCountIsValid(rhythmListCountInput.valueAsNumber)){
         updateRhythmsFromPresetInput();
-        rhythmListCountInput.style.backgroundColor = textFieldOkayColor;
     }
-    else{
-        rhythmListCountInput.style.backgroundColor = textFieldErrorColor;
-    }
+
+    setBackgroundColorForRhythmInputs();
 }
 
 rhythmListOffsetInput.oninput = e => {
     if (Patch.rhythmOffsetIsValid(rhythmListOffsetInput.valueAsNumber)){
         updateRhythmsFromPresetInput();
-        rhythmListOffsetInput.style.backgroundColor = textFieldOkayColor;
     }
-    else{
-        rhythmListOffsetInput.style.backgroundColor = textFieldErrorColor;
-    }
+
+    setBackgroundColorForRhythmInputs();
 }
 
 rhythmListIsReversedCheckbox.oninput = e => {
     e?.target.blur();
     updateRhythmsFromPresetInput();
+    setBackgroundColorForRhythmInputs();
 }
 
 cycleTimeInput.oninput = e => {
