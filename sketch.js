@@ -105,30 +105,27 @@ function setMasterPolyRhythmProgress(){
 }
 
 
-let rotationSpeedRatio = 1200;
-let rotateCount = 4;
-let drawBackground = false;
-
 /**
  * paint the screen without updating physics
  */
 function paint(){
-    if (drawBackground)
+    if (currentPatch.drawBackground)
         background(currentPatch ? currentPatch.backgroundColor : 0);
 
-
-    for (let i = 0; i < rotateCount; i++){
+    for (let i = 0; i < currentPatch.rotateCount; i++){
         push();
     
-        // let globalRotationProgress = (globalProgress % 1) * rotationSpeedRatio;
-        let globalRotationProgress = i / rotateCount;
+        let globalRotationProgress = i / currentPatch.rotateCount + (globalProgress % 1) * currentPatch.globalRotationSpeed;
         let v = createVector(0, 1);
         v = v.mult((canvasWidth / 2) / (sin(PI/4))).rotate((2 * PI * globalRotationProgress) + PI * 3 / 4);
         v = v.add(createVector(canvasWidth / 2, canvasHeight / 2));
         translate(v);
         rotate(globalRotationProgress * 2 * PI);
     
-        // drawGlobalBorder();
+        if (currentPatch.drawGlobalBorder){
+            console.log("drawing global border");
+            drawGlobalBorder();
+        }
         frameRate(FRAMERATE);
         rootPr.draw();
     
