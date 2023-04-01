@@ -207,9 +207,6 @@ function setup(){
     p5canvas = createCanvas(canvasWidth, canvasHeight);
     p5canvas.parent(document.getElementById("p5canvas"));
 
-    playbackSettingsDetails.open = true;
-    patchSettingsDetails.open = true;
-
     let welcomeMessage = Helper.isFirstVisit() ? "Welcome to PolyShapr!" : "Welcome back to PolyShapr!";
     
     Swal.fire({ title: welcomeMessage, icon: 'info', text: "Click OK to enable audio" })

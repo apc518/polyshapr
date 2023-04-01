@@ -12,15 +12,9 @@ const resetBtn = document.getElementById("resetbtn");
 
 // playback ui elements
 const playbackSettingsDetails = document.getElementById("playbackSettingsDetails");
-const soundOnCheckbox = document.getElementById("soundOnCheckbox");
-const globalSpeedSlider = document.getElementById("globalSpeedSlider");
-const globalSpeedIndicator = document.getElementById("globalSpeedIndicator");
-const globalSpeedResetBtn = document.getElementById("globalSpeedResetBtn");
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
-const globalVolumeResetBtn = document.getElementById("globalVolumeResetBtn");
 
 // patch ui elements
-const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const presetDropdown = document.getElementById("presetDropdown");
 const patchSaveButton = document.getElementById("patchSaveButton");
 const patchLoadButton = document.getElementById("patchLoadButton");
@@ -83,42 +77,18 @@ resetBtn.onclick = e => {
     fullRefresh(true);
 }
 
-soundOnCheckbox.checked = true;
-soundOnCheckbox.oninput = e => {
-    e?.target.blur();
-    soundOn = soundOnCheckbox.checked;
+globalVolumeSlider.value = parseInt(globalVolumeSlider.max) / 2;
+globalVolumeSlider.oninput = e => {
+    const value = globalVolumeSlider.valueAsNumber;
+    soundOn = value >= 1;
     if (!soundOn){
         Howler.stop();
     }
-}
-
-const globalSpeedSliderMax = Math.max(1, parseInt(globalSpeedSlider.max))
-globalSpeedSlider.value = globalSpeedSliderMax / 2;
-globalSpeedSlider.oninput = e => {
-    globalSpeed = Math.pow(1/10, (1 - e.target.value * 2 / globalSpeedSliderMax));
-    globalSpeedIndicator.innerText = globalSpeed.toFixed(2);
-}
-
-globalSpeedSlider.onmouseup = e => e?.target.blur();
-
-globalSpeedResetBtn.onclick = e => {
-    e?.target.blur();
-    globalSpeedSlider.value = globalSpeedSliderMax / 2;
-    globalSpeedSlider.oninput({target: globalSpeedSlider});
-}
-
-globalVolumeSlider.value = parseInt(globalVolumeSlider.max) / 2;
-globalVolumeSlider.oninput = e => {
-    Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
+    console.log(value);
+    Howler.volume(convertSliderValueToAmplitude(value));
 }
 
 globalVolumeSlider.onmouseup = e => e?.target.blur();
-
-globalVolumeResetBtn.onclick = e => {
-    e?.target.blur();
-    globalVolumeSlider.value = 50;
-    globalVolumeSlider.oninput();
-}
 
 globalProgressSlider.value = 0;
 

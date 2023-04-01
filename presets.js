@@ -96,8 +96,8 @@ const presets = [
         skips: [],
         colorInterpolationMode: COLOR_INTERPOLATION_MODES.HSL,
         colorKeyFrames: [
-            new ColorKeyFrame({ idx: 0, rgbValues: [0, 0, 255] }),
-            new ColorKeyFrame({ idx: -1, rgbValues: [255, 0, 0] }),
+            new ColorKeyFrame({ idx: 0, rgbValues: [255, 0, 0] }),
+            new ColorKeyFrame({ idx: -1, rgbValues: [255, 0, 1] }),
         ],
         colorScale: 3,
         doColorRipple: true,

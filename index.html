@@ -3,6 +3,7 @@
     <head>
         <title>PolyShapr</title>
         <link rel="stylesheet" href="styles.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -10,51 +11,20 @@
     <body>
         <div id="main" style="display: flex;">
             <div id="appDrawer">
-                <div id="playbackSettings" class="settingsSection">
-                    <details id="playbackSettingsDetails">
-                        <summary class="settingsHeader">Playback</summary>
+                <div id="patchSettings">
+                    <div id="presetBrowser" class="settingsSection">
+                        <label for=""></label>
+                        <select id="presetDropdown" class="mayDisplayFilename"></select> <!-- <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/> -->
+                        <button id="patchSaveButton">Save</button> <button id="patchLoadButton">Load</button>
+                    </div>
 
-                        <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
-                        
-                        <div class="settingsSlider">
-                            <label for="globalSpeedSlider" class="settingsCategoryLabel">Speed</label>
-                            <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
-                            <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/> <br/>
-                        </div>
-                        
-                        <div class="settingsSlider">
-                            <label for="globalVolumeSlider" class="settingsCategoryLabel">Volume</label>
-                            <button id="globalVolumeResetBtn">reset</button> <br/>
-                            <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
-                        </div>
-                    </details>
-                </div>
+                    <div class="appDrawerDivider"></div>
 
-                <div id="appDrawerDivider"></div>
-
-                <div id="patchSettings" class="settingsSection">
-                    <details id="patchSettingsDetails">
-                        <summary class="settingsHeader">Patch</summary>
-    
-                        <div id="presetBrowser" class="settingsCategory">
-                            <label for=""></label>
-                            <select id="presetDropdown" class="mayDisplayFilename"></select> <!-- <label for="presetDropdown" class="secondaryLabels">Preset</label> <br/> -->
-                            <button id="patchSaveButton">Save</button> <button id="patchLoadButton">Load</button>
-                        </div>
-
-                        <div id="audioSampleSettings" class="settingsCategory">
-                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
-                            <select id="audioSampleDropdown"  class="mayDisplayFilename"></select>
-                            <button id="audioSampleLoadButton">Load your own</button>
-                        </div>
-    
-                        <div id="animationModeSettings" class="settingsCategory">
-                            <label for="animationModeButtons" class="settingsCategoryLabel">Animation Mode</label>
-                            <div id="animationModeButtons" class="secondaryLabels"></div>
-                        </div>
+                    <details id="rhythmSettingsDetails" class="settingsSection" open>
+                        <summary class="settingsSummary">Rhythm</summary>
     
                         <div class="settingsCategory" id="rhythmSettings">
-                            <label for="rhythmListInput" class="settingsCategoryLabel">Rhythms</label> <br/>
+                            <label for="rhythmListInput" class="settingsCategoryLabel">Polyrhythm</label> <br/>
                             <input type="text" id="rhythmListInput" class="patchSettingTextInput"/> <br/>
                             <div>
                                 <select id="rhythmModeDropdown"></select>
@@ -71,7 +41,19 @@
                             <label for="cycleTimeInput" class="settingsCategoryLabel">Cycle Length (seconds)</label> <br/>
                             <input type="number" id="cycleTimeInput" class="patchSettingNumericalInput" />
                         </div>
-    
+                    </details>
+
+                    <div class="appDrawerDivider"></div>
+
+                    <details id="audioSettingsDetails" class="settingsSection" open>
+                        <summary class="settingsSummary">Audio</summary>
+                        
+                        <div id="audioSampleSettings" class="settingsCategory">
+                            <label for="audioSampleDropdown" class="settingsCategoryLabel">Audio Sample</label><br/>
+                            <select id="audioSampleDropdown"  class="mayDisplayFilename"></select>
+                            <button id="audioSampleLoadButton">Load your own</button>
+                        </div>
+
                         <div class="settingsCategory" id="rhythmSettings">
                             <label for="pitchListInput" class="settingsCategoryLabel">Pitches</label> <br/>
                             <div id="presetPitchListControls">
@@ -86,7 +68,18 @@
                                 <input type="number" step="0.1" min="0" id="pitchMultiplierInput" class="patchSettingNumericalInput"/> <label for="pitchListIsReversedCheckbox" class="secondaryLabels">Multiplier</label>
                             </div>
                         </div>
+                    </details>
+
+                    <div class="appDrawerDivider"></div>
+
+                    <details id="visualSettingsDetails" class="settingsSection" open>
+                        <summary class="settingsSummary">Visual</summary>
     
+                        <div id="animationModeSettings" class="settingsCategory">
+                            <label for="animationModeButtons" class="settingsCategoryLabel">Animation Mode</label>
+                            <div id="animationModeButtons" class="secondaryLabels"></div>
+                        </div>
+
                         <div class="settingsCategory" id="colorSettings">
                             <div>
                                 <label for="pitchListInput">Color</label> <br/>
@@ -123,9 +116,13 @@
                     <div>
                         <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/>
                     </div>
-                    <div id="globalProgressControlButtons">
+                    <div class="playback-control-bar">
                         <button id="playpausebtn">Play</button>
                         <button id="resetbtn">Reset</button>
+                        <div id="volumeSliderContainer">
+                            <label for="globalVolumeSlider" id="volumeSliderLabel">Volume</label>
+                            <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
+                        </div>
                     </div>
                 </div>
             </div>
