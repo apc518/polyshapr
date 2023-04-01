@@ -3,6 +3,7 @@
     <head>
         <title>PolyShapr</title>
         <link rel="stylesheet" href="styles.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -10,28 +11,6 @@
     <body>
         <div id="main" style="display: flex;">
             <div id="appDrawer">
-                <div id="playbackSettings" class="settingsSection">
-                    <details id="playbackSettingsDetails">
-                        <summary class="settingsHeader">Playback</summary>
-
-                        <input type="checkbox" id="soundOnCheckbox"/><label for="soundOnCheckbox">Sound</label> <br/>
-                        
-                        <div class="settingsSlider">
-                            <label for="globalSpeedSlider" class="settingsCategoryLabel">Speed</label>
-                            <span id="globalSpeedIndicator">1.0</span><span>x</span> <button id="globalSpeedResetBtn">reset</button><br/>
-                            <input type="range" min="0" max="1000" id="globalSpeedSlider" class="slider"/> <br/>
-                        </div>
-                        
-                        <div class="settingsSlider">
-                            <label for="globalVolumeSlider" class="settingsCategoryLabel">Volume</label>
-                            <button id="globalVolumeResetBtn">reset</button> <br/>
-                            <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
-                        </div>
-                    </details>
-                </div>
-
-                <div id="appDrawerDivider"></div>
-
                 <div id="patchSettings" class="settingsSection">
                     <details id="patchSettingsDetails">
                         <summary class="settingsHeader">Patch</summary>
@@ -123,9 +102,13 @@
                     <div>
                         <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/>
                     </div>
-                    <div id="globalProgressControlButtons">
+                    <div class="playback-control-bar">
                         <button id="playpausebtn">Play</button>
                         <button id="resetbtn">Reset</button>
+                        <div id="volumeSliderContainer">
+                            <label for="globalVolumeSlider" id="volumeSliderLabel">Volume</label>
+                            <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
+                        </div>
                     </div>
                 </div>
             </div>

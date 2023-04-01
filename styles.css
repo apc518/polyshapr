@@ -30,10 +30,6 @@ a:hover{
     max-width: 4rem;
 }
 
-#soundOnCheckbox{
-    margin-bottom: 1rem;
-}
-
 .slider{
     width: 100%;
     min-width: 240px;
@@ -135,4 +131,35 @@ a:hover{
     margin-inline: 10px;
     padding-bottom: 0.5rem;
     overflow-y: hidden;
+}
+
+.playback-control-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+#playpausebtn {
+    margin-right: 10px;
+}
+
+#resetbtn {
+    margin-right: 10px;
+}
+
+.sound-control {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#volumeSliderContainer{
+    margin-left: auto;
+    display: flex;
+}
+
+#volumeSliderLabel{
+    margin-right: 5px;
 }
