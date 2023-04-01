@@ -15,7 +15,6 @@ const playbackSettingsDetails = document.getElementById("playbackSettingsDetails
 const globalVolumeSlider = document.getElementById("globalVolumeSlider");
 
 // patch ui elements
-const patchSettingsDetails = document.getElementById("patchSettingsDetails");
 const presetDropdown = document.getElementById("presetDropdown");
 const patchSaveButton = document.getElementById("patchSaveButton");
 const patchLoadButton = document.getElementById("patchLoadButton");
