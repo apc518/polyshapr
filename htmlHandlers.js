@@ -84,7 +84,6 @@ globalVolumeSlider.oninput = e => {
     if (!soundOn){
         Howler.stop();
     }
-    console.log(value);
     Howler.volume(convertSliderValueToAmplitude(value));
 }
 
