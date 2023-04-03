@@ -123,7 +123,6 @@ function paint(){
         rotate(globalRotationProgress * 2 * PI);
     
         if (currentPatch.drawGlobalBorder){
-            console.log("drawing global border");
             drawGlobalBorder();
         }
         frameRate(FRAMERATE);
