@@ -475,6 +475,7 @@ class NGonRhythm2d extends Rhythm {
             let da = ((child.skip + 1) * 2 * PI / this.polygon.n) - (2 * PI / child.polygon.n);
 
             // trim down da to within one nth of a full rotation since anything more would be more than enough (but keep the sign)
+            // it is important that this is the javascript remainder, NOT modulus
             da = da % (2 * Math.PI / child.polygon.n);
 
             const lastSideKeyAngle = lastStep * da;
