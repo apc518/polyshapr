@@ -421,6 +421,15 @@ class NGonRhythm2d extends Rhythm {
         // image(NGonRhythm2d.auxCanvas, 0, 0);
     }
 
+    static maxInnerRadiusRatioForNoClip(childN, parentN){
+        const fancyMath = (nc, np) => {
+            const a = sin(PI / np)
+            return a / (a + (PI * (np - nc) * sin(PI / nc)) / (np * nc * sin(PI / np) * cos(PI / nc)));
+        }
+        
+        return childN <= parentN ? fancyMath(childN, parentN) : 1 / fancyMath(childN, parentN);
+    }
+
     constructor(polygon, skip=0){
         super();
 
