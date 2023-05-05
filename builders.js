@@ -111,8 +111,11 @@ function _nGonPolyrhythmRecursive(sideNums, skips, parent, depth){
     if (depth >= sideNums.length) return;
     
     parent.soundIdx = depth - 1;
+
+    const childN = sideNums[depth];
+    const parentN = sideNums[depth-1];
     
-    let child = parent.addChild(sideNums[depth], currentPatch.ngonShrinkFactor * Polygon.innerRadiusRatioForSameSideLength(sideNums[depth-1], sideNums[depth]), skips[depth]);
+    const child = parent.addChild(sideNums[depth], NGonRhythm2d.maxInnerRadiusRatioForNoClip(childN, parentN), skips[depth]);
     
     child.setColorIdx(depth);
     

@@ -421,6 +421,15 @@ class NGonRhythm2d extends Rhythm {
         // image(NGonRhythm2d.auxCanvas, 0, 0);
     }
 
+    static maxInnerRadiusRatioForNoClip(childN, parentN){
+        const fancyMath = (nc, np) => {
+            const a = sin(PI / np)
+            return a / (a + (PI * (np - nc) * sin(PI / nc)) / (np * nc * sin(PI / np) * cos(PI / nc)));
+        }
+        
+        return childN <= parentN ? fancyMath(childN, parentN) : 1 / fancyMath(childN, parentN);
+    }
+
     constructor(polygon, skip=0){
         super();
 
@@ -475,14 +484,8 @@ class NGonRhythm2d extends Rhythm {
             let da = ((child.skip + 1) * 2 * PI / this.polygon.n) - (2 * PI / child.polygon.n);
 
             // trim down da to within one nth of a full rotation since anything more would be more than enough (but keep the sign)
-            while (Math.abs(da) > (2 * Math.PI / child.polygon.n)){
-                if (da < 0){
-                    da += 2 * Math.PI / child.polygon.n;
-                }
-                else{
-                    da -= 2 * Math.PI / child.polygon.n;
-                }
-            }
+            // it is important that this is the javascript remainder, NOT modulus
+            da = da % (2 * Math.PI / child.polygon.n);
 
             const lastSideKeyAngle = lastStep * da;
             const nextSideKeyAngle = nextStep * da;
