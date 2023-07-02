@@ -1,8 +1,8 @@
 "use strict";
 
 // graphics constants
-const canvasWidth = 800;
-const canvasHeight = 800;
+const canvasWidth = 1000;
+const canvasHeight = 1000;
 const colorList = [];
 const DEFAULT_SIZE_MULTIPLIER = 1;
 

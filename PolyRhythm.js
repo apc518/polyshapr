@@ -277,8 +277,16 @@ class EqTriangle{
 
 class EqTriangleRhythm2d extends Rhythm {
 
-    static trianglePointsVertex(size, pointsDown=true, offset=createVector(0,0)){
-        if(pointsDown){
+    static trianglePointsVertex(size, pointsDown=true, offset=createVector(0,0), doItDifferently){
+        if(doItDifferently){
+            console.log("hello")
+            let v1 = createVector(0, size * 2);
+            let v2 = v1.copy().setHeading(-PI / 6);
+            let v3 = v1.copy().setHeading(11 * PI / 6 + PI / 3 + PI);
+    
+            return [offset.x + v2.x, offset.y + v2.y, offset.x + v1.x, offset.y + v1.y, offset.x + v3.x, offset.y + v3.y];
+        }
+        else if(pointsDown){
             let v1 = createVector(0, size);
             let v2 = v1.copy().setHeading(7 * PI / 6);
             let v3 = v1.copy().setHeading(11 * PI / 6);
@@ -295,7 +303,7 @@ class EqTriangleRhythm2d extends Rhythm {
     }
 
     static trianglePointsMidSide(size, pointsDown=true, offset){
-        return EqTriangleRhythm2d.trianglePointsVertex(size * 2, pointsDown, offset);
+        return EqTriangleRhythm2d.trianglePointsVertex(size * 2, pointsDown, offset, false);
     }
 
     /**
@@ -315,7 +323,8 @@ class EqTriangleRhythm2d extends Rhythm {
         this.boundPt2 = createVector(...this.boundPoints.slice(2,4));
         this.boundPt3 = createVector(...this.boundPoints.slice(4,6));
 
-        this.pathPoints = EqTriangleRhythm2d.trianglePointsVertex(this.boundSize - this.size, false, this.boundPos);
+        this.pathPoints = EqTriangleRhythm2d.trianglePointsVertex(this.boundSize - this.size, false, this.boundPos, rhythm !== 0);
+        console.log(rhythm, this.pathPoints);
 
         this.pathPt1 = createVector(...this.pathPoints.slice(0,2));
         this.pathPt2 = createVector(...this.pathPoints.slice(2,4));
@@ -391,9 +400,11 @@ class EqTriangleRhythm2d extends Rhythm {
             }
         }
 
-        noFill();
-        stroke(colorList[this.colorIdx % colorList.length]);
-        strokeWeight(currentPatch.strokeWeight);
+        noStroke();
+        fill(colorList[this.colorIdx % colorList.length]);
+        if (this !== rootPr){
+            fill(255, 225, 0, 180);
+        }
 
         triangle(...EqTriangleRhythm2d.trianglePointsMidSide(this.size, true, this.pos));
 
