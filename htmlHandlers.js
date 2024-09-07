@@ -5,6 +5,13 @@ const textFieldOkayColor = "#fff";
 
 // existing html elements
 
+// high-level UI elements
+const mainElement = document.getElementById("main");
+const appDrawer = document.getElementById("appDrawer");
+const bottomControlBar = document.getElementById("bottomControlBar");
+const footerContainer = document.getElementById("footerContainer");
+const centralDiv = document.getElementById("centralDiv");
+
 // play/pause/reset controls
 const globalProgressSlider = document.getElementById("globalProgressSlider");
 const playPauseBtn = document.getElementById("playpausebtn");
@@ -38,6 +45,7 @@ const colorKeyFrameInput1 = document.getElementById("colorKeyFrameInput1");
 const colorScaleInput = document.getElementById("colorScaleInput");
 const colorRippleCheckbox = document.getElementById("colorRippleCheckbox");
 const colorReflectionCheckbox = document.getElementById("colorReflectionCheckbox");
+const globalBorderCheckbox = document.getElementById("globalBorderCheckbox");
 const strokeWeightSlider = document.getElementById("strokeWeightSlider");
 const strokeWeightSliderResetBtn = document.getElementById("strokeWeightSliderResetBtn");
 
@@ -423,6 +431,16 @@ colorReflectionCheckbox.oninput = e => {
     e?.target.blur();
     currentPatch.doColorReflection = colorReflectionCheckbox.checked;
     colorReflectionCheckbox.blur();
+
+    fullRefresh(false);
+}
+
+globalBorderCheckbox.checked = true;
+
+globalBorderCheckbox.oninput = e => {
+    e?.target.blur();
+    currentPatch.drawGlobalBorder = globalBorderCheckbox.checked;
+    globalBorderCheckbox.blur();
 
     fullRefresh(false);
 }
