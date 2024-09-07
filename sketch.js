@@ -145,6 +145,9 @@ function initializeCurrentPatch(initSounds=false){
  * reflect the current patch on the screen, regardless of whether the animation is playing or paused
 */
 function fullRefresh(refreshSounds=false){
+    if (p5canvas.width != canvasWidth || p5canvas.height != canvasHeight){
+        p5canvas.resize(canvasWidth, canvasHeight);
+    }
     initializeCurrentPatch(refreshSounds);
     setMasterPolyRhythmProgress();
     paint();
@@ -258,9 +261,59 @@ function updateAll(){
     paint();
 }
 
+/** if no arguments are given the canvas is reset to the default size */
+function resizeCanvasAndRefresh(width, height){
+    console.log("hello there");
+    if (width && height){
+        canvasWidth = width;
+        canvasHeight = height;
+    }
+    else if (width || height){
+        console.error("Must provide either both height and width to resize, or neither to reset canvas size");
+        return;
+    }
+    else{
+        canvasWidth = CANVAS_WIDTH_DEFAULT;
+        canvasHeight = CANVAS_HEIGHT_DEFAULT;
+    }
+
+    console.log(`${canvasWidth} ${canvasHeight}`);
+
+    p5canvas.resize(canvasWidth, canvasHeight);
+
+    fullRefresh();
+}
+
+function toggleHideUI(){
+    console.log("general kenobi")
+    if (appDrawer.hidden){
+        document.exitFullscreen(p5canvas.canvas);
+        appDrawer.hidden = false;
+        resizeCanvasAndRefresh();
+    }
+    else {
+        var el = document.documentElement,
+            rfs = el.requestFullscreen;
+        if(typeof rfs!="undefined" && rfs){
+            rfs.call(p5canvas.canvas);
+        }
+        appDrawer.hidden = true;
+        let newSize = Math.min(window.displayWidth, window.displayHeight);
+        resizeCanvasAndRefresh(newSize, newSize);
+    }
+}
+
+function mousePressed(){
+    console.log(mouseX, mouseY);
+}
+
 function keyPressed(e){
     if (e.target.nodeName.toLowerCase() === "input"){
         return;
+    }
+    console.log(keyCode);
+    if (keyCode === F_KEYCODE){
+        toggleHideUI();
     }
     if (keyCode === SPACE_KEYCODE){
         playPause();
