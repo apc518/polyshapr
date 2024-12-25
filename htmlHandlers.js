@@ -481,3 +481,5 @@ document.addEventListener('fullscreenchange', e => {
         toggleHideUI();
     }
 });
+
+const recordVideoBtn = document.getElementById("recordVideoBtn");
