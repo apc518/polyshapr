@@ -263,7 +263,6 @@ function updateAll(){
 
 /** if no arguments are given the canvas is reset to the default size */
 function resizeCanvasAndRefresh(width, height){
-    console.log("hello there");
     if (width && height){
         canvasWidth = width;
         canvasHeight = height;
@@ -276,31 +275,28 @@ function resizeCanvasAndRefresh(width, height){
         canvasWidth = CANVAS_WIDTH_DEFAULT;
         canvasHeight = CANVAS_HEIGHT_DEFAULT;
     }
-
-    console.log(`${canvasWidth} ${canvasHeight}`);
-
+    
     p5canvas.resize(canvasWidth, canvasHeight);
+    console.log(`New canvas size: ${canvasWidth}x${canvasHeight}`);
 
     fullRefresh();
 }
 
 function toggleHideUI(){
-    console.log("general kenobi")
     if (appDrawer.hidden){
         document.exitFullscreen(p5canvas.canvas);
         appDrawer.hidden = false;
         resizeCanvasAndRefresh();
     }
     else {
-        var el = document.documentElement,
-            rfs = el.requestFullscreen;
-        if(typeof rfs!="undefined" && rfs){
-            rfs.call(p5canvas.canvas);
-        }
+        p5canvas.canvas.requestFullscreen();
         appDrawer.hidden = true;
         let newSize = Math.min(window.displayWidth, window.displayHeight);
         resizeCanvasAndRefresh(newSize, newSize);
     }
+
+    bottomControlBar.hidden = appDrawer.hidden;
+    footerContainer.hidden = appDrawer.hidden;
 }
 
 function mousePressed(){
@@ -313,6 +309,7 @@ function keyPressed(e){
     }
     console.log(keyCode);
     if (keyCode === F_KEYCODE){
+        fWasPressed = true;
         toggleHideUI();
     }
     if (keyCode === SPACE_KEYCODE){

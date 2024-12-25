@@ -17,6 +17,7 @@ const SPACE_KEYCODE = 32;
 const UP_ARROW_KEYCODE = 38;
 const DOWN_ARROW_KEYCODE = 40;
 const F_KEYCODE = 70;
+const ESC_KEYCODE = 27;
 const DEBUG = false;
 
 

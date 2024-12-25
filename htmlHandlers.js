@@ -469,3 +469,15 @@ window.addEventListener('keydown', function(e) {
         e.preventDefault();
     }
 });
+
+let fWasPressed = false;
+
+document.addEventListener('fullscreenchange', e => {
+    console.log("fullscreenchange event captured");
+    if (fWasPressed){
+        fWasPressed = false;
+    }
+    else {
+        toggleHideUI();
+    }
+});
