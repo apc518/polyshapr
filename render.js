@@ -3,7 +3,7 @@ const chunks = [];
 function recordVideo() {
     chunks.length = 0;
     let stream = p5canvas.canvas.captureStream(60);
-    recorder = new MediaRecorder(stream, { videoBitsPerSecond: 3 * 1024 * 1024 * 8 });
+    recorder = new MediaRecorder(stream, { videoBitsPerSecond: 6 * 1024 * 1024 * 8 });
     recorder.ondataavailable = e => {
         if (e.data.size) {
             chunks.push(e.data);
