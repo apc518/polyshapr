@@ -483,3 +483,7 @@ document.addEventListener('fullscreenchange', e => {
 });
 
 const recordVideoBtn = document.getElementById("recordVideoBtn");
+
+recordVideoBtn.onclick = e => {
+    e?.target.blur();
+}
