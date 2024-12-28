@@ -82,7 +82,7 @@ function drawGlobalBorder(){
     push();
     noFill();
     stroke(255);
-    strokeWeight(currentPatch.strokeWeight);
+    strokeWeight(currentPatch.getDisplayStrokeWeight());
     rect(0, 0, canvasWidth, canvasHeight);
     pop();
 }
@@ -175,7 +175,7 @@ function updatePatchUI(){
     updatePitchUI();
     updateColorUI();
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
-    strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
+    strokeWeightSlider.value = strokeWeightToSliderValue(currentPatch.strokeWeight);
 }
 
 

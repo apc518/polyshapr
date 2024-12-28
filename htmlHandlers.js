@@ -445,11 +445,21 @@ globalBorderCheckbox.oninput = e => {
     fullRefresh(false);
 }
 
-const strokeWeightSliderResolution = 25;
+const strokeWeightSliderMiddleValue = 20;
+const strokeWeightSliderExponent = 2;
+
+function sliderValueToStrokeWeight(sv){
+    return strokeWeightSliderMiddleValue * Math.pow(2 * (sv / strokeWeightSlider.max), strokeWeightSliderExponent);
+}
+
+function strokeWeightToSliderValue(sw){
+    return strokeWeightSlider.max * Math.pow((sw / strokeWeightSliderMiddleValue), 1 / strokeWeightSliderExponent) / 2;
+}
 
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
-    currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
+    currentPatch.strokeWeight = sliderValueToStrokeWeight(e.target.value)
+    debugLog(DEBUG_LEVEL_ONE, [`target value: ${e.target.value}, actual stroke weight: ${currentPatch.strokeWeight}`]);
     fullRefresh(false);
 }
 
@@ -459,7 +469,7 @@ const strokeWeightDefault = 3;
 
 strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
-    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
+    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderMiddleValue;
     currentPatch.strokeWeight = strokeWeightDefault;
     fullRefresh(false);
 }
