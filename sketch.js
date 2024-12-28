@@ -284,7 +284,9 @@ function resizeCanvasAndRefresh(width, height){
 
 function toggleHideUI(){
     if (appDrawer.hidden){
-        document.exitFullscreen(p5canvas.canvas);
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement){
+            document.exitFullscreen(p5canvas.canvas);
+        }
         appDrawer.hidden = false;
         resizeCanvasAndRefresh();
     }
