@@ -67,15 +67,13 @@ playPauseBtn.onclick = e => {
     playPause();
 }
 
-resetBtn.onclick = e => {
-    e?.target.blur();
-    
+function resetAnimation(){
     Howler.stop();
     Howler.ctx.close();
     Howler.init();
-
+    
     Howler.volume(convertSliderValueToAmplitude(globalVolumeSlider.value));
-
+    
     pause_();
     
     globalProgress = 0;
@@ -83,6 +81,11 @@ resetBtn.onclick = e => {
     globalProgressSlider.oninput({ target: globalProgressSlider })
     
     fullRefresh(true);
+}
+
+resetBtn.onclick = e => {
+    e?.target.blur();
+    resetAnimation();    
 }
 
 globalVolumeSlider.value = parseInt(globalVolumeSlider.max) / 2;
@@ -173,7 +176,7 @@ patchFileInput.onchange = e => {
             presetDropdown.children[presetDropdown.children.length - 1].onclick();
         }
         catch(e){
-            console.log(e);
+            debugError(DEBUG_LEVEL_ONE, [e]);
             Swal.fire({
                 icon: "error",
                 title: "Invalid Polyshapr File",
@@ -445,22 +448,30 @@ globalBorderCheckbox.oninput = e => {
     fullRefresh(false);
 }
 
-const strokeWeightSliderResolution = 25;
+const strokeWeightSliderMiddleValue = 20;
+const strokeWeightSliderExponent = 2;
+
+function sliderValueToStrokeWeight(sv){
+    return strokeWeightSliderMiddleValue * Math.pow(2 * (sv / strokeWeightSlider.max), strokeWeightSliderExponent);
+}
+
+function strokeWeightToSliderValue(sw){
+    return strokeWeightSlider.max * Math.pow((sw / strokeWeightSliderMiddleValue), 1 / strokeWeightSliderExponent) / 2;
+}
 
 strokeWeightSlider.value = 0;
 strokeWeightSlider.oninput = e => {
-    currentPatch.strokeWeight = e.target.value / strokeWeightSliderResolution;
+    currentPatch.strokeWeight = sliderValueToStrokeWeight(e.target.value)
+    debugLog(DEBUG_LEVEL_ONE, [`target value: ${e.target.value}, actual stroke weight: ${currentPatch.strokeWeight}`]);
     fullRefresh(false);
 }
 
 strokeWeightSlider.onmouseup = e => e?.target.blur();
 
-const strokeWeightDefault = 3;
-
 strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
-    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderResolution;
-    currentPatch.strokeWeight = strokeWeightDefault;
+    strokeWeightSlider.value = strokeWeightToSliderValue(strokeWeightSliderMiddleValue);
+    currentPatch.strokeWeight = strokeWeightSliderMiddleValue;
     fullRefresh(false);
 }
 
@@ -473,7 +484,7 @@ window.addEventListener('keydown', function(e) {
 let fWasPressed = false;
 
 document.addEventListener('fullscreenchange', e => {
-    console.log("fullscreenchange event captured");
+    debugLog(DEBUG_LEVEL_ONE, ["fullscreenchange event captured"]);
     if (fWasPressed){
         fWasPressed = false;
     }
@@ -481,3 +492,65 @@ document.addEventListener('fullscreenchange', e => {
         toggleHideUI();
     }
 });
+
+const recordVideoBtn = document.getElementById("recordVideoBtn");
+
+recordVideoBtn.onclick = e => {
+    e?.target.blur();
+}
+
+const openRenderModalBtn = document.getElementById("openRenderModalBtn");
+const renderModal = document.getElementById("renderModal");
+const renderModalCloseBtn = document.getElementById("renderModalCloseBtn");
+
+function closeRenderModal(){
+    Renderer.stopRender();
+    renderModal.style.display = "none";
+}
+
+renderModalCloseBtn.onclick = closeRenderModal;
+
+window.onclick = e => {
+    if (e.target == renderModal) {
+        closeRenderModal();
+    }
+}
+
+openRenderModalBtn.onclick = () => {
+    // resetBtn.click();
+    document.getElementById("renderModal").style.display = "block";
+}
+
+const renderCycleCountInput = document.getElementById("renderCycleCountInput");
+const renderCanvasSizeInput = document.getElementById("renderCanvasSizeInput");
+const renderVideoBitrateInput = document.getElementById("renderVideoBitrateInput");
+const renderAudioBitrateInput = document.getElementById("renderAudioBitrateInput");
+
+renderCycleCountInput.value = 1;
+renderCanvasSizeInput.value = canvasWidth;
+renderVideoBitrateInput.value = VIDEO_BITRATE_DEFAULT / 1000;
+renderAudioBitrateInput.value = AUDIO_BITRATE_DEFAULT / 1000;
+
+renderCycleCountInput.oninput = updateProjectedMaxFileSize;
+renderVideoBitrateInput.oninput = updateProjectedMaxFileSize;
+renderAudioBitrateInput.oninput = updateProjectedMaxFileSize;
+
+const renderBtn = document.getElementById("renderBtn");
+
+renderBtn.onclick = () => {
+    Renderer.startRender(renderCycleCountInput.value, renderCanvasSizeInput.value, renderVideoBitrateInput.value * 1000, renderAudioBitrateInput.value * 1000);
+}
+
+const exportSizeUpperBoundSpan = document.getElementById("exportSizeUpperBoundSpan");
+
+/**
+ * Calculate the upper limit of file size given the number of cycles (and therefore duration of the export) and audio/video bitrate
+ */
+function updateProjectedMaxFileSize(){
+    let videoBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderVideoBitrateInput.value / 8;
+    let audioBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderAudioBitrateInput.value / 8;
+
+    console.log(videoBytes, audioBytes);
+
+    exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
+}

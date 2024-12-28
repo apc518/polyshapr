@@ -126,6 +126,10 @@ class Patch {
     static colorScaleIsValid(colorScale){
         return Number.isFinite(colorScale) && colorScale !== 0;
     }
+
+    getCanvasScaledPhysicalStrokeWeight(){
+        return this.strokeWeight * canvasWidth / this.canvasWidth;
+    }
 }
 
 function base64ToTypedArray(base64String) {

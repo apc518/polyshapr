@@ -26,7 +26,7 @@ class Rhythm {
      * true if progress is within half of progressIncrement from the ideal progress value for the rhythm to hit, false otherwise
      */
     static isHitting(progress, progressIncrement, rhythm){
-        debugLog("progress, increment, rhythm:", progress, progressIncrement, rhythm);
+        debugLog(DEBUG_LEVEL_THREE, ["progress, increment, rhythm:", progress, progressIncrement, rhythm]);
 
         if (rhythm <= 0) return false; // rhythm of 0 never hits
 
@@ -34,16 +34,16 @@ class Rhythm {
         let floorMod = mod(progress, progressPerHit);
         let ceilMod = progressPerHit - mod(progress, progressPerHit);
         let distanceToIdeal = Math.min(floorMod, ceilMod);
-        debugLog("distance to ideal:", distanceToIdeal);
+        debugLog(DEBUG_LEVEL_THREE, ["distance to ideal:", distanceToIdeal]);
 
         let distanceToIdealIsFromBelow = floorMod > ceilMod;
 
         let ideal = distanceToIdealIsFromBelow ? progress + distanceToIdeal : progress - distanceToIdeal;
-        debugLog("ideal:", ideal);
+        debugLog(DEBUG_LEVEL_THREE, ["ideal:", ideal]);
 
         let lowerBound = ideal - progressIncrement / 2;
         let upperBound = ideal + progressIncrement / 2;
-        debugLog(lowerBound, upperBound);
+        debugLog(DEBUG_LEVEL_THREE, [lowerBound, upperBound]);
 
         return lowerBound < progress && progress <= upperBound;
     }
@@ -223,8 +223,8 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
 
         if(parent){
             translate(
-                parent.pos.x - parent.size.x / 2 + this.size.x / 2 + currentPatch.strokeWeight,
-                parent.pos.y - parent.size.y / 2 + this.size.y / 2 + currentPatch.strokeWeight
+                parent.pos.x - parent.size.x / 2 + this.size.x / 2 + currentPatch.getCanvasScaledPhysicalStrokeWeight(),
+                parent.pos.y - parent.size.y / 2 + this.size.y / 2 + currentPatch.getCanvasScaledPhysicalStrokeWeight()
             );
         }
         else{
@@ -234,7 +234,7 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
         // draw our own self
         noFill();
         stroke(colorList[this.colorIdx % colorList.length]); // white wireframe square
-        strokeWeight(currentPatch.strokeWeight);
+        strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
         if(currentPatch.squareStyle === SQUARE_STYLES.SOLID){
             noStroke();
             fill(colorList[this.colorIdx % colorList.length]);
@@ -309,7 +309,7 @@ class EqTriangleRhythm2d extends Rhythm {
         this.boundSize = boundSize;
         this.size = size;
 
-        this.boundPoints = EqTriangleRhythm2d.trianglePointsMidSide(this.boundSize + currentPatch.strokeWeight, true, this.boundPos);
+        this.boundPoints = EqTriangleRhythm2d.trianglePointsMidSide(this.boundSize + currentPatch.getCanvasScaledPhysicalStrokeWeight(), true, this.boundPos);
 
         this.boundPt1 = createVector(...this.boundPoints.slice(0,2));
         this.boundPt2 = createVector(...this.boundPoints.slice(2,4));
@@ -365,7 +365,7 @@ class EqTriangleRhythm2d extends Rhythm {
         push();
         noFill();
         stroke(255);
-        strokeWeight(currentPatch.strokeWeight);
+        strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
         triangle(this.boundPt1.x, this.boundPt1.y, this.boundPt2.x, this.boundPt2.y, this.boundPt3.x, this.boundPt3.y);
         pop();
     }
@@ -393,7 +393,7 @@ class EqTriangleRhythm2d extends Rhythm {
 
         noFill();
         stroke(colorList[this.colorIdx % colorList.length]);
-        strokeWeight(currentPatch.strokeWeight);
+        strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
 
         triangle(...EqTriangleRhythm2d.trianglePointsMidSide(this.size, true, this.pos));
 
@@ -450,7 +450,7 @@ class NGonRhythm2d extends Rhythm {
             new Polygon(
                 numSides,
                 createVector(0, 0),
-                sizeFactor * this.polygon.inSize - currentPatch.strokeWeight,
+                sizeFactor * this.polygon.inSize - currentPatch.getCanvasScaledPhysicalStrokeWeight(),
                 0
             ),
             skip
@@ -470,7 +470,7 @@ class NGonRhythm2d extends Rhythm {
             const lastSide = lastStep * (child.skip + 1);
             const nextSide = nextStep * (child.skip + 1);
             
-            const keyInnerRadiusVector = createVector(0, this.polygon.inSize - child.polygon.inSize - (currentPatch.strokeWeight));
+            const keyInnerRadiusVector = createVector(0, this.polygon.inSize - child.polygon.inSize - (currentPatch.getCanvasScaledPhysicalStrokeWeight()));
 
             // because of the while loop below and no real guarantee that the polygon side counts arent 0
             // not taking chances on dividing by 0
@@ -532,8 +532,8 @@ class NGonRhythm2d extends Rhythm {
         // ellipse(0, 0, 1);
         
         stroke(colorList[this.colorIdx % colorList.length]);
-        strokeWeight(currentPatch.strokeWeight);
-        if(this.children.length === 0) strokeWeight(currentPatch.strokeWeight)
+        strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
+        if(this.children.length === 0) strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight())
 
         beginShape();
         
@@ -544,7 +544,7 @@ class NGonRhythm2d extends Rhythm {
         // if the stroke weight is very thin, doing this would cause 
         // the last side to be brighter than the rest, but when the stroke weight is thin
         // the soft corners arent noticeable anyway
-        let numVerticesToDraw = this.polygon.vertices.length + (currentPatch.strokeWeight > 2 ? 2 : 1);
+        let numVerticesToDraw = this.polygon.vertices.length + (currentPatch.getCanvasScaledPhysicalStrokeWeight() > 2 ? 2 : 1);
         
         for(let i = 0; i < numVerticesToDraw; i++){
             let idx = i % this.polygon.vertices.length;
@@ -571,6 +571,10 @@ class NGonRhythm2d extends Rhythm {
         }
 
         pop();
+    }
+
+    drawBounds(){
+        // nothing to do for ngons
     }
 
     reset(){

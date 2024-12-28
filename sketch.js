@@ -4,8 +4,9 @@
 
 let p5canvas = null;
 let soundOn = true;
-let currentPatch = new Patch(presets[0]);
+let currentPatch = new Patch(presets[0]); 
 let allHowls = [];
+let debugLevel = isDevelopmentEnvironment() ? DEBUG_LEVEL_ONE : DEBUG_LEVEL_ZERO;
 
 // physics
 let globalSpeed = 1;
@@ -17,7 +18,7 @@ let rootPr;
 let hits = 0;
 
 function onHit(soundIdx){
-    debugLog("onhit called for idx", soundIdx);
+    debugLog(DEBUG_LEVEL_TWO, ["onhit called for idx", soundIdx]);
     hits += 1;
 
     // color ripple
@@ -81,7 +82,7 @@ function drawGlobalBorder(){
     push();
     noFill();
     stroke(255);
-    strokeWeight(currentPatch.strokeWeight);
+    strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
     rect(0, 0, canvasWidth, canvasHeight);
     pop();
 }
@@ -94,6 +95,10 @@ function getProgressIncrement(){
 
 function incrementGlobalProgress(){
     globalProgress += getProgressIncrement();
+
+    if (Renderer.isRendering && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
+        Renderer.stopRender();
+    }
 
     // update global progress slider accordingly
     globalProgressSlider.value = globalProgress * PROGRESS_SLIDER_RESOLUTION % PROGRESS_SLIDER_RESOLUTION;
@@ -131,7 +136,7 @@ function paint(){
         pop();
     }
 
-    if(DEBUG)
+    if(debugLevel >= DEBUG_LEVEL_TWO)
         rootPr.drawBounds();
 }
 
@@ -139,6 +144,7 @@ function initializeCurrentPatch(initSounds=false){
     populateColorList();
     if (initSounds) populateSoundList();
     createRootPr();
+    updateProjectedMaxFileSize();
 }
 
 /**
@@ -174,7 +180,7 @@ function updatePatchUI(){
     updatePitchUI();
     updateColorUI();
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
-    strokeWeightSlider.value = currentPatch.strokeWeight * strokeWeightSliderResolution;
+    strokeWeightSlider.value = strokeWeightToSliderValue(currentPatch.strokeWeight);
 }
 
 
@@ -222,7 +228,7 @@ function setup(){
     });
     
     // if running locally, run tests
-    if(["127.0.0.1", "localhost"].includes(window.location.hostname))
+    if(isDevelopmentEnvironment())
         runTests();
 }
 
@@ -254,7 +260,7 @@ function updateAll(){
     let prevGlobProg = globalProgress
     incrementGlobalProgress();
     if (globalProgress % 1 < prevGlobProg % 1){
-        debugLog("Loop!");
+        debugLog(DEBUG_LEVEL_TWO, ["Loop!"]);
     }
     setMasterPolyRhythmProgress();
     
@@ -277,14 +283,16 @@ function resizeCanvasAndRefresh(width, height){
     }
     
     p5canvas.resize(canvasWidth, canvasHeight);
-    console.log(`New canvas size: ${canvasWidth}x${canvasHeight}`);
+    debugLog(DEBUG_LEVEL_ONE, [`New canvas size: ${canvasWidth}x${canvasHeight}`]);
 
     fullRefresh();
 }
 
 function toggleHideUI(){
     if (appDrawer.hidden){
-        document.exitFullscreen(p5canvas.canvas);
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement){
+            document.exitFullscreen(p5canvas.canvas);
+        }
         appDrawer.hidden = false;
         resizeCanvasAndRefresh();
     }
@@ -300,14 +308,14 @@ function toggleHideUI(){
 }
 
 function mousePressed(){
-    console.log(mouseX, mouseY);
+    debugLog(DEBUG_LEVEL_ONE, [mouseX, mouseY]);
 }
 
 function keyPressed(e){
     if (e.target.nodeName.toLowerCase() === "input"){
         return;
     }
-    console.log(keyCode);
+    debugLog(DEBUG_LEVEL_ONE, ["key pressed:", keyCode]);
     if (keyCode === F_KEYCODE){
         fWasPressed = true;
         toggleHideUI();

@@ -125,8 +125,10 @@
                         <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/>
                     </div>
                     <div class="playback-control-bar">
-                        <button id="playpausebtn">Play</button>
-                        <button id="resetbtn">Reset</button>
+                        <button id="playpausebtn" class="playbar-button">Play</button>
+                        <button id="resetbtn" class="playbar-button">Reset</button>
+                        <button id="recordVideoBtn" class="playbar-button">Start Recording Now</button>
+                        <button id="openRenderModalBtn" class="playbar-button">Render</button>
                         <div id="volumeSliderContainer">
                             <label for="globalVolumeSlider" id="volumeSliderLabel">Volume</label>
                             <input type="range" min="0" max="100" id="globalVolumeSlider" class="slider"/> <br/>
@@ -145,10 +147,31 @@
             </div>
         </div>
 
+        <div id="renderModal" class="modal">
+            <div class="modal-content">
+                <span id="renderModalCloseBtn">&times;</span>
+                <div style="display: flex">
+                    <div>
+                        <div class="renderUiRow"> <input type="number" id="renderCycleCountInput" class="renderNumericalInput" /> <label for="renderCycleCountInput"># Cycles</label> </div>
+                        <div class="renderUiRow"> <input type="number" id="renderCanvasSizeInput" class="renderNumericalInput" /> <label for="renderCanvasSizeInput">Canvas Size (px)</label> </div>
+                        <div class="renderUiRow"> <input type="number" min="1000" step="1000" id="renderVideoBitrateInput" class="renderNumericalInput" /> <label for="renderCanvasSizeInput">Video Bitrate (kbps)</label> </div>
+                        <div class="renderUiRow"> <input type="number" id="renderAudioBitrateInput" class="renderNumericalInput" /> <label for="renderCanvasSizeInput">Audio Bitrate (kbps)</label> </div>
+                    </div>
+                    <div style="margin-left: auto; margin-right: 10px; margin-top: auto" class="renderUiRow">
+                        <span>Export size estimate: </span><span id="exportSizeUpperBoundSpan"></span><span>MiB</span>
+                    </div>
+                </div>
+                <div class="appDrawerDivider"></div>
+                <br/>
+                <div class="renderUiRow"> <button id="renderBtn">Start Render</button> </div>
+            </div>
+        </div>
+
         <script src="constants.js" defer></script>
         <script src="utils/logging.js" defer></script>
         <script src="utils/math.js" defer></script>
         <script src="utils/drawing.js" defer></script>
+        <script src="utils/environment.js" defer></script>
         <script src="htmlHandlers.js" defer></script>
         <script src="Helper.js" defer></script>
         <script src="audioSampleOptions.js" defer></script>
@@ -167,9 +190,11 @@
         <script src="Sound.js" defer></script>
         <script src="Patch.js" defer></script>
         <script src="PolyRhythm.js" defer></script>
+        <script src="Renderer.js" defer></script>
         <script src="builders.js" defer></script>
         <script src="presets.js" defer></script>
         <script src="tests.js" defer></script>
+        <script src="record.js" defer></script>
         <script src="sketch.js" defer></script>
     </body>
 </html>
