@@ -1,14 +1,16 @@
 const chunks = [];
 
-function recordVideo() {
+let recorder;
+
+function recordVideo(videoBitrate, audioBitrate) {
     chunks.length = 0;
     let stream = p5canvas.canvas.captureStream(60);
     let audioMediaDestNode = Howler.ctx.createMediaStreamDestination()
     Howler.masterGain.connect(audioMediaDestNode);
     stream.addTrack(audioMediaDestNode.stream.getAudioTracks()[0]);
     recorder = new MediaRecorder(stream, {
-        videoBitsPerSecond: 6 * 1024 * 1024 * 8,
-        audioBitsPerSecond: 192 * 1024,
+        videoBitsPerSecond: videoBitrate,
+        audioBitsPerSecond: audioBitrate,
     });
     recorder.ondataavailable = e => {
         if (e.data.size) {
@@ -18,8 +20,10 @@ function recordVideo() {
     recorder.onstop = exportVideo;
     recordVideoBtn.onclick = e => {
         recorder.stop();
-        recordVideoBtn.textContent = 'Start Recording';
-        recordVideoBtn.onclick = recordVideo;
+        recordVideoBtn.textContent = 'Start Recording Now';
+        recordVideoBtn.onclick = () => {
+            recordVideo(VIDEO_BITRATE_DEFAULT, AUDIO_BITRATE_DEFAULT);
+        }
     };
     recorder.start();
     recordVideoBtn.textContent = 'Stop Recording';
@@ -34,4 +38,6 @@ function exportVideo() {
     downloadElem.click();
 }
 
-recordVideoBtn.onclick = recordVideo;
+recordVideoBtn.onclick = () => {
+    recordVideo(VIDEO_BITRATE_DEFAULT, AUDIO_BITRATE_DEFAULT);
+}

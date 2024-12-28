@@ -573,6 +573,10 @@ class NGonRhythm2d extends Rhythm {
         pop();
     }
 
+    drawBounds(){
+        // nothing to do for ngons
+    }
+
     reset(){
         this.children.forEach(c => c.lastAbsSide = -1);
     }

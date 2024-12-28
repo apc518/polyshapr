@@ -4,7 +4,7 @@
 
 let p5canvas = null;
 let soundOn = true;
-let currentPatch = new Patch(presets[0]);
+let currentPatch = new Patch(presets[0]); 
 let allHowls = [];
 let debugLevel = isDevelopmentEnvironment() ? DEBUG_LEVEL_ONE : DEBUG_LEVEL_ZERO;
 
@@ -96,6 +96,10 @@ function getProgressIncrement(){
 function incrementGlobalProgress(){
     globalProgress += getProgressIncrement();
 
+    if (Renderer.isRendering && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
+        Renderer.stopRender();
+    }
+
     // update global progress slider accordingly
     globalProgressSlider.value = globalProgress * PROGRESS_SLIDER_RESOLUTION % PROGRESS_SLIDER_RESOLUTION;
 }
@@ -132,7 +136,7 @@ function paint(){
         pop();
     }
 
-    if(debugLevel >= DEBUG_LEVEL_ONE)
+    if(debugLevel >= DEBUG_LEVEL_TWO)
         rootPr.drawBounds();
 }
 
@@ -140,6 +144,7 @@ function initializeCurrentPatch(initSounds=false){
     populateColorList();
     if (initSounds) populateSoundList();
     createRootPr();
+    updateProjectedMaxFileSize();
 }
 
 /**

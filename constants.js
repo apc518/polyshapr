@@ -22,7 +22,8 @@ const DEBUG_LEVEL_ZERO = 0; // no debug messages; ideally the console will not p
 const DEBUG_LEVEL_ONE = 1; // on-demand debug messages; only a certain finite number of debug messages per user interaction
 const DEBUG_LEVEL_TWO = 2; // indefinite debug messages but not every frame i.e. a debug message for every collision
 const DEBUG_LEVEL_THREE = 3; // spammy debug messaging i.e. a debug message for every frame
-
+const VIDEO_BITRATE_DEFAULT = 50 * 1000 * 1000;
+const AUDIO_BITRATE_DEFAULT = 192 * 1000;
 
 // enums
 
