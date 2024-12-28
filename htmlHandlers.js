@@ -465,12 +465,10 @@ strokeWeightSlider.oninput = e => {
 
 strokeWeightSlider.onmouseup = e => e?.target.blur();
 
-const strokeWeightDefault = 3;
-
 strokeWeightSliderResetBtn.onclick = e => {
     e?.target.blur();
-    strokeWeightSlider.value = strokeWeightDefault * strokeWeightSliderMiddleValue;
-    currentPatch.strokeWeight = strokeWeightDefault;
+    strokeWeightSlider.value = strokeWeightToSliderValue(strokeWeightSliderMiddleValue);
+    currentPatch.strokeWeight = strokeWeightSliderMiddleValue;
     fullRefresh(false);
 }
 
