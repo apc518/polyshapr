@@ -82,7 +82,7 @@ function drawGlobalBorder(){
     push();
     noFill();
     stroke(255);
-    strokeWeight(currentPatch.getDisplayStrokeWeight());
+    strokeWeight(currentPatch.getCanvasScaledPhysicalStrokeWeight());
     rect(0, 0, canvasWidth, canvasHeight);
     pop();
 }

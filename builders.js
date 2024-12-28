@@ -7,7 +7,7 @@ function squarePolyRhythmRecursive(){
     }
 
     let parentSize = currentPatch.sizeMultiplier * canvasWidth;
-    let padding = (parentSize + currentPatch.getDisplayStrokeWeight()) / (1 + rhythmList.length / 2);
+    let padding = (parentSize + currentPatch.getCanvasScaledPhysicalStrokeWeight()) / (1 + rhythmList.length / 2);
 
     return _squarePolyRhythmRecursive(parentSize, rhythmList, padding, 0);
 }
@@ -22,8 +22,8 @@ function _squarePolyRhythmRecursive(parentSize, rhythmList, padding, depth=0){
         yRhythm: rhythmList[(2 * depth + 1) % rhythmList.length],
         init_pos: createVector(0, 0),
         size: createVector(thisSize, thisSize),
-        xBounds: new Bounds(thisSize / 2 + currentPatch.getDisplayStrokeWeight(), parentSize - thisSize / 2 - currentPatch.getDisplayStrokeWeight()),
-        yBounds: new Bounds(thisSize / 2 + currentPatch.getDisplayStrokeWeight(), parentSize - thisSize / 2 - currentPatch.getDisplayStrokeWeight())
+        xBounds: new Bounds(thisSize / 2 + currentPatch.getCanvasScaledPhysicalStrokeWeight(), parentSize - thisSize / 2 - currentPatch.getCanvasScaledPhysicalStrokeWeight()),
+        yBounds: new Bounds(thisSize / 2 + currentPatch.getCanvasScaledPhysicalStrokeWeight(), parentSize - thisSize / 2 - currentPatch.getCanvasScaledPhysicalStrokeWeight())
     });
 
     pr.setColorIdx(depth);
@@ -47,7 +47,7 @@ function trianglePolyrhythmRecursive(){
     if (rhythmList.length < 1) throw new Error("rhythm list must have at least one element");
 
     let parentSize = currentPatch.sizeMultiplier * canvasWidth / 4;
-    let padding = parentSize / (rhythmList.length + 1) - currentPatch.getDisplayStrokeWeight();
+    let padding = parentSize / (rhythmList.length + 1) - currentPatch.getCanvasScaledPhysicalStrokeWeight();
 
     return _trianglePolyrhythmRecursive(parentSize, rhythmList, padding, 0);
 }
@@ -66,7 +66,7 @@ function _trianglePolyrhythmRecursive(parentSize, rhythmList, padding, depth=0, 
     pr.setColorIdx(depth);
     pr.soundIdx = depth;
 
-    let child = _trianglePolyrhythmRecursive(thisSize - currentPatch.getDisplayStrokeWeight(), rhythmList, padding, depth + 1, pr);
+    let child = _trianglePolyrhythmRecursive(thisSize - currentPatch.getCanvasScaledPhysicalStrokeWeight(), rhythmList, padding, depth + 1, pr);
 
     if(child){
         pr.children.push(child);
@@ -87,7 +87,7 @@ function nGonPolyrhythmRecursive(){
     if(skips.length < sideNums.length) throw new Error("skips list must be at least as long as rhythms list");
 
     let firstRhythmUnitPolygon = new Polygon(sideNums[0], createVector(0,0), 1);
-    let firstAncestorInnerRadius = currentPatch.sizeMultiplier * (canvasWidth / (2 * firstRhythmUnitPolygon.outSize) - currentPatch.getDisplayStrokeWeight() - 5);
+    let firstAncestorInnerRadius = currentPatch.sizeMultiplier * (canvasWidth / (2 * firstRhythmUnitPolygon.outSize) - currentPatch.getCanvasScaledPhysicalStrokeWeight() - 5);
 
     let pr = new NGonRhythm2d(
         new Polygon(sideNums[0] , createVector(canvasWidth / 2, canvasHeight / 2), firstAncestorInnerRadius, 0),

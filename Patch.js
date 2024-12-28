@@ -127,7 +127,7 @@ class Patch {
         return Number.isFinite(colorScale) && colorScale !== 0;
     }
 
-    getDisplayStrokeWeight(){
+    getCanvasScaledPhysicalStrokeWeight(){
         return this.strokeWeight * canvasWidth / this.canvasWidth;
     }
 }
