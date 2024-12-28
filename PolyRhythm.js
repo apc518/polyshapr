@@ -26,7 +26,7 @@ class Rhythm {
      * true if progress is within half of progressIncrement from the ideal progress value for the rhythm to hit, false otherwise
      */
     static isHitting(progress, progressIncrement, rhythm){
-        debugLog("progress, increment, rhythm:", progress, progressIncrement, rhythm);
+        debugLog(DEBUG_LEVEL_THREE, ["progress, increment, rhythm:", progress, progressIncrement, rhythm]);
 
         if (rhythm <= 0) return false; // rhythm of 0 never hits
 
@@ -34,16 +34,16 @@ class Rhythm {
         let floorMod = mod(progress, progressPerHit);
         let ceilMod = progressPerHit - mod(progress, progressPerHit);
         let distanceToIdeal = Math.min(floorMod, ceilMod);
-        debugLog("distance to ideal:", distanceToIdeal);
+        debugLog(DEBUG_LEVEL_THREE, ["distance to ideal:", distanceToIdeal]);
 
         let distanceToIdealIsFromBelow = floorMod > ceilMod;
 
         let ideal = distanceToIdealIsFromBelow ? progress + distanceToIdeal : progress - distanceToIdeal;
-        debugLog("ideal:", ideal);
+        debugLog(DEBUG_LEVEL_THREE, ["ideal:", ideal]);
 
         let lowerBound = ideal - progressIncrement / 2;
         let upperBound = ideal + progressIncrement / 2;
-        debugLog(lowerBound, upperBound);
+        debugLog(DEBUG_LEVEL_THREE, [lowerBound, upperBound]);
 
         return lowerBound < progress && progress <= upperBound;
     }

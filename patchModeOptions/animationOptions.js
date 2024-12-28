@@ -11,7 +11,7 @@ const animationModeOptions = [
         displayName: "Squares",
         func: () => {
             if (currentPatch) {
-                debugLog("squares with", currentPatch);
+                debugLog(DEBUG_LEVEL_ONE, ["squares with", currentPatch]);
                 rootPr = squarePolyRhythmRecursive();
             }
             else{
@@ -24,7 +24,7 @@ const animationModeOptions = [
         displayName: "Triangles",
         func: () => {
             if (currentPatch){
-                debugLog("triangles with ", currentPatch);
+                debugLog(DEBUG_LEVEL_ONE, ["triangles with ", currentPatch]);
                 rootPr = trianglePolyrhythmRecursive();
             }
             else{
@@ -37,7 +37,7 @@ const animationModeOptions = [
         displayName: "N-Gons",
         func: () => {
             if(currentPatch){
-                debugLog("ngons with ", currentPatch);
+                debugLog(DEBUG_LEVEL_ONE, ["ngons with ", currentPatch]);
                 while (currentPatch.skips.length < currentPatch.rhythms.length){
                     currentPatch.skips.push(0);
                 }

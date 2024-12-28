@@ -173,7 +173,7 @@ patchFileInput.onchange = e => {
             presetDropdown.children[presetDropdown.children.length - 1].onclick();
         }
         catch(e){
-            console.log(e);
+            debugError(DEBUG_LEVEL_ONE, [e]);
             Swal.fire({
                 icon: "error",
                 title: "Invalid Polyshapr File",
@@ -473,7 +473,7 @@ window.addEventListener('keydown', function(e) {
 let fWasPressed = false;
 
 document.addEventListener('fullscreenchange', e => {
-    console.log("fullscreenchange event captured");
+    debugLog(DEBUG_LEVEL_ONE, ["fullscreenchange event captured"]);
     if (fWasPressed){
         fWasPressed = false;
     }

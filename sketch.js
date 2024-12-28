@@ -6,6 +6,7 @@ let p5canvas = null;
 let soundOn = true;
 let currentPatch = new Patch(presets[0]);
 let allHowls = [];
+let debugLevel = DEBUG_LEVEL_ZERO;
 
 // physics
 let globalSpeed = 1;
@@ -17,7 +18,7 @@ let rootPr;
 let hits = 0;
 
 function onHit(soundIdx){
-    debugLog("onhit called for idx", soundIdx);
+    debugLog(DEBUG_LEVEL_TWO, ["onhit called for idx", soundIdx]);
     hits += 1;
 
     // color ripple
@@ -131,7 +132,7 @@ function paint(){
         pop();
     }
 
-    if(DEBUG)
+    if(debugLevel)
         rootPr.drawBounds();
 }
 
@@ -254,7 +255,7 @@ function updateAll(){
     let prevGlobProg = globalProgress
     incrementGlobalProgress();
     if (globalProgress % 1 < prevGlobProg % 1){
-        debugLog("Loop!");
+        debugLog(DEBUG_LEVEL_TWO, ["Loop!"]);
     }
     setMasterPolyRhythmProgress();
     
@@ -277,7 +278,7 @@ function resizeCanvasAndRefresh(width, height){
     }
     
     p5canvas.resize(canvasWidth, canvasHeight);
-    console.log(`New canvas size: ${canvasWidth}x${canvasHeight}`);
+    debugLog(DEBUG_LEVEL_ONE, [`New canvas size: ${canvasWidth}x${canvasHeight}`]);
 
     fullRefresh();
 }
@@ -302,14 +303,14 @@ function toggleHideUI(){
 }
 
 function mousePressed(){
-    console.log(mouseX, mouseY);
+    debugLog(DEBUG_LEVEL_ONE, [mouseX, mouseY]);
 }
 
 function keyPressed(e){
     if (e.target.nodeName.toLowerCase() === "input"){
         return;
     }
-    console.log(keyCode);
+    debugLog(DEBUG_LEVEL_ONE, [keyCode]);
     if (keyCode === F_KEYCODE){
         fWasPressed = true;
         toggleHideUI();

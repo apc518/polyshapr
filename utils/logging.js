@@ -1,17 +1,17 @@
-function debugLog(){
-    if (DEBUG){
-        console.log(...arguments);
+function debugLog(level, args){
+    if (debugLevel >= level){
+        console.log(...args);
     }
 }
 
-function debugWarn(){
-    if (DEBUG){
-        console.warn(...arguments);
+function debugWarn(level, args){
+    if (debugLevel >= level){
+        console.warn(...args);
     }
 }
 
-function debugError(){
-    if (DEBUG){
-        console.error(...arguments);
+function debugError(level, args){
+    if (debugLevel >= level){
+        console.error(...args);
     }
 }
