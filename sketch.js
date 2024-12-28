@@ -6,7 +6,7 @@ let p5canvas = null;
 let soundOn = true;
 let currentPatch = new Patch(presets[0]);
 let allHowls = [];
-let debugLevel = DEBUG_LEVEL_ZERO;
+let debugLevel = isDevelopmentEnvironment() ? DEBUG_LEVEL_ONE : DEBUG_LEVEL_ZERO;
 
 // physics
 let globalSpeed = 1;
@@ -132,7 +132,7 @@ function paint(){
         pop();
     }
 
-    if(debugLevel)
+    if(debugLevel >= DEBUG_LEVEL_ONE)
         rootPr.drawBounds();
 }
 
@@ -223,7 +223,7 @@ function setup(){
     });
     
     // if running locally, run tests
-    if(["127.0.0.1", "localhost"].includes(window.location.hostname))
+    if(isDevelopmentEnvironment())
         runTests();
 }
 
@@ -310,7 +310,7 @@ function keyPressed(e){
     if (e.target.nodeName.toLowerCase() === "input"){
         return;
     }
-    debugLog(DEBUG_LEVEL_ONE, [keyCode]);
+    debugLog(DEBUG_LEVEL_ONE, ["key pressed:", keyCode]);
     if (keyCode === F_KEYCODE){
         fWasPressed = true;
         toggleHideUI();
