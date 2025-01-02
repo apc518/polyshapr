@@ -311,7 +311,7 @@ function toggleHideUI(){
 }
 
 function mousePressed(){
-    debugLog(DEBUG_LEVEL_ONE, [mouseX, mouseY]);
+    debugLog(DEBUG_LEVEL_ONE, [`mouse click at (${mouseX}, ${mouseY})`]);
 }
 
 function keyPressed(e){

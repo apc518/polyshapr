@@ -556,8 +556,6 @@ function updateProjectedMaxFileSize(){
     let videoBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderVideoBitrateInput.value / 8;
     let audioBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderAudioBitrateInput.value / 8;
 
-    console.log(videoBytes, audioBytes);
-
     exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
 }
 
