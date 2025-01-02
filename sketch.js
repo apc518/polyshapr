@@ -96,7 +96,7 @@ function getProgressIncrement(){
 function incrementGlobalProgress(){
     globalProgress += getProgressIncrement();
 
-    if (Renderer.isRendering && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
+    if (Renderer.isRendering() && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
         Renderer.stopRender();
     }
 

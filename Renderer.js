@@ -1,9 +1,14 @@
 class Renderer {
-    static isRendering = false;
+    static _isRendering = false;
     static globalProgressEnd = 0;
     static outAudioBuffer;
+
+    static isRendering() {
+        return Renderer._isRendering;
+    }
     
     static startRender(cycleCount, canvasSize, videoBitrate, audioBitrate) {
+        Renderer._isRendering = true;
         resizeCanvasAndRefresh(canvasSize, canvasSize);
         resetAnimation();
         Renderer.renderAudio();
@@ -143,10 +148,10 @@ class Renderer {
     }
 
     static stopRender(){
-        if (Renderer.isRendering){
+        if (Renderer._isRendering){
             recorder.stop();
             pause_();
-            Renderer.isRendering = false;
+            Renderer._isRendering = false;
             resizeCanvasAndRefresh(currentPatch.canvasWidth, currentPatch.canvasHeight);
             recordVideoBtn.textContent = 'Start Recording Now';
         }
