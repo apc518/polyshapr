@@ -11,75 +11,92 @@ class Renderer {
         return Renderer._isRendering;
     }
     
-    static startRender(cycleCount, canvasSize, videoBitrate, audioBitrate) {
+    static startRender(cycleCount, canvasSize, videoBitrate, audioBitrate, leaveRemainder) {
         Renderer._isRendering = true;
         resizeCanvasAndRefresh(canvasSize, canvasSize);
         resetAnimation();
-        Renderer.renderAudio();
+        Renderer.renderAudio(leaveRemainder);
     }
 
     static renderVideo(){
-        // create PNGs for every frame without timing (as fast as possible)
-        // do audio render
-        
-        // set up a media recorder to record the (a secondary?) canvas that we put the pngs on
-        // which hopefully will always be fast enough to keep up with 60fps
-        // we will bundle the audio and video by creating a howl with the rendered audio
-        // and recording that stream just as we do with the normal recording process in record.js
+        // pause buffering? try calling recorder.start() and then immediately (or maybe after one round of the event loop?) call recorder.pause()
+        // then paint the next frame, then repeat until done
+
+        // how to combine the video with the audio?
     }
 
     static async letUIUpdate() {
         let now = Date.now();
         if (now - Renderer.lastSleepTime > 1000 / FRAMERATE) {
             Renderer.lastSleepTime = now;
+            // TODO: deal with the event in which total samples to process is 0. Probably want to just skip the rendering loop
+            // altogether and thus not call this function at all, but still in this function I should deal with it
             document.getElementById("renderProgressGauge").innerText = (100 * Renderer.samplesProcessed / Renderer.totalSamplesToProcess).toPrecision(3);
             debugLog(DEBUG_LEVEL_THREE, [Renderer.samplesProcessed / Renderer.totalSamplesToProcess, Date.now() / 1000]);
             await new Promise(r => setTimeout(r, 0));
         }
     }
 
-    static renderAudio(){
-        let audioFileName;
+    static renderAudio(leaveRemainder){
+        let audioSampleFileName;
 
         if (currentPatch.audioSampleIsCustom){
             let audioFileBytes = base64ToTypedArray(currentPatch.audioSampleBase64).buffer;
-            audioFileName = URL.createObjectURL(new Blob([audioFileBytes]));
+            audioSampleFileName = URL.createObjectURL(new Blob([audioFileBytes]));
         }
         else{
-            audioFileName = currentPatch.audioSampleFilename;
+            audioSampleFileName = currentPatch.audioSampleFilename;
         }
 
-        fetch(audioFileName)
+        fetch(audioSampleFileName)
         .then(res => res.arrayBuffer())
         .then(arrayBuffer => {
             console.log(arrayBuffer);
             let audioCtx = new window.AudioContext();
             audioCtx.decodeAudioData(arrayBuffer)
             .then(async (audioBuffer) => {
-                let channelOutBuffers = [];
-                Renderer.totalSamplesToProcess = audioBuffer.sampleRate * currentPatch.cycleTime * 3 * audioBuffer.numberOfChannels; // for the normalization and wav file writing passes
+                let channelOutputBuffers = [];
+
+                // calculate output audio length in audio frames
+                let outputLength = audioBuffer.sampleRate * currentPatch.cycleTime;
+                if (leaveRemainder){
+                    let maxOutputIdx = 0;
+                    for (let rhythmIdx = 0; rhythmIdx < currentPatch.rhythms.length; rhythmIdx++){
+                        let rhythm = currentPatch.rhythms[rhythmIdx];
+                        let pitchMult = soundList[rhythmIdx % soundList.length].speed;
+                        if (pitchMult === 0 || rhythm === 0) continue;
+                        let numAudioFramesForThisHit = floor(audioBuffer.getChannelData(0).length / pitchMult);
+                        maxOutputIdx = max(maxOutputIdx, ceil((rhythm - 1) * outputLength / rhythm + numAudioFramesForThisHit));
+                    }
+                    outputLength = max(maxOutputIdx, outputLength);
+                }
+
+                console.log(`Original length: ${audioBuffer.sampleRate * currentPatch.cycleTime}, with leaving remainder: ${outputLength}`);
+
+                Renderer.totalSamplesToProcess = outputLength * 3 * audioBuffer.numberOfChannels; // for the normalization and wav file writing passes
                 Renderer.samplesProcessed = 0;
                 Renderer.lastSleepTime = Date.now();
 
                 // add up how many samples will be processed in the main rendering inner loop
-                let inputAudioClipChannelData = audioBuffer.getChannelData(0);
                 for (let rhythmIdx = 0; rhythmIdx < currentPatch.rhythms.length; rhythmIdx++){
-                    let pitchMult = soundList[rhythmIdx % soundList.length].speed;
                     let rhythm = currentPatch.rhythms[rhythmIdx];
-                    Renderer.totalSamplesToProcess += rhythm * floor(inputAudioClipChannelData.length / pitchMult);
+                    let pitchMult = soundList[rhythmIdx % soundList.length].speed;
+                    if (pitchMult === 0 || rhythm === 0) continue;
+                    Renderer.totalSamplesToProcess += rhythm * floor(audioBuffer.getChannelData(0).length / pitchMult);
                 }
                 Renderer.totalSamplesToProcess *= audioBuffer.numberOfChannels;
 
                 for(let channelIdx = 0; channelIdx < audioBuffer.numberOfChannels; channelIdx++){
                     let inputAudioClipChannelData = audioBuffer.getChannelData(channelIdx);
-                    let outputArray = new Float32Array(audioBuffer.sampleRate * currentPatch.cycleTime);
+                    let outputArray = new Float32Array(outputLength);
 
                     // render!!!
                     for (let rhythmIdx = 0; rhythmIdx < currentPatch.rhythms.length; rhythmIdx++){
+                        let rhythm = currentPatch.rhythms[rhythmIdx];
                         let pitchMult = soundList[rhythmIdx % soundList.length].speed;
-                        let rhythm = currentPatch.rhythms[rhythmIdx]
+                        if (pitchMult === 0 || rhythm === 0) continue;
+                        let numAudioFramesForThisHit = floor(inputAudioClipChannelData.length / pitchMult);
                         for (let hitIdx = 0; hitIdx < rhythm; hitIdx++){
-                            let numAudioFramesForThisHit = floor(inputAudioClipChannelData.length / pitchMult);
                             for (let scaledInputAudioFrameIdx = 0; scaledInputAudioFrameIdx < numAudioFramesForThisHit; scaledInputAudioFrameIdx++){
                                 let s1_idx = floor(scaledInputAudioFrameIdx * pitchMult);
                                 let s2_idx = ceil(scaledInputAudioFrameIdx * pitchMult);
@@ -89,7 +106,7 @@ class Renderer {
                                 let portion = scaledInputAudioFrameIdx * pitchMult - floor(scaledInputAudioFrameIdx * pitchMult);
                                 let inputSample = lerp(s1, s2, portion);
 
-                                let outputIdx =  hitIdx * outputArray.length / rhythm + scaledInputAudioFrameIdx;
+                                let outputIdx =  hitIdx * audioBuffer.sampleRate * currentPatch.cycleTime / rhythm + scaledInputAudioFrameIdx;
                                 let o1_idx = floor(outputIdx);
                                 let o2_idx = ceil(outputIdx);
                                 if (o1_idx === o2_idx){
@@ -135,18 +152,18 @@ class Renderer {
                         if (!Renderer._isRendering) break;
                     }
 
-                    channelOutBuffers.push(outputArray);
+                    channelOutputBuffers.push(outputArray);
                 }
 
                 // create the output audio buffer
                 Renderer.outAudioBuffer = new AudioBuffer({
-                    length: channelOutBuffers[0].length,
-                    numberOfChannels: channelOutBuffers.length,
+                    length: channelOutputBuffers[0].length,
+                    numberOfChannels: channelOutputBuffers.length,
                     sampleRate: audioBuffer.sampleRate
                 });
 
-                for (let i = 0; i < channelOutBuffers.length; i++){
-                    Renderer.outAudioBuffer.copyToChannel(channelOutBuffers[i], i);
+                for (let i = 0; i < channelOutputBuffers.length; i++){
+                    Renderer.outAudioBuffer.copyToChannel(channelOutputBuffers[i], i);
                 }
 
                 Renderer.generateDownload();
