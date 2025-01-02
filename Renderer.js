@@ -2,6 +2,10 @@ class Renderer {
     static _isRendering = false;
     static globalProgressEnd = 0;
     static outAudioBuffer;
+    static samplesProcessed;
+    static lastSleepTime;
+    static totalSamplesToProcess;
+    static PROGRESS_CHECK_INTERVAL = 100_000; // samples
 
     static isRendering() {
         return Renderer._isRendering;
@@ -24,6 +28,16 @@ class Renderer {
         // and recording that stream just as we do with the normal recording process in record.js
     }
 
+    static async letUIUpdate() {
+        let now = Date.now();
+        if (now - Renderer.lastSleepTime > 1000 / FRAMERATE) {
+            Renderer.lastSleepTime = now;
+            document.getElementById("renderProgressGauge").innerText = (100 * Renderer.samplesProcessed / Renderer.totalSamplesToProcess).toPrecision(3);
+            debugLog(DEBUG_LEVEL_THREE, [Renderer.samplesProcessed / Renderer.totalSamplesToProcess, Date.now() / 1000]);
+            await new Promise(r => setTimeout(r, 0));
+        }
+    }
+
     static renderAudio(){
         let audioFileName;
 
@@ -43,29 +57,18 @@ class Renderer {
             audioCtx.decodeAudioData(arrayBuffer)
             .then(async (audioBuffer) => {
                 let channelOutBuffers = [];
-                let totalSamplesToProcess = audioBuffer.sampleRate * currentPatch.cycleTime * 4;
-                let samplesProcessed = 0;
-                let lastSleepTime = Date.now();
-                const PROGRESS_CHECK_INTERVAL = 100_000; // samples
-
-                const letUIUpdate = async () => {
-                    let now = Date.now();
-                    if (now - lastSleepTime > 1000 / FRAMERATE) {
-                        lastSleepTime = now;
-                        document.getElementById("renderProgressGauge").innerText = (100 * samplesProcessed / totalSamplesToProcess).toPrecision(3);
-                        debugLog(DEBUG_LEVEL_THREE, [samplesProcessed / totalSamplesToProcess, Date.now() / 1000]);
-                        await new Promise(r => setTimeout(r, 0));
-                    }
-                }
+                Renderer.totalSamplesToProcess = audioBuffer.sampleRate * currentPatch.cycleTime * 3 * audioBuffer.numberOfChannels; // for the normalization and wav file writing passes
+                Renderer.samplesProcessed = 0;
+                Renderer.lastSleepTime = Date.now();
 
                 // add up how many samples will be processed in the main rendering inner loop
                 let inputAudioClipChannelData = audioBuffer.getChannelData(0);
                 for (let rhythmIdx = 0; rhythmIdx < currentPatch.rhythms.length; rhythmIdx++){
                     let pitchMult = soundList[rhythmIdx % soundList.length].speed;
                     let rhythm = currentPatch.rhythms[rhythmIdx];
-                    totalSamplesToProcess += rhythm * floor(inputAudioClipChannelData.length / pitchMult);
+                    Renderer.totalSamplesToProcess += rhythm * floor(inputAudioClipChannelData.length / pitchMult);
                 }
-                totalSamplesToProcess *= audioBuffer.numberOfChannels;
+                Renderer.totalSamplesToProcess *= audioBuffer.numberOfChannels;
 
                 for(let channelIdx = 0; channelIdx < audioBuffer.numberOfChannels; channelIdx++){
                     let inputAudioClipChannelData = audioBuffer.getChannelData(channelIdx);
@@ -100,10 +103,10 @@ class Renderer {
                                     outputArray[o2_idx] += o2_portion * inputSample;
                                 }
                                 
-                                samplesProcessed += 1;
+                                Renderer.samplesProcessed += 1;
                                 
-                                if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
-                                    await letUIUpdate();
+                                if (Renderer.samplesProcessed % Renderer.PROGRESS_CHECK_INTERVAL === 0){
+                                    await Renderer.letUIUpdate();
 
                                     if (!Renderer._isRendering) break; // check for cancellation
                                 }
@@ -117,17 +120,17 @@ class Renderer {
                     let maxAmplitude = 0;
                     for (let value of outputArray){
                         maxAmplitude = abs(value) > maxAmplitude ? value : maxAmplitude;
-                        samplesProcessed += 1;
-                        if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
-                            await letUIUpdate();
+                        Renderer.samplesProcessed += 1;
+                        if (Renderer.samplesProcessed % Renderer.PROGRESS_CHECK_INTERVAL === 0){
+                            await Renderer.letUIUpdate();
                         }
                         if (!Renderer._isRendering) break;
                     }
                     for (let outIdx = 0; outIdx < outputArray.length; outIdx++){
                         outputArray[outIdx] /= maxAmplitude;
-                        samplesProcessed += 1;
-                        if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
-                            await letUIUpdate();
+                        Renderer.samplesProcessed += 1;
+                        if (Renderer.samplesProcessed % Renderer.PROGRESS_CHECK_INTERVAL === 0){
+                            await Renderer.letUIUpdate();
                         }
                         if (!Renderer._isRendering) break;
                     }
@@ -145,8 +148,6 @@ class Renderer {
                 for (let i = 0; i < channelOutBuffers.length; i++){
                     Renderer.outAudioBuffer.copyToChannel(channelOutBuffers[i], i);
                 }
-
-                document.getElementById("renderProgressGauge").innerText = 100;
 
                 Renderer.generateDownload();
             });
@@ -209,7 +210,7 @@ class Renderer {
 
     static generateDownload(){
         // function by Russell Good, some modifications by me https://www.russellgood.com/how-to-convert-audiobuffer-to-audio-file/
-        const bufferToWave = (abuffer) => {
+        const bufferToWave = async (abuffer) => {
             const numOfChan = abuffer.numberOfChannels;
             const length = abuffer.length * numOfChan * 2 + 44;
             let buffer = new ArrayBuffer(length);
@@ -258,6 +259,12 @@ class Renderer {
                     sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
                     view.setInt16(pos, sample, true);
                     pos += 2;
+
+                    Renderer.samplesProcessed += 1;
+                    if (Renderer.samplesProcessed % Renderer.PROGRESS_CHECK_INTERVAL === 0){
+                        await Renderer.letUIUpdate();
+                    }
+                    if (!Renderer._isRendering) break;
                 }
                 offset++;
             }
@@ -266,13 +273,20 @@ class Renderer {
             return new Blob([buffer], { type: "audio/wav" });
         }
 
+        bufferToWave(Renderer.outAudioBuffer).then(res => {
+            if (Renderer._isRendering){
+                Renderer.outAudioObjURL = URL.createObjectURL(res);
+                
+                document.getElementById("renderProgressGauge").innerText = 100;
+        
+                let downloadElem = document.createElement('a');
+                downloadElem.target = "_blank";
+                downloadElem.download = `polyshapr-${hashCode(JSON.stringify(currentPatch))}.wav`;
+                downloadElem.href = Renderer.outAudioObjURL;
+                downloadElem.click();
 
-        Renderer.outAudioObjURL = URL.createObjectURL(bufferToWave(Renderer.outAudioBuffer))
-
-        let downloadElem = document.createElement('a');
-        downloadElem.target = "_blank";
-        downloadElem.download = `polyshapr-${hashCode(JSON.stringify(currentPatch))}.wav`;
-        downloadElem.href = Renderer.outAudioObjURL;
-        downloadElem.click();
+                Renderer._isRendering = false;
+            }
+        });
     }
 }
