@@ -422,9 +422,9 @@ class NGonRhythm2d extends Rhythm {
     }
 
     static maxInnerRadiusRatioForNoClip(childN, parentN){
-        const fancyMath = (nc, np) => {
-            const a = sin(PI / np)
-            return a / (a + (PI * (np - nc) * sin(PI / nc)) / (np * nc * sin(PI / np) * cos(PI / nc)));
+        const fancyMath = (n_c, n_p) => {
+            const a = sin(PI / n_p)
+            return a / (a + (PI * (n_p - n_c) * sin(PI / n_c)) / (n_p * n_c * sin(PI / n_p) * cos(PI / n_c)));
         }
         
         return childN <= parentN ? fancyMath(childN, parentN) : 1 / fancyMath(childN, parentN);
