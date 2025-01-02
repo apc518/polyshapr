@@ -104,9 +104,13 @@ class Renderer {
                                 
                                 if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
                                     await letUIUpdate();
+
+                                    if (!Renderer._isRendering) break; // check for cancellation
                                 }
                             }
+                            if (!Renderer._isRendering) break;
                         }
+                        if (!Renderer._isRendering) break;
                     }
  
                     // normalize
@@ -117,6 +121,7 @@ class Renderer {
                         if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
                             await letUIUpdate();
                         }
+                        if (!Renderer._isRendering) break;
                     }
                     for (let outIdx = 0; outIdx < outputArray.length; outIdx++){
                         outputArray[outIdx] /= maxAmplitude;
@@ -124,6 +129,7 @@ class Renderer {
                         if (samplesProcessed % PROGRESS_CHECK_INTERVAL === 0){
                             await letUIUpdate();
                         }
+                        if (!Renderer._isRendering) break;
                     }
 
                     channelOutBuffers.push(outputArray);
@@ -149,9 +155,9 @@ class Renderer {
 
     static stopRender(){
         if (Renderer._isRendering){
-            recorder.stop();
-            pause_();
             Renderer._isRendering = false;
+            // recorder.stop();
+            pause_();
             resizeCanvasAndRefresh(currentPatch.canvasWidth, currentPatch.canvasHeight);
             recordVideoBtn.textContent = 'Start Recording Now';
         }
