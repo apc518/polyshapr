@@ -102,9 +102,14 @@ globalVolumeSlider.onmouseup = e => e?.target.blur();
 
 globalProgressSlider.value = 0;
 
+function displayGlobalProgressGauge(){
+    globalProgressGauge.textContent = globalProgress.toFixed(3);
+}
+
 globalProgressSlider.oninput = e => {
     globalProgress = Math.floor(globalProgress) + Math.min(e.target.value, PROGRESS_SLIDER_RESOLUTION - 1) / PROGRESS_SLIDER_RESOLUTION;
     setMasterPolyRhythmProgress();
+    displayGlobalProgressGauge();
     paint();
 }
 
@@ -282,6 +287,7 @@ rhythmModeDropdown.oninput = e => {
     e?.target.blur();
     let disabled = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
     rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
+    currentPatch.rhythmMode = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex);
     updateRhythmsFromPresetInput();
     setBackgroundColorForRhythmInputs();
 }
@@ -517,8 +523,8 @@ window.onclick = e => {
 }
 
 openRenderModalBtn.onclick = () => {
-    // resetBtn.click();
     document.getElementById("renderModal").style.display = "block";
+    document.getElementById("renderProgressGauge").innerText = 0;
 }
 
 const renderCycleCountInput = document.getElementById("renderCycleCountInput");
@@ -554,3 +560,5 @@ function updateProjectedMaxFileSize(){
 
     exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
 }
+
+const globalProgressGauge = document.getElementById("globalProgressGauge");

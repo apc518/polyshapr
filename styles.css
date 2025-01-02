@@ -36,7 +36,7 @@ a:hover{
 }
 
 #globalProgressSlider{
-    min-width: 800px;
+    max-width: 800px;
 }
 
 #appDrawer{

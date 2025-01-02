@@ -102,6 +102,7 @@ function incrementGlobalProgress(){
 
     // update global progress slider accordingly
     globalProgressSlider.value = globalProgress * PROGRESS_SLIDER_RESOLUTION % PROGRESS_SLIDER_RESOLUTION;
+    displayGlobalProgressGauge();
 }
 
 
@@ -156,6 +157,7 @@ function fullRefresh(refreshSounds=false){
     }
     initializeCurrentPatch(refreshSounds);
     setMasterPolyRhythmProgress();
+    updatePatchUI();
     paint();
 }
 
@@ -257,12 +259,13 @@ let globalRotation = 0;
  */
 function updateAll(){
     tryPlaySounds();
-    let prevGlobProg = globalProgress
+    let prevGlobProg = globalProgress;
     incrementGlobalProgress();
     if (globalProgress % 1 < prevGlobProg % 1){
         debugLog(DEBUG_LEVEL_TWO, ["Loop!"]);
     }
     setMasterPolyRhythmProgress();
+    displayGlobalProgressGauge();
     
     paint();
 }

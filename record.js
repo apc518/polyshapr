@@ -2,6 +2,8 @@ const chunks = [];
 
 let recorder;
 
+let dataAvailableEventCount = 0;
+
 function recordVideo(videoBitrate, audioBitrate) {
     chunks.length = 0;
     let stream = p5canvas.canvas.captureStream(60);
@@ -13,11 +15,12 @@ function recordVideo(videoBitrate, audioBitrate) {
         audioBitsPerSecond: audioBitrate,
     });
     recorder.ondataavailable = e => {
+        dataAvailableEventCount++;
         if (e.data.size) {
             chunks.push(e.data);
         }
     };
-    recorder.onstop = exportVideo;
+    // recorder.onstop = exportVideo;
     recordVideoBtn.onclick = e => {
         recorder.stop();
         recordVideoBtn.textContent = 'Start Recording Now';

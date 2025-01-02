@@ -123,6 +123,7 @@
                 <div id="bottomControlBar">
                     <div>
                         <input type="range" value="0" min="0" max="1000" id="globalProgressSlider" class="slider"/>
+                        <label for="globalProgressSlider" id="globalProgressGauge">0</label>
                     </div>
                     <div class="playback-control-bar">
                         <button id="playpausebtn" class="playbar-button">Play</button>
@@ -163,7 +164,10 @@
                 </div>
                 <div class="appDrawerDivider"></div>
                 <br/>
-                <div class="renderUiRow"> <button id="renderBtn">Start Render</button> </div>
+                <div class="renderUiRow">
+                    <button id="renderBtn">Start Render</button>
+                    Progress: <span id="renderProgressGauge">0</span>%
+                </div>
             </div>
         </div>
 
@@ -172,6 +176,7 @@
         <script src="utils/math.js" defer></script>
         <script src="utils/drawing.js" defer></script>
         <script src="utils/environment.js" defer></script>
+        <script src="utils/strings.js" defer></script>
         <script src="htmlHandlers.js" defer></script>
         <script src="Helper.js" defer></script>
         <script src="audioSampleOptions.js" defer></script>

@@ -142,8 +142,8 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
 
         
         let master_vector = createVector(
-        this.xRhythm * this.xBounds.size(),
-        this.yRhythm * this.yBounds.size()
+            this.xRhythm * this.xBounds.size(),
+            this.yRhythm * this.yBounds.size()
         )
         
         let progressVector = master_vector.mult(progress);
