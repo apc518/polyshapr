@@ -532,6 +532,7 @@ const renderCanvasSizeInput = document.getElementById("renderCanvasSizeInput");
 const renderVideoBitrateInput = document.getElementById("renderVideoBitrateInput");
 const renderAudioBitrateInput = document.getElementById("renderAudioBitrateInput");
 const leaveRemainderCheckbox = document.getElementById("leaveRemainderCheckbox");
+const exportVideoCheckbox = document.getElementById("exportVideoCheckbox");
 
 renderCycleCountInput.value = 1;
 renderCanvasSizeInput.value = canvasWidth;
@@ -545,7 +546,14 @@ renderAudioBitrateInput.oninput = updateProjectedMaxFileSize;
 const renderBtn = document.getElementById("renderBtn");
 
 renderBtn.onclick = () => {
-    Renderer.startRender(renderCycleCountInput.value, renderCanvasSizeInput.value, renderVideoBitrateInput.value * 1000, renderAudioBitrateInput.value * 1000, leaveRemainderCheckbox.checked);
+    Renderer.startRender(
+        renderCycleCountInput.value,
+        renderCanvasSizeInput.value,
+        renderVideoBitrateInput.value * 1000,
+        renderAudioBitrateInput.value * 1000,
+        leaveRemainderCheckbox.checked,
+        exportVideoCheckbox.checked
+    );
 }
 
 const exportSizeUpperBoundSpan = document.getElementById("exportSizeUpperBoundSpan");

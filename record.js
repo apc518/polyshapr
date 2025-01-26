@@ -1,6 +1,6 @@
 const chunks = [];
 
-let recorder;
+let videoRecorder;
 
 let dataAvailableEventCount = 0;
 
@@ -10,25 +10,25 @@ function recordVideo(videoBitrate, audioBitrate) {
     let audioMediaDestNode = Howler.ctx.createMediaStreamDestination()
     Howler.masterGain.connect(audioMediaDestNode);
     stream.addTrack(audioMediaDestNode.stream.getAudioTracks()[0]);
-    recorder = new MediaRecorder(stream, {
+    videoRecorder = new MediaRecorder(stream, {
         videoBitsPerSecond: videoBitrate,
         audioBitsPerSecond: audioBitrate,
     });
-    recorder.ondataavailable = e => {
+    videoRecorder.ondataavailable = e => {
         dataAvailableEventCount++;
         if (e.data.size) {
             chunks.push(e.data);
         }
     };
-    // recorder.onstop = exportVideo;
+    videoRecorder.onstop = exportVideo;
     recordVideoBtn.onclick = e => {
-        recorder.stop();
+        videoRecorder.stop();
         recordVideoBtn.textContent = 'Start Recording Now';
         recordVideoBtn.onclick = () => {
             recordVideo(VIDEO_BITRATE_DEFAULT, AUDIO_BITRATE_DEFAULT);
         }
     };
-    recorder.start();
+    videoRecorder.start();
     recordVideoBtn.textContent = 'Stop Recording';
 }
 

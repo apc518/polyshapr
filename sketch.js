@@ -96,9 +96,9 @@ function getProgressIncrement(){
 function incrementGlobalProgress(){
     globalProgress += getProgressIncrement();
 
-    if (Renderer.isRendering() && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
-        Renderer.stopRender();
-    }
+    // if (Renderer.isRendering() && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
+    //     Renderer.stopRender();
+    // }
 
     // update global progress slider accordingly
     globalProgressSlider.value = globalProgress * PROGRESS_SLIDER_RESOLUTION % PROGRESS_SLIDER_RESOLUTION;
@@ -237,7 +237,7 @@ function setup(){
 
 function tryPlaySounds(){
     // print(soundList.map(s => s.on).filter(a => a));
-    if(soundOn) soundList.filter(s => s.on).forEach(s => s.play());
+    if(soundOn && !Renderer.isRendering()) soundList.filter(s => s.on).forEach(s => s.play());
     soundList.forEach(s => {s.on = false});
 }
 
