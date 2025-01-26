@@ -6,6 +6,7 @@ class Renderer {
     static lastSleepTime;
     static totalSamplesToProcess;
     static PROGRESS_CHECK_INTERVAL = 100_000; // samples
+    static renderedAudioHowl;
 
     static isRendering() {
         return Renderer._isRendering;
@@ -28,13 +29,13 @@ class Renderer {
             if (exportVideo) {
                 console.log("INITIAL STATE", isLooping(), globalProgress);
 
-                let hs = new Howl({ src: outAudioObjURL, format: "wav"});
-                hs.on('end', () => {
+                Renderer.renderedAudioHowl = new Howl({ src: outAudioObjURL, format: "wav"});
+                Renderer.renderedAudioHowl.on('end', () => {
                     Renderer.stopRender();
                 });
                 recordVideo(videoBitrate, audioBitrate);
                 Renderer.letUIUpdate().then(() => {
-                    hs.play();
+                    Renderer.renderedAudioHowl.play();
                     play_();
                 });
             }
@@ -213,6 +214,7 @@ class Renderer {
     static stopRender(){
         if (Renderer._isRendering){
             Renderer._isRendering = false;
+            Renderer.renderedAudioHowl?.stop();
             videoRecorder?.stop();
             Renderer.letUIUpdate().then(() => {
                 resizeCanvasAndRefresh(currentPatch.canvasWidth, currentPatch.canvasHeight);
