@@ -96,9 +96,9 @@ function getProgressIncrement(){
 function incrementGlobalProgress(){
     globalProgress += getProgressIncrement();
 
-    // if (Renderer.isRendering() && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
-    //     Renderer.stopRender();
-    // }
+    if (Renderer.isRendering() && Renderer.globalProgressEnd - globalProgress < getProgressIncrement()){
+        pause_();
+    }
 
     // update global progress slider accordingly
     globalProgressSlider.value = globalProgress * PROGRESS_SLIDER_RESOLUTION % PROGRESS_SLIDER_RESOLUTION;

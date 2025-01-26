@@ -542,6 +542,7 @@ renderAudioBitrateInput.value = AUDIO_BITRATE_DEFAULT / 1000;
 renderCycleCountInput.oninput = updateProjectedMaxFileSize;
 renderVideoBitrateInput.oninput = updateProjectedMaxFileSize;
 renderAudioBitrateInput.oninput = updateProjectedMaxFileSize;
+exportVideoCheckbox.oninput = updateProjectedMaxFileSize;
 
 const renderBtn = document.getElementById("renderBtn");
 
@@ -562,10 +563,15 @@ const exportSizeUpperBoundSpan = document.getElementById("exportSizeUpperBoundSp
  * Calculate the upper limit of file size given the number of cycles (and therefore duration of the export) and audio/video bitrate
  */
 function updateProjectedMaxFileSize(){
-    let videoBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderVideoBitrateInput.value / 8;
-    let audioBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderAudioBitrateInput.value / 8;
+    let videoBytes = currentPatch.cycleTime * renderCycleCountInput.valueAsNumber * renderVideoBitrateInput.valueAsNumber / 8;
+    let audioBytes = currentPatch.cycleTime * renderCycleCountInput.valueAsNumber * renderAudioBitrateInput.valueAsNumber / 8;
 
-    exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
+    if (exportVideoCheckbox.checked){
+        exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
+    }
+    else{
+        exportSizeUpperBoundSpan.textContent = (44100 * 16 * 2 * currentPatch.cycleTime * renderCycleCountInput.valueAsNumber / (8 * 1024 * 1024)).toPrecision(3);
+    }
 }
 
 const globalProgressGauge = document.getElementById("globalProgressGauge");

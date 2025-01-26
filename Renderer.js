@@ -13,8 +13,11 @@ class Renderer {
     
     static startRender(cycleCount, canvasSize, videoBitrate, audioBitrate, leaveRemainder, exportVideo) {
         Renderer._isRendering = true;
-        resizeCanvasAndRefresh(canvasSize, canvasSize);
-        resetAnimation();
+        if (exportVideoCheckbox.checked){
+            resizeCanvasAndRefresh(canvasSize, canvasSize);
+            resetAnimation();
+            Renderer.globalProgressEnd = cycleCount;
+        }
         Renderer.renderAudio(cycleCount, leaveRemainder).then(outAudioObjURL => {
             if (!outAudioObjURL) return;
 
@@ -27,15 +30,13 @@ class Renderer {
 
                 let hs = new Howl({ src: outAudioObjURL, format: "wav"});
                 hs.on('end', () => {
-                    videoRecorder.stop();
-                    Renderer._isRendering = false;
+                    Renderer.stopRender();
                 });
-                hs.play();
-                
-                play_();
-                console.log("playPause() called");
                 recordVideo(videoBitrate, audioBitrate);
-                console.log("recordVideo called");
+                Renderer.letUIUpdate().then(() => {
+                    hs.play();
+                    play_();
+                });
             }
             else{
                 let downloadElem = document.createElement('a');
@@ -43,7 +44,7 @@ class Renderer {
                 downloadElem.download = `polyshapr-${hashCode(JSON.stringify(currentPatch))}.wav`;
                 downloadElem.href = outAudioObjURL;
                 downloadElem.click();
-                Renderer._isRendering = false;
+                Renderer.stopRender();
             }
         });
     }
@@ -67,7 +68,7 @@ class Renderer {
         }
     }
 
-    static async renderAudio(leaveRemainder){
+    static async renderAudio(cycleCount, leaveRemainder){
         let audioSampleFileName;
 
         if (currentPatch.audioSampleIsCustom){
@@ -86,7 +87,7 @@ class Renderer {
         let channelOutputBuffers = [];
 
         // calculate output audio length in audio frames
-        let outputLength = audioBuffer.sampleRate * currentPatch.cycleTime;
+        let outputLength = audioBuffer.sampleRate * currentPatch.cycleTime * cycleCount;
         if (leaveRemainder){
             let maxOutputIdx = 0;
             for (let rhythmIdx = 0; rhythmIdx < currentPatch.rhythms.length; rhythmIdx++){
@@ -94,12 +95,22 @@ class Renderer {
                 let pitchMult = soundList[rhythmIdx % soundList.length].speed;
                 if (pitchMult === 0 || rhythm === 0) continue;
                 let numAudioFramesForThisHit = floor(audioBuffer.getChannelData(0).length / pitchMult);
-                maxOutputIdx = max(maxOutputIdx, ceil((rhythm - 1) * outputLength / rhythm + numAudioFramesForThisHit));
+                let lastRhythmThatPlaysIdx = floor(rhythm * cycleCount) === rhythm * cycleCount ? floor(rhythm * cycleCount) - 1 : floor(rhythm * cycleCount);
+                console.log(`lastRhythmThatPlaysIdx=${lastRhythmThatPlaysIdx} for rhythm ${rhythm}`);
+                maxOutputIdx = max(maxOutputIdx, ceil(lastRhythmThatPlaysIdx * audioBuffer.sampleRate * currentPatch.cycleTime / rhythm + numAudioFramesForThisHit));
             }
             outputLength = max(maxOutputIdx, outputLength);
         }
 
-        console.log(`Original length: ${audioBuffer.sampleRate * currentPatch.cycleTime}, with leaving remainder: ${outputLength}`);
+        console.log(JSON.stringify({
+            leaveRemainder,
+            outputLength,
+            outputLengthSeconds: outputLength / audioBuffer.sampleRate,
+            cycleCount,
+            cycleTime: currentPatch.cycleTime
+        }));
+
+        console.log(`Original length: ${audioBuffer.sampleRate * currentPatch.cycleTime * cycleCount}, with leaving remainder: ${outputLength}`);
 
         Renderer.totalSamplesToProcess = outputLength * 3 * audioBuffer.numberOfChannels; // for the normalization and wav file writing passes
         Renderer.samplesProcessed = 0;
@@ -110,7 +121,7 @@ class Renderer {
             let rhythm = currentPatch.rhythms[rhythmIdx];
             let pitchMult = soundList[rhythmIdx % soundList.length].speed;
             if (pitchMult === 0 || rhythm === 0) continue;
-            Renderer.totalSamplesToProcess += rhythm * floor(audioBuffer.getChannelData(0).length / pitchMult);
+            Renderer.totalSamplesToProcess += rhythm * floor(audioBuffer.getChannelData(0).length / pitchMult * cycleCount);
         }
         Renderer.totalSamplesToProcess *= audioBuffer.numberOfChannels;
 
@@ -124,7 +135,8 @@ class Renderer {
                 let pitchMult = soundList[rhythmIdx % soundList.length].speed;
                 if (pitchMult === 0 || rhythm === 0) continue;
                 let numAudioFramesForThisHit = floor(inputAudioClipChannelData.length / pitchMult);
-                for (let hitIdx = 0; hitIdx < rhythm; hitIdx++){
+                let lastRhythmThatPlaysIdx = floor(rhythm * cycleCount) === rhythm * cycleCount ? floor(rhythm * cycleCount) - 1 : floor(rhythm * cycleCount);
+                for (let hitIdx = 0; hitIdx <= lastRhythmThatPlaysIdx; hitIdx++){
                     for (let scaledInputAudioFrameIdx = 0; scaledInputAudioFrameIdx < numAudioFramesForThisHit; scaledInputAudioFrameIdx++){
                         let s1_idx = floor(scaledInputAudioFrameIdx * pitchMult);
                         let s2_idx = ceil(scaledInputAudioFrameIdx * pitchMult);
@@ -135,6 +147,7 @@ class Renderer {
                         let inputSample = lerp(s1, s2, portion);
 
                         let outputIdx =  hitIdx * audioBuffer.sampleRate * currentPatch.cycleTime / rhythm + scaledInputAudioFrameIdx;
+
                         let o1_idx = floor(outputIdx);
                         let o2_idx = ceil(outputIdx);
                         if (o1_idx === o2_idx){
@@ -200,10 +213,11 @@ class Renderer {
     static stopRender(){
         if (Renderer._isRendering){
             Renderer._isRendering = false;
-            // recorder.stop();
-            pause_();
-            resizeCanvasAndRefresh(currentPatch.canvasWidth, currentPatch.canvasHeight);
-            recordVideoBtn.textContent = 'Start Recording Now';
+            videoRecorder?.stop();
+            Renderer.letUIUpdate().then(() => {
+                resizeCanvasAndRefresh(currentPatch.canvasWidth, currentPatch.canvasHeight);
+                recordVideoBtn.textContent = 'Start Recording Now';
+            });
         }
     }
 

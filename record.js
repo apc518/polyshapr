@@ -36,7 +36,7 @@ function exportVideo() {
     var blob = new Blob(chunks);
     let downloadElem = document.createElement('a');
     downloadElem.target = "_blank";
-    downloadElem.download = "polyshapr-render.webm";
+    downloadElem.download = `polyshapr-${hashCode(JSON.stringify(currentPatch))}.webm`;
     downloadElem.href = URL.createObjectURL(blob);
     downloadElem.click();
 }
