@@ -22,13 +22,9 @@ class Renderer {
         Renderer.renderAudio(cycleCount, leaveRemainder).then(outAudioObjURL => {
             if (!outAudioObjURL) return;
 
-            console.log(outAudioObjURL);
-
             document.getElementById("renderProgressGauge").innerText = 100;
     
             if (exportVideo) {
-                console.log("INITIAL STATE", isLooping(), globalProgress);
-
                 Renderer.renderedAudioHowl = new Howl({ src: outAudioObjURL, format: "wav"});
                 Renderer.renderedAudioHowl.on('end', () => {
                     Renderer.stopRender();
@@ -97,21 +93,12 @@ class Renderer {
                 if (pitchMult === 0 || rhythm === 0) continue;
                 let numAudioFramesForThisHit = floor(audioBuffer.getChannelData(0).length / pitchMult);
                 let lastRhythmThatPlaysIdx = floor(rhythm * cycleCount) === rhythm * cycleCount ? floor(rhythm * cycleCount) - 1 : floor(rhythm * cycleCount);
-                console.log(`lastRhythmThatPlaysIdx=${lastRhythmThatPlaysIdx} for rhythm ${rhythm}`);
                 maxOutputIdx = max(maxOutputIdx, ceil(lastRhythmThatPlaysIdx * audioBuffer.sampleRate * currentPatch.cycleTime / rhythm + numAudioFramesForThisHit));
             }
             outputLength = max(maxOutputIdx, outputLength);
         }
 
-        console.log(JSON.stringify({
-            leaveRemainder,
-            outputLength,
-            outputLengthSeconds: outputLength / audioBuffer.sampleRate,
-            cycleCount,
-            cycleTime: currentPatch.cycleTime
-        }));
-
-        console.log(`Original length: ${audioBuffer.sampleRate * currentPatch.cycleTime * cycleCount}, with leaving remainder: ${outputLength}`);
+        debugLog(DEBUG_LEVEL_ONE, `Original length: ${audioBuffer.sampleRate * currentPatch.cycleTime * cycleCount}, with leaving remainder: ${outputLength}`);
 
         Renderer.totalSamplesToProcess = outputLength * 3 * audioBuffer.numberOfChannels; // for the normalization and wav file writing passes
         Renderer.samplesProcessed = 0;
