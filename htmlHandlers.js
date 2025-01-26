@@ -102,9 +102,14 @@ globalVolumeSlider.onmouseup = e => e?.target.blur();
 
 globalProgressSlider.value = 0;
 
+function displayGlobalProgressGauge(){
+    globalProgressGauge.textContent = globalProgress.toFixed(3);
+}
+
 globalProgressSlider.oninput = e => {
     globalProgress = Math.floor(globalProgress) + Math.min(e.target.value, PROGRESS_SLIDER_RESOLUTION - 1) / PROGRESS_SLIDER_RESOLUTION;
     setMasterPolyRhythmProgress();
+    displayGlobalProgressGauge();
     paint();
 }
 
@@ -282,6 +287,7 @@ rhythmModeDropdown.oninput = e => {
     e?.target.blur();
     let disabled = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex) === RHYTHM_MODES.CUSTOM;
     rhythmListCountInput.disabled = rhythmListOffsetInput.disabled = rhythmListIsReversedCheckbox.disabled = disabled;
+    currentPatch.rhythmMode = getRhythmOptionNameByIndex(rhythmModeDropdown.selectedIndex);
     updateRhythmsFromPresetInput();
     setBackgroundColorForRhythmInputs();
 }
@@ -517,14 +523,16 @@ window.onclick = e => {
 }
 
 openRenderModalBtn.onclick = () => {
-    // resetBtn.click();
     document.getElementById("renderModal").style.display = "block";
+    document.getElementById("renderProgressGauge").innerText = 0;
 }
 
 const renderCycleCountInput = document.getElementById("renderCycleCountInput");
 const renderCanvasSizeInput = document.getElementById("renderCanvasSizeInput");
 const renderVideoBitrateInput = document.getElementById("renderVideoBitrateInput");
 const renderAudioBitrateInput = document.getElementById("renderAudioBitrateInput");
+const leaveRemainderCheckbox = document.getElementById("leaveRemainderCheckbox");
+const exportVideoCheckbox = document.getElementById("exportVideoCheckbox");
 
 renderCycleCountInput.value = 1;
 renderCanvasSizeInput.value = canvasWidth;
@@ -534,11 +542,19 @@ renderAudioBitrateInput.value = AUDIO_BITRATE_DEFAULT / 1000;
 renderCycleCountInput.oninput = updateProjectedMaxFileSize;
 renderVideoBitrateInput.oninput = updateProjectedMaxFileSize;
 renderAudioBitrateInput.oninput = updateProjectedMaxFileSize;
+exportVideoCheckbox.oninput = updateProjectedMaxFileSize;
 
 const renderBtn = document.getElementById("renderBtn");
 
 renderBtn.onclick = () => {
-    Renderer.startRender(renderCycleCountInput.value, renderCanvasSizeInput.value, renderVideoBitrateInput.value * 1000, renderAudioBitrateInput.value * 1000);
+    Renderer.startRender(
+        renderCycleCountInput.value,
+        renderCanvasSizeInput.value,
+        renderVideoBitrateInput.value * 1000,
+        renderAudioBitrateInput.value * 1000,
+        leaveRemainderCheckbox.checked,
+        exportVideoCheckbox.checked
+    );
 }
 
 const exportSizeUpperBoundSpan = document.getElementById("exportSizeUpperBoundSpan");
@@ -547,10 +563,15 @@ const exportSizeUpperBoundSpan = document.getElementById("exportSizeUpperBoundSp
  * Calculate the upper limit of file size given the number of cycles (and therefore duration of the export) and audio/video bitrate
  */
 function updateProjectedMaxFileSize(){
-    let videoBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderVideoBitrateInput.value / 8;
-    let audioBytes = currentPatch.cycleTime * renderCycleCountInput.value * renderAudioBitrateInput.value / 8;
+    let videoBytes = currentPatch.cycleTime * renderCycleCountInput.valueAsNumber * renderVideoBitrateInput.valueAsNumber / 8;
+    let audioBytes = currentPatch.cycleTime * renderCycleCountInput.valueAsNumber * renderAudioBitrateInput.valueAsNumber / 8;
 
-    console.log(videoBytes, audioBytes);
-
-    exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
+    if (exportVideoCheckbox.checked){
+        exportSizeUpperBoundSpan.textContent = ((videoBytes + audioBytes) / 1024).toPrecision(3);
+    }
+    else{
+        exportSizeUpperBoundSpan.textContent = (44100 * 16 * 2 * currentPatch.cycleTime * renderCycleCountInput.valueAsNumber / (8 * 1024 * 1024)).toPrecision(3);
+    }
 }
+
+const globalProgressGauge = document.getElementById("globalProgressGauge");

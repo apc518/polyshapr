@@ -99,7 +99,7 @@ function nGonPolyrhythmRecursive(){
     // add one extra shape to the end so that the last rhythm in the input actually has a child
     // so it gets played (the child of a given polygon is what actually triggers the playing of that polygon's rhythm)
     sideNumsAugmented = sideNums.slice();
-    sideNumsAugmented.push(currentPatch.ngonInnerPolygonSideCount);
+    sideNumsAugmented.push(sideNums[sideNums.length - 1] === 3 ? 4 : sideNums[sideNums.length - 1] - 1);
 
     _nGonPolyrhythmRecursive(sideNumsAugmented, skips, pr, 1);
 
