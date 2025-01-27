@@ -125,11 +125,11 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
 
 
     calcPosition(progress){
-        this.sinusoidalExponent = 33;
-        return createVector(
-            this.xBounds.size() * (1 - pow(cos(PI * this.xRhythm * progress), this.sinusoidalExponent)) / ((this.sinusoidalExponent) % 2 + 1),
-            this.yBounds.size() * (1 - pow(cos(PI * this.yRhythm * progress), this.sinusoidalExponent)) / ((this.sinusoidalExponent) % 2 + 1),
-        )
+        // this.sinusoidalExponent = 33;
+        // return createVector(
+        //     this.xBounds.size() * (1 - pow(cos(PI * this.xRhythm * progress), this.sinusoidalExponent)) / ((this.sinusoidalExponent) % 2 + 1),
+        //     this.yBounds.size() * (1 - pow(cos(PI * this.yRhythm * progress), this.sinusoidalExponent)) / ((this.sinusoidalExponent) % 2 + 1),
+        // )
 
         /**
          * so heres the idea:
@@ -143,50 +143,50 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
          * the position should be
          */
         
-        // let newXPos;
-        // let newYPos;
+        let newXPos;
+        let newYPos;
 
         
-        // let master_vector = createVector(
-        //     this.xRhythm * this.xBounds.size(),
-        //     this.yRhythm * this.yBounds.size()
-        // )
+        let master_vector = createVector(
+            this.xRhythm * this.xBounds.size(),
+            this.yRhythm * this.yBounds.size()
+        )
         
-        // let progressVector = master_vector.mult(progress);
+        let progressVector = master_vector.mult(progress);
         
-        // let unboundedPos = createVector(
-        //     progressVector.x + this.init_pos.x,
-        //     progressVector.y + this.init_pos.y,
-        // );
+        let unboundedPos = createVector(
+            progressVector.x + this.init_pos.x,
+            progressVector.y + this.init_pos.y,
+        );
         
-        // let xMod = unboundedPos.x % this.xBounds.size();
-        // let yMod = unboundedPos.y % this.yBounds.size();
+        let xMod = unboundedPos.x % this.xBounds.size();
+        let yMod = unboundedPos.y % this.yBounds.size();
 
-        // if (this.xBounds.size() <= 0){
-        //     newXPos = 0;
-        // }
-        // else{
-        //     if (Math.round((unboundedPos.x - xMod) / this.xBounds.size()) % 2 === 0){
-        //         newXPos = xMod;
-        //     }
-        //     else{
-        //         newXPos = this.xBounds.size() - xMod;
-        //     }
-        // }
+        if (this.xBounds.size() <= 0){
+            newXPos = 0;
+        }
+        else{
+            if (Math.round((unboundedPos.x - xMod) / this.xBounds.size()) % 2 === 0){
+                newXPos = xMod;
+            }
+            else{
+                newXPos = this.xBounds.size() - xMod;
+            }
+        }
 
-        // if (this.yBounds.size() <= 0){
-        //     newYPos = 0;
-        // }
-        // else{
-        //     if (Math.round((unboundedPos.y - yMod) / this.yBounds.size()) % 2 === 0){
-        //         newYPos = yMod;
-        //     }
-        //     else{
-        //         newYPos = this.yBounds.size() - yMod;
-        //     }
-        // }
+        if (this.yBounds.size() <= 0){
+            newYPos = 0;
+        }
+        else{
+            if (Math.round((unboundedPos.y - yMod) / this.yBounds.size()) % 2 === 0){
+                newYPos = yMod;
+            }
+            else{
+                newYPos = this.yBounds.size() - yMod;
+            }
+        }
 
-        // return createVector(newXPos, newYPos);
+        return createVector(newXPos, newYPos);
     }
 
     /**
