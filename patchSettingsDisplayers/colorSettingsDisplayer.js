@@ -7,7 +7,7 @@ function updateColorUI(){
     colorScaleInput.value = currentPatch.colorScale;
 
     colorRippleCheckbox.checked = currentPatch.doColorRipple;
-    colorReflectionCheckbox.checked = currentPatch.doColorRipple;
+    colorReflectionCheckbox.checked = currentPatch.doColorReflection;
 }
 
 
