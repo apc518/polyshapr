@@ -22,11 +22,11 @@ function onHit(soundIdx){
     hits += 1;
 
     // color ripple
-    if (currentPatch.doColorRipple && isLooping()){
-        colorList.push(colorList.shift());
-    }
+    // if (currentPatch.doColorRipple && isLooping()){
+    //     colorList.push(colorList.shift());
+    // }
 
-    soundList[mod(soundIdx, soundList.length)].on = true;
+    // soundList[mod(soundIdx, soundList.length)].on = true;
 }
 
 
@@ -115,6 +115,10 @@ function setMasterPolyRhythmProgress(){
  * paint the screen without updating physics
  */
 function paint(){
+    if (frameCount % 5 == 0 && currentPatch.doColorRipple && isLooping()){
+        colorList.push(colorList.shift());
+    }
+
     if (currentPatch.drawBackground)
         background(currentPatch ? currentPatch.backgroundColor : 0);
 
@@ -158,6 +162,7 @@ function fullRefresh(refreshSounds=false){
     initializeCurrentPatch(refreshSounds);
     setMasterPolyRhythmProgress();
     updatePatchUI();
+    background(currentPatch ? currentPatch.backgroundColor : 0);
     paint();
 }
 
@@ -228,6 +233,13 @@ function setup(){
         globalVolumeSlider.oninput();
         fullRefresh(true);
     });
+
+    fetch("assets/patches/hd-2025-03-27.json")
+    .then(res => res.json())
+    .then(res => {
+        currentPatch = new Patch(res);
+        fullRefresh();
+    });
     
     // if running locally, run tests
     if(isDevelopmentEnvironment())
@@ -237,7 +249,7 @@ function setup(){
 
 function tryPlaySounds(){
     // print(soundList.map(s => s.on).filter(a => a));
-    if(soundOn && !Renderer.isRendering()) soundList.filter(s => s.on).forEach(s => s.play());
+    if(currentPatch.doSound === false && soundOn && !Renderer.isRendering()) soundList.filter(s => s.on).forEach(s => s.play());
     soundList.forEach(s => {s.on = false});
 }
 

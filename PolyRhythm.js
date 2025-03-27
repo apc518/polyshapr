@@ -201,10 +201,12 @@ class RectanglePolyRhythm2d extends PolyRhythm2d {
 
         if (Rhythm.isHitting(progress, progressIncrement, this.xRhythm)) {
             onHit(this.xSoundIdx);
+            // this.colorIdx = (this.colorIdx + 1) % colorList.length;
         }
 
         if (Rhythm.isHitting(progress, progressIncrement, this.yRhythm)) {
             onHit(this.ySoundIdx);
+            // this.colorIdx = (this.colorIdx + 1) % colorList.length;
         }
 
         // update children

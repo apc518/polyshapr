@@ -7,7 +7,7 @@ class Patch {
     constructor({ animationMode, rhythmMode, rhythmOffset, rhythmCount, rhythmIsReversed, rhythms, cycleTime,
                   pitchMode, tuningMode, pitches, pitchOffset, pitchMultiplier, skips, colorInterpolationMode, colorKeyFrames, colorScale,
                   doColorRipple, doColorReflection, rotateCount, globalRotationSpeed, drawBackground, drawGlobalBorder, strokeWeight, canvasWidth, canvasHeight, ngonShrinkFactor, ngonInnerPolygonSideCount,
-                  squareStyle, sizeMultiplier, backgroundColor, audioSampleIsCustom, audioSampleFilename, audioSampleDisplayName, audioSampleBase64 }){
+                  squareStyle, sizeMultiplier, backgroundColor, audioSampleIsCustom, audioSampleFilename, audioSampleDisplayName, audioSampleBase64, doSound }){
         // rhythm
         this.rhythmMode = rhythmMode;
         this.rhythmOffset = rhythmOffset;
@@ -49,6 +49,7 @@ class Patch {
         this.audioSampleFilename = audioSampleFilename.slice();
         this.audioSampleDisplayName = audioSampleDisplayName;
         this.audioSampleBase64 = audioSampleBase64?.slice();
+        this.doSound = doSound;
     }
 
     static rhythmModeIsValid(mode){
